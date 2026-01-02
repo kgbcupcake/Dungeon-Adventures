@@ -7,7 +7,7 @@ namespace DungeonAdventures.Src.Utilities.GameArt
 {
 	public static class MainMenuArt
 	{
-		public static void DrawHeader()
+		public static void DrawMainHeader()
 		{
 			// 1. Create a dynamic separator based on current window width
 			// Subtracting 2 ensures we don't hit the edge and cause a scrollbar

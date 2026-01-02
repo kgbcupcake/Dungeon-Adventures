@@ -1,6 +1,5 @@
 using DungeonAdventures.Src.Interfaces;
 using DungeonAdventures.Src.Game.Interfaces;
-using DungeonAdventures.Src.Utilities;
 using DungeonAdventures.Src.Utilities.UI;
 using DungeonAdventures.Src.GameData; // Added for ThemeConfig
 using System.Text.Json; // Added for JsonSerializer usage consistency
@@ -9,6 +8,7 @@ using Pastel;
 using System.Runtime.InteropServices;
 using static System.Console;
 using DungeonAdventures.Src.GameData.Components;
+using DungeonAdventures.Src.Utilities.GameArt;
 
 namespace DungeonAdventures.Src.GameEngine.Interfaces
 {
@@ -28,26 +28,8 @@ namespace DungeonAdventures.Src.GameEngine.Interfaces
 			string[] options = { "START NEW GAME", "LOAD SAVE", "CREDITS", "EXIT" };
 
 			// --- DRAW TITLE ART ONCE ---
-			RenderService.ClearFrameBuffer();
-			RenderService.Present();
-			string titleArt = @"
-  ██████╗ ██╗   ██╗███╗   ███╗ ██████╗ ███████╗██████╗  █████╗  ██████╗ ███╗   ██╗
-  ██╔══██╗██║   ██║████╗ ████║██╔════╝ ██╔════╝██╔══██╗██╔══██╗██╔════╝ ████╗  ██║
-  ██║  ██║██║   ██║██╔████╔██║██║  ███╗█████╗  ██████╔╝███████║██║  ███╗██╔██╗ ██║
-  ██║  ██║██║   ██║██║╚██╔╝██║██║   ██║██╔══╝  ██╔══██╗██╔══██║██║   ██║██║╚██╗██║
-  ██████╔╝╚██████╔╝██║ ╚═╝ ██║╚██████╔╝███████╗██║  ██║██║  ██║╚██████╔╝██║ ╚████║
-  ╚═════╝  ╚═════╝ ╚═╝     ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
- 
-<--------------------------------------------------------------------------------->
-<                  D U N G E O N   A D V E N T U R E S - R E B O R N              >
-<--------------------------------------------------------------------------------->
-".Pastel("#8B0000"); // Dark Red
-			string[] titleLines = titleArt.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
-			for (int i = 0; i < titleLines.Length; i++)
-			{
-				if (string.IsNullOrWhiteSpace(titleLines[i])) continue;
-				UiEngine.DrawCentered(titleLines[i], i + 2);
-			}
+			Clear();
+			MainMenuArt.DrawMainHeader();
 
 			// --- ATMOSPHERIC BACKGROUND TEXT ---
 			UiEngine.DrawCentered("--------------------------------------------".Pastel("#4A0000"), 10);
@@ -100,8 +82,7 @@ namespace DungeonAdventures.Src.GameEngine.Interfaces
 						isRunning = ExecuteSelection(options[selectedIndex], saveExists);
 						if (!isRunning) return;
 
-						RenderService.ClearFrameBuffer();
-						RenderService.Present();
+						Write("\x1b[2J\x1b[3J\x1b[H");
 						break;
 				}
 				RenderMenu(options, selectedIndex, saveExists);
@@ -201,8 +182,7 @@ namespace DungeonAdventures.Src.GameEngine.Interfaces
 			switch (selection)
 			{
 				case "START NEW GAME":
-					RenderService.ClearFrameBuffer();
-					RenderService.Present();
+					Clear();
 					CharacterCreation.Start();
 					if (GameState.CurrentPlayer != null) // Check if character was successfully created
 					{
@@ -213,8 +193,7 @@ namespace DungeonAdventures.Src.GameEngine.Interfaces
 				case "LOAD SAVE":
 					if (saveExists)
 					{
-						RenderService.ClearFrameBuffer();
-						RenderService.Present(); // Clear the main menu before showing load screen
+						Clear(); // Clear the main menu before showing load screen
 						if (CharacterLoadScreen.ShowLoadMenu()) // Show the load menu
 						{
 							// If a character was loaded, update the title bar
@@ -239,14 +218,12 @@ namespace DungeonAdventures.Src.GameEngine.Interfaces
 
 		private static void ShowCredits()
 		{
-			RenderService.ClearFrameBuffer();
-			RenderService.Present();
+			Clear();
 			UiEngine.DrawCentered("CREATED BY: YOUR NAME".Pastel("#FFAB00"), 10);
 			UiEngine.DrawCentered("V2 ENGINE POWERED BY C# & IMGUI", 12);
 			UiEngine.DrawCentered("Press any key to return...", 16);
 			ReadKey(true);
-			RenderService.ClearFrameBuffer();
-			RenderService.Present();
+			Clear();
 		}
 	}
 }

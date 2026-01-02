@@ -13,41 +13,23 @@ namespace DungeonAdventures.Src.Utilities.UI
 		#region//ConsoleSize
 		public static void ConsoleSize()
 		{
+			int width = 100; // Slightly wider than standard to fit the matrix side-car
+			int height = 30;
+
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 			{
 				try
 				{
-					SetBufferSize(85, 25);
-					SetWindowSize(85, 25);
+					// By making these identical, the scrollbar disappears
+					Console.SetWindowSize(width, height);
+					Console.SetBufferSize(width, height);
 				}
-				catch
-				{
-					try { SetWindowSize(80, 25); } catch { }
-				}
+				catch { /* Fallback for small screens */ }
 			}
-			else // For non-Windows platforms (Linux, macOS)
-			{
-				// Set reasonable default sizes if not on Windows
-				try
-				{
-					// Attempt to set a standard size, adjust as needed for desired terminal appearance
-					// Note: On some Linux terminals, setting window size might not be fully supported or respected.
-					SetBufferSize(85, 25);
-					SetWindowSize(85, 25);
-				}
-				catch (Exception ex)
-				{
-					// Fallback or log if setting size fails
-					Console.WriteLine($"Warning: Could not set console window size: {ex.Message}");
-					// Ensure a minimal size is still assumed for calculations
-					if (WindowWidth < 80) SetWindowSize(80, WindowHeight); // Ensure minimum width
-					if (WindowHeight < 25) SetWindowSize(WindowWidth, 25); // Ensure minimum height
-				}
-			}
-
-			CursorVisible = false;
-			//TitleBar();
+			Console.CursorVisible = false;
 		}
+
+
 		#endregion
 		#region//TitleBar
 		public static void TitleBar()
@@ -330,8 +312,229 @@ namespace DungeonAdventures.Src.Utilities.UI
 		#endregion
 		#region//StartGameLoading
 		public static void StartGameLoading()
+
 		{
-		LoadingSequence.Run();
+
+			Console.Clear();
+
+			Console.CursorVisible = false;
+
+
+
+			int screenWidth = Console.WindowWidth;
+
+			int screenHeight = Console.WindowHeight;
+
+			int centerX = screenWidth / 2;
+
+			int centerY = screenHeight / 2;
+
+			int barWidth = 50;
+
+			Random rnd = new Random();
+
+
+
+			// --- Initial Static Burst / Glitch Effect ---
+
+			for (int j = 0; j < 5; j++) // Short, jarring flashes
+
+			{
+
+				Console.Clear();
+
+				for (int y = 0; y < screenHeight; y++)
+
+				{
+
+					for (int x = 0; x < screenWidth; x++)
+
+					{
+
+						if (rnd.Next(0, 100) < 30) // 30% chance for a character
+
+						{
+
+							char c = (char)rnd.Next(33, 126); // Printable ASCII
+
+							string color = rnd.Next(2) == 0 ? "#FF0000" : "#00FF00"; // Red/Green glitch
+
+							Console.Write(c.ToString().Pastel(color));
+
+						}
+
+						else
+
+						{
+
+							Console.Write(" ");
+
+						}
+
+					}
+
+				}
+
+				Thread.Sleep(rnd.Next(100, 200)); // Slower flashes
+
+			}
+
+			Console.Clear();
+
+
+
+			// --- Corrupted Loading Sequence ---
+
+			string[] scaryLabels = {
+
+"SYSTEM INTEGRITY: CRITICAL...",
+
+"REALITY ANCHORS: DEGRADED...",
+
+"INITIATING UNSTABLE PROTOCOL...",
+
+"WARNING: ENTITY DETECTED...",
+
+"ERROR: DIMENSIONAL FRACTURE...",
+
+"LOADING NIGHTMARE PROTOCOL...",
+
+"S̴Y̷S̷T̵E̵M̴ ̶C̶O̵R̷R̴U̷P̷T̸E̵D̸...", // Corrupted text using unicode
+
+"F̸A̴I̸L̴U̶R̷E̵ ̸T̸O̵ ̷C̸O̷N̵N̷E̵C̷T̵ ̶T̷O̵ ̸S̵E̸R̵V̷E̵R̶..."
+
+};
+
+
+
+			string[] scaryColors = { "#FF0000", "#8B0000", "#4B0082", "#800000", "#A52A2A", "#696969", "#404040", "#2F4F4F" }; // Darker, more unsettling palette
+
+
+
+			int labelIndex = 0;
+
+
+
+			for (int i = 0; i <= 100; i++)
+
+			{
+
+				// --- UNSETTLING BACKGROUND PATTERN ---
+
+				// Top pattern - dynamically changing characters and faster flicker
+
+				string topPatternChar = (rnd.Next(2) == 0) ? "💀" : "⸸";
+
+				if (rnd.Next(0, 5) == 0) topPatternChar = ((char)rnd.Next(33, 126)).ToString(); // Random ASCII for glitch
+
+				string topPatternLine = new string(topPatternChar[0], 30);
+
+				UiEngine.DrawCentered(topPatternLine.Pastel(scaryColors[rnd.Next(scaryColors.Length)]), centerY - 5);
+
+
+
+				// Bottom pattern - dynamically changing characters and faster flicker
+
+				string bottomPatternChar = (rnd.Next(2) == 0) ? "☣" : "☢";
+
+				if (rnd.Next(0, 5) == 0) bottomPatternChar = ((char)rnd.Next(33, 126)).ToString(); // Random ASCII for glitch
+
+				string bottomPatternLine = new string(bottomPatternChar[0], 30);
+
+				UiEngine.DrawCentered(bottomPatternLine.Pastel(scaryColors[rnd.Next(scaryColors.Length)]), centerY + 3);
+
+
+
+
+
+				// Update label sporadically
+
+				if (i == 0 || rnd.Next(0, 10) == 0) // Change label at start and more frequently
+
+				{
+
+					labelIndex = rnd.Next(0, scaryLabels.Length);
+
+					string currentLabel = scaryLabels[labelIndex];
+
+					string labelColor = scaryColors[rnd.Next(scaryColors.Length)];
+
+					UiEngine.DrawCentered(currentLabel.Pastel(labelColor), centerY - 2, 60); // Clear wider for corrupted text
+
+				}
+
+
+
+				int barLeft = centerX - (barWidth / 2);
+
+				Console.SetCursorPosition(barLeft, centerY);
+
+
+
+				int progressBlocks = (int)((i / 100.0) * barWidth);
+
+				string filled = new string('█', progressBlocks);
+
+				string empty = new string('░', barWidth - progressBlocks);
+
+
+
+				Console.Write(filled.Pastel("#5A057A") + empty.Pastel("#333333"));
+
+
+
+				Console.SetCursorPosition(barLeft + barWidth + 2, centerY);
+
+				Console.Write($"{i}%".Pastel("#FFFFFF"));
+
+
+
+				// Erratic speed variation
+
+				if (i < 20) Thread.Sleep(rnd.Next(50, 100));
+
+				else if (i < 70) Thread.Sleep(rnd.Next(10, 30));
+
+				else Thread.Sleep(rnd.Next(40, 80));
+
+
+
+				// Small chance of a "glitch jump" in progress
+
+				if (rnd.Next(0, 50) == 0 && i < 90)
+
+				{
+
+					i += rnd.Next(5, 15); // Jump forward
+
+					if (i > 100) i = 100;
+
+				}
+
+			}
+
+
+
+			// --- Final Unsettling Message ---
+
+			Console.Clear();
+
+			string finalMessage = "T̷H̷E̵ ̸G̷A̷T̷E̵S̷ ̷A̶R̸E̵ ̷O̷P̷E̶N̸...".Pastel("#FF0000");
+
+			UiEngine.DrawCentered(finalMessage, centerY);
+
+			Thread.Sleep(1500); // Hold the message
+
+
+
+			// 3. Cleanup
+
+			Console.ResetColor();
+
+			Console.Clear();
+
+			Console.CursorVisible = true;
+
 		}
 		#endregion
 		#region//ShowCreationAnimation
