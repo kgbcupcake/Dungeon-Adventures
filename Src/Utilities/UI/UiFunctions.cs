@@ -331,7 +331,7 @@ namespace DungeonAdventures.Src.Utilities.UI
 		#region//StartGameLoading
 		public static void StartGameLoading()
 		{
-			DungeonAdventures.Src.Utilities.LoadingSequence.Run();
+		LoadingSequence.Run();
 		}
 		#endregion
 		#region//ShowCreationAnimation

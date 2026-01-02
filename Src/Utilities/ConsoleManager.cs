@@ -105,7 +105,7 @@ namespace DungeonAdventures.Src.Utilities
             }
             
             // Set window title for flavor
-            Console.Title = "SYSTEM CORRUPTED";
+            Console.Title = "DUMGERAGN // ACTIVE";
 
             // Hide the cursor
             Console.CursorVisible = false;

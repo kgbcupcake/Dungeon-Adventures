@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36408.4
+# Visual Studio Version 18
+VisualStudioVersion = 18.1.11312.151 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DungeonAdventures", "DungeonAdventures.csproj", "{885B5FAB-8CAA-422C-AFA5-805F3DC550C3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DungeonAdventures.Tests", "Tests\DungeonAdventures.Tests.csproj", "{F65003B4-CB4D-43D7-9BE0-90D404CCE1CB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DungeonAdventures.csproj", "DungeonAdventures.csproj.csproj", "{885B5FAB-8CAA-422C-AFA5-805F3DC550C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +15,6 @@ Global
 		{885B5FAB-8CAA-422C-AFA5-805F3DC550C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{885B5FAB-8CAA-422C-AFA5-805F3DC550C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{885B5FAB-8CAA-422C-AFA5-805F3DC550C3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F65003B4-CB4D-43D7-9BE0-90D404CCE1CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F65003B4-CB4D-43D7-9BE0-90D404CCE1CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F65003B4-CB4D-43D7-9BE0-90D404CCE1CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F65003B4-CB4D-43D7-9BE0-90D404CCE1CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

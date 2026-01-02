@@ -1,18 +1,13 @@
-﻿// DEPRECATED: This UI is being replaced by the Hostile Terminal.
-// using ClickableTransparentOverlay;
-// using ImGuiNET;
-using DungeonAdventures.Src.GameData;
+﻿using ClickableTransparentOverlay;
 using DungeonAdventures.Src.GameData.Components;
 using DungeonAdventures.Src.GameEngine;
-using System.Numerics;
+using ImGuiNET;
 using System.Drawing; // For Point, needed for Screen.PrimaryScreen.Bounds
+using System.Numerics;
 
 
 namespace DungeonAdventures.Src.Interfaces
 {
-	// DEPRECATED: DevGuiRenderer class and its contents are deprecated.
-// All functionality is being replaced by the Hostile Terminal.
-/*
 	public partial class DevGuiRenderer : Overlay
 	{
 		private Conductor _conductor = new Conductor();
@@ -278,5 +273,4 @@ namespace DungeonAdventures.Src.Interfaces
 			}
 		}
 	}
-*/
 }

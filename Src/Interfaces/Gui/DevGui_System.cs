@@ -1,10 +1,9 @@
-﻿// DEPRECATED: This UI is being replaced by the Hostile Terminal.
-// using ClickableTransparentOverlay;
-// using ImGuiNET;
+﻿using ClickableTransparentOverlay;
 using DungeonAdventures.Src.GameData;
 using DungeonAdventures.Src.GameData.Components;
 using DungeonAdventures.Src.GameData.Entities;
 using DungeonAdventures.Src.GameEngine;
+using ImGuiNET;
 using System.Collections;
 using System.Numerics;
 using System.Reflection;
@@ -14,9 +13,6 @@ using System.Text.Json.Serialization;
 namespace DungeonAdventures.Src.Interfaces
 {
 	// --- SYSTEM & REFLECTION ENGINE ---
-	// DEPRECATED: DevGuiRenderer class and its contents are deprecated.
-// All functionality is being replaced by the Hostile Terminal.
-/*
 	public partial class DevGuiRenderer : Overlay
 	{
 		private int _newPlayerClassIndex = 0;
@@ -483,5 +479,4 @@ namespace DungeonAdventures.Src.Interfaces
 
 
 	}
-
 }
