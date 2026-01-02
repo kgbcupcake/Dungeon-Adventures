@@ -5,7 +5,7 @@ This plan details the phases and tasks required to implement the "Hostile Termin
 ## Phase 1: Engine Transplant & Console Setup
 
 - [x] Task: Identify and isolate all code related to `ImGui.NET` and `ClickableTransparentOverlay`. Add comments marking them as deprecated and disable their execution paths.
-- [ ] Task: Create a new `ConsoleManager` or similar static class to handle console setup. This class will set the window size to 85x25, buffer size, and hide the cursor.
+- [x] Task: Create a new `ConsoleManager` or similar static class to handle console setup. This class will set the window size to 85x25, buffer size, and hide the cursor.
 - [ ] Task: Implement a new `RenderService` that uses a `StringBuilder` for frame construction. It should have a method to `Present()` the final `StringBuilder` content to the console using `Console.SetCursorPosition` and `Console.Write`.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Engine Transplant & Console Setup' (Protocol in workflow.md)
 
