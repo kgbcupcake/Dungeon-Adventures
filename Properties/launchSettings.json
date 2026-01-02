@@ -1,0 +1,12 @@
+{
+	"profiles": {
+		"WSL": {
+			"commandName": "Project"
+		},
+		"DungeonAdventures": {
+			"commandName": "Project",
+			"console": "externalTerminal"
+		}
+	}
+}
+
