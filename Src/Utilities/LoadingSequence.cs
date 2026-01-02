@@ -34,11 +34,11 @@ namespace DungeonAdventures.Src.Utilities
             string logo = "DUMGERAGN";
             string[] icons = { "💀", "⸸", "☣", "☢" };
 
-            RenderService.DrawCentered(5, logo);
-            RenderService.WriteToBuffer(2, 2, icons[0]);
-            RenderService.WriteToBuffer(CONSOLE_WIDTH - 3, 2, icons[1]);
-            RenderService.WriteToBuffer(2, CONSOLE_HEIGHT - 2, icons[2]);
-            RenderService.WriteToBuffer(CONSOLE_WIDTH - 3, CONSOLE_HEIGHT - 2, icons[3]);
+            RenderService.DrawCentered(5, logo, VEIN_RED);
+            RenderService.WriteToBuffer(2, 2, icons[0], NUCLEAR_WASTE_GREEN);
+            RenderService.WriteToBuffer(CONSOLE_WIDTH - 3, 2, icons[1], NUCLEAR_WASTE_GREEN);
+            RenderService.WriteToBuffer(2, CONSOLE_HEIGHT - 2, icons[2], NUCLEAR_WASTE_GREEN);
+            RenderService.WriteToBuffer(CONSOLE_WIDTH - 3, CONSOLE_HEIGHT - 2, icons[3], NUCLEAR_WASTE_GREEN);
         }
 
         private static void DrawAsciiCorruption()
@@ -48,9 +48,9 @@ namespace DungeonAdventures.Src.Utilities
             {
                 int x = _random.Next(0, CONSOLE_WIDTH);
                 int y = _random.Next(0, CONSOLE_HEIGHT);
-                string corruptionChar = CORRUPTION_CHARS[_random.Next(0, CORRUPTION_CHARS.Length)];
+                char corruptionChar = CORRUPTION_CHARS[_random.Next(0, CORRUPTION_CHARS.Length)][0];
                 string color = _random.Next(0, 2) == 0 ? VEIN_RED : NUCLEAR_WASTE_GREEN;
-                RenderService.WriteToBuffer(x, y, corruptionChar.Pastel(color));
+                RenderService.WriteToBuffer(x, y, corruptionChar, color);
             }
         }
     }
