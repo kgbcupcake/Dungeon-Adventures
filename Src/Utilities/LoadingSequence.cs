@@ -46,7 +46,7 @@ namespace DungeonAdventures
 
         public static void Run()
         {
-            RenderService.Initialize();
+            
             Console.CursorVisible = false;
 
             // Scary labels from UiFunctions.cs

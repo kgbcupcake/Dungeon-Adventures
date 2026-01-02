@@ -16,10 +16,9 @@ namespace DungeonAdventures.Src.Utilities
         private const int CONSOLE_WIDTH = 85;
         private const int CONSOLE_HEIGHT = 25;
 
-        public static void Initialize()
+        static RenderService()
         {
             _frameBuffer = new Pixel[CONSOLE_WIDTH * CONSOLE_HEIGHT];
-            // Ensure ConsoleManager has been called to set up console dimensions
             ConsoleManager.SetupConsole(CONSOLE_WIDTH, CONSOLE_HEIGHT);
         }
 
