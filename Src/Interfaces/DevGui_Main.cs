@@ -1,7 +1,8 @@
-using ClickableTransparentOverlay;
+// DEPRECATED: This UI is being replaced by the Hostile Terminal.
+// using ClickableTransparentOverlay;
+// using ImGuiNET;
 using DungeonAdventures.Src.GameEngine;
 using DungeonAdventures.Src.GameEngine.GameData;
-using ImGuiNET;
 using Pastel;
 using System.Numerics;
 using System.Runtime.InteropServices;
@@ -16,6 +17,9 @@ using System.Collections.Generic;
 using System.Linq;
 
 
+// DEPRECATED: DevGuiRenderer class and its contents are deprecated.
+// All functionality is being replaced by the Hostile Terminal.
+/*
 namespace DungeonAdventures.Src.Interfaces
 {
 
@@ -161,7 +165,7 @@ namespace DungeonAdventures.Src.Interfaces
 			GameVersion = "Alpha 0.0.1";
 			_jsonEditorBuffer = string.Empty;
 
-			LoadTheme(); 
+			LoadTheme();
 			PopulateAvailableMaps();
 		}
 
