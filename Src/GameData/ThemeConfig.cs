@@ -3,7 +3,8 @@ namespace DungeonAdventures.Src.GameData
     public class ThemeConfig
     {
         public float[] FontColor { get; set; } = new float[] { 1f, 1f, 1f, 1f };
-        public float[] BgColor { get; set; } = new float[] { 0.1f, 0.1f, 0.1f, 1f };
+        public float[] TgbColor { get; set; } = new float[] { 0.1f, 0.1f, 0.1f, 1f };
+        public float[] WindowBgColor { get; set; } = new float[] { 0.1f, 0.1f, 0.1f, 1f };
         public float[] BorderColor { get; set; } = new float[] { 0f, 1f, 1f, 1f };
         public float[] ChildBgColor { get; set; } = new float[] { 0.08f, 0.08f, 0.12f, 1f };
         public float WindowBorderSize { get; set; } = 1.0f;

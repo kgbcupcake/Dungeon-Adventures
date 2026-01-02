@@ -22,7 +22,21 @@ GameState.EnsureDirectories();
 UiFunctions.TitleBar();
 
 // 4. Loading Sequence
-UiFunctions.StartGameLoading();
+Console.WriteLine("Press 'S' to skip loading, or any other key to view the loading sequence...");
+// Wait for a key press. This will block until a key is pressed.
+ConsoleKeyInfo key = Console.ReadKey(true); // 'true' means don't display the key
+
+if (key.Key == ConsoleKey.S)
+{
+    Console.WriteLine("Loading sequence skipped.");
+    // Clear the console to prepare for MainMenu
+    Console.Clear();
+}
+else
+{
+    // User pressed another key or just wanted to proceed with loading
+    UiFunctions.StartGameLoading();
+}
 
 // 5. Launch Game
 MainMenu.Show();

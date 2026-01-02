@@ -1,14 +1,11 @@
-using DungeonAdventures.Src.Interfaces;
 using DungeonAdventures.Src.Game.Interfaces;
+using DungeonAdventures.Src.GameData.Components;
+using DungeonAdventures.Src.Interfaces;
+using DungeonAdventures.Src.Utilities.GameArt;
 using DungeonAdventures.Src.Utilities.UI;
-using DungeonAdventures.Src.GameData; // Added for ThemeConfig
-using System.Text.Json; // Added for JsonSerializer usage consistency
-using System.Drawing; // Added for ThemeConfig usage consistency
 using Pastel;
 using System.Runtime.InteropServices;
 using static System.Console;
-using DungeonAdventures.Src.GameData.Components;
-using DungeonAdventures.Src.Utilities.GameArt;
 
 namespace DungeonAdventures.Src.GameEngine.Interfaces
 {

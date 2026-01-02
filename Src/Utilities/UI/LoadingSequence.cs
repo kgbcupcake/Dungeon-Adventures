@@ -1,10 +1,9 @@
 using System;
 using System.Threading;
 using System.Collections.Generic;
-using DungeonAdventures.Src.Utilities;
-using Pastel; // This is already in the file.
+using Pastel;
 
-namespace DungeonAdventures
+namespace DungeonAdventures.csproj.Src.Utilities.UI
 {
     public static class LoadingSequence
     {

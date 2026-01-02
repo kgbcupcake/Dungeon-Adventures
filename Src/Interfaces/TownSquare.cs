@@ -1,7 +1,7 @@
-﻿using DungeonAdventures.Src.Interfaces;
-using DungeonAdventures.Src.Utilities.UI;
+﻿using DungeonAdventures.Src.Utilities.UI;
 using static System.Console;
 using DungeonAdventures.Src.GameData.Components;
+using DungeonAdventures.Src.Interfaces;
 
 namespace DungeonAdventures.Src.GameEngine.Interfaces
 {

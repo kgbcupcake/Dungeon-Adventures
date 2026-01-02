@@ -3,6 +3,8 @@
 using DungeonAdventures.Src.GameData.Components;
 using Pastel;
 using System.Runtime.InteropServices;
+using System.Text;
+
 // ADD THIS LINE TO FIX THE ERRORS:
 using static System.Console;
 
@@ -20,9 +22,11 @@ namespace DungeonAdventures.Src.Utilities.UI
 			{
 				try
 				{
-					// By making these identical, the scrollbar disappears
-					Console.SetWindowSize(width, height);
-					Console.SetBufferSize(width, height);
+					// 1. Set the Window Size first
+					Console.SetWindowSize(85, 25);
+
+					// 2. FORCE the Buffer to match the Window exactly (This kills the scroll bar)
+					Console.SetBufferSize(85, 25);
 				}
 				catch { /* Fallback for small screens */ }
 			}
@@ -312,229 +316,123 @@ namespace DungeonAdventures.Src.Utilities.UI
 		#endregion
 		#region//StartGameLoading
 		public static void StartGameLoading()
-
 		{
+			// --- STEP 1: DIMENSIONS & SCROLLBAR KILLER ---
+			const int width = 84;
+			const int height = 24;
+
+			try
+			{
+				Console.SetWindowSize(width + 1, height + 1);
+				Console.SetBufferSize(width + 1, height + 1);
+			}
+			catch { }
 
 			Console.Clear();
-
 			Console.CursorVisible = false;
 
-
-
-			int screenWidth = Console.WindowWidth;
-
-			int screenHeight = Console.WindowHeight;
-
-			int centerX = screenWidth / 2;
-
-			int centerY = screenHeight / 2;
-
-			int barWidth = 50;
-
+			int centerX = width / 2;
+			int centerY = height / 2;
+			int barWidth = 40;
 			Random rnd = new Random();
 
-
-
-			// --- Initial Static Burst / Glitch Effect ---
-
-			for (int j = 0; j < 5; j++) // Short, jarring flashes
-
+			// --- STEP 2: INITIAL BURST ---
+			for (int j = 0; j < 5; j++)
 			{
-
-				Console.Clear();
-
-				for (int y = 0; y < screenHeight; y++)
-
+				Console.SetCursorPosition(0, 0);
+				StringBuilder burst = new StringBuilder();
+				for (int y = 0; y < height; y++)
 				{
-
-					for (int x = 0; x < screenWidth; x++)
-
+					for (int x = 0; x < width; x++)
 					{
-
-						if (rnd.Next(0, 100) < 30) // 30% chance for a character
-
+						if (rnd.Next(0, 100) < 15)
 						{
-
-							char c = (char)rnd.Next(33, 126); // Printable ASCII
-
-							string color = rnd.Next(2) == 0 ? "#FF0000" : "#00FF00"; // Red/Green glitch
-
-							Console.Write(c.ToString().Pastel(color));
-
+							burst.Append(((char)rnd.Next(33, 126)).ToString().Pastel(rnd.Next(2) == 0 ? "#FF0000" : "#00FF00"));
 						}
-
-						else
-
-						{
-
-							Console.Write(" ");
-
-						}
-
+						else burst.Append(" ");
 					}
-
 				}
-
-				Thread.Sleep(rnd.Next(100, 200)); // Slower flashes
-
+				Console.Write(burst.ToString());
+				Thread.Sleep(300);
 			}
 
-			Console.Clear();
-
-
-
-			// --- Corrupted Loading Sequence ---
-
+			// --- STEP 3: THE MAIN LOOP (Rain + Skulls + Nukes) ---
 			string[] scaryLabels = {
-
-"SYSTEM INTEGRITY: CRITICAL...",
-
-"REALITY ANCHORS: DEGRADED...",
-
-"INITIATING UNSTABLE PROTOCOL...",
-
-"WARNING: ENTITY DETECTED...",
-
-"ERROR: DIMENSIONAL FRACTURE...",
-
-"LOADING NIGHTMARE PROTOCOL...",
-
-"S̴Y̷S̷T̵E̵M̴ ̶C̶O̵R̷R̴U̷P̷T̸E̵D̸...", // Corrupted text using unicode
-
-"F̸A̴I̸L̴U̶R̷E̵ ̸T̸O̵ ̷C̸O̷N̵N̷E̵C̷T̵ ̶T̷O̵ ̸S̵E̸R̵V̷E̵R̶..."
-
-};
-
-
-
-			string[] scaryColors = { "#FF0000", "#8B0000", "#4B0082", "#800000", "#A52A2A", "#696969", "#404040", "#2F4F4F" }; // Darker, more unsettling palette
-
-
-
+		"SYSTEM INTEGRITY: CRITICAL...",
+		"REALITY ANCHORS: DEGRADED...",
+		"INITIATING UNSTABLE PROTOCOL...",
+		"WARNING: ENTITY DETECTED...",
+		"S̴Y̷S̷T̵E̵M̴ ̶C̶O̵R̷R̴U̷P̷T̸E̵D̸...",
+		"F̸A̴I̸L̴U̶R̷E̵ ̸T̸O̵ ̷C̸O̷N̵N̷E̵C̷T̵..."
+	};
+			string[] scaryColors = { "#FF0000", "#8B0000", "#4B0082", "#2F4F4F" };
 			int labelIndex = 0;
 
-
-
 			for (int i = 0; i <= 100; i++)
-
 			{
-
-				// --- UNSETTLING BACKGROUND PATTERN ---
-
-				// Top pattern - dynamically changing characters and faster flicker
-
-				string topPatternChar = (rnd.Next(2) == 0) ? "💀" : "⸸";
-
-				if (rnd.Next(0, 5) == 0) topPatternChar = ((char)rnd.Next(33, 126)).ToString(); // Random ASCII for glitch
-
-				string topPatternLine = new string(topPatternChar[0], 30);
-
-				UiEngine.DrawCentered(topPatternLine.Pastel(scaryColors[rnd.Next(scaryColors.Length)]), centerY - 5);
-
-
-
-				// Bottom pattern - dynamically changing characters and faster flicker
-
-				string bottomPatternChar = (rnd.Next(2) == 0) ? "☣" : "☢";
-
-				if (rnd.Next(0, 5) == 0) bottomPatternChar = ((char)rnd.Next(33, 126)).ToString(); // Random ASCII for glitch
-
-				string bottomPatternLine = new string(bottomPatternChar[0], 30);
-
-				UiEngine.DrawCentered(bottomPatternLine.Pastel(scaryColors[rnd.Next(scaryColors.Length)]), centerY + 3);
-
-
-
-
-
-				// Update label sporadically
-
-				if (i == 0 || rnd.Next(0, 10) == 0) // Change label at start and more frequently
-
+				// --- THE RAIN ENGINE (Background) ---
+				Console.SetCursorPosition(0, 0);
+				StringBuilder rainFrame = new StringBuilder();
+				for (int y = 0; y < height; y++)
 				{
-
-					labelIndex = rnd.Next(0, scaryLabels.Length);
-
-					string currentLabel = scaryLabels[labelIndex];
-
-					string labelColor = scaryColors[rnd.Next(scaryColors.Length)];
-
-					UiEngine.DrawCentered(currentLabel.Pastel(labelColor), centerY - 2, 60); // Clear wider for corrupted text
-
+					for (int x = 0; x < width; x++)
+					{
+						if (rnd.Next(0, 100) < 10)
+						{
+							rainFrame.Append(((char)rnd.Next(33, 126)).ToString().Pastel("#004400"));
+						}
+						else rainFrame.Append(" ");
+					}
 				}
+				Console.Write(rainFrame.ToString());
 
+				// --- THE UI OVERLAY ---
 
+				// We use double quotes "" to avoid the "too many characters" error
+				// 1. TOP PATTERN: RED SKULLS + ERROR MESSAGE
+				string skullIcon = "☠"; // This is the standard Unicode skull, it tints perfectly
+				string skullMsg = " [ FATAL_MEMORY_LEAK ] ";
+				// Combine first, THEN apply color to the whole thing
+				string topContent = $"{skullIcon}{skullMsg}{skullIcon}";
 
+				// Use the glitchRed logic you have, but apply it to the FINAL string
+				string glitchRed = rnd.Next(0, 10) > 8 ? "#4A0000" : "#FF0000";
+				UiEngine.DrawCentered(topContent.Pastel(glitchRed), centerY - 5);
+
+				// 2. DYNAMIC LABEL (The one you already had)
+				if (i % 15 == 0) labelIndex = rnd.Next(scaryLabels.Length);
+				UiEngine.DrawCentered(scaryLabels[labelIndex].Pastel(scaryColors[rnd.Next(scaryColors.Length)]), centerY - 2);
+
+				// 3. PROGRESS BAR
 				int barLeft = centerX - (barWidth / 2);
-
 				Console.SetCursorPosition(barLeft, centerY);
-
-
-
 				int progressBlocks = (int)((i / 100.0) * barWidth);
-
 				string filled = new string('█', progressBlocks);
-
 				string empty = new string('░', barWidth - progressBlocks);
+				Console.Write(filled.Pastel("#5A057A") + empty.Pastel("#333333") + $" {i}%".Pastel("#FFFFFF"));
 
+				// 4. BOTTOM PATTERN: NUKES + RADIATION WARNING
+				string nukeIcon = "☢";
+				string nukeMsg = " [ CORE_MELTDOWN_IMMINENT ] ";
+				string bottomContent = nukeIcon + nukeMsg + nukeIcon;
+				UiEngine.DrawCentered(bottomContent.Pastel(scaryColors[rnd.Next(scaryColors.Length)]), centerY + 3);
 
+				// --- SPEED CONTROL ---
+				int baseDelay = 120; // Slower rain and progress
+				if (i < 30) Thread.Sleep(baseDelay + 100);
+				else if (i < 80) Thread.Sleep(baseDelay);
+				else Thread.Sleep(baseDelay + 150);
 
-				Console.Write(filled.Pastel("#5A057A") + empty.Pastel("#333333"));
-
-
-
-				Console.SetCursorPosition(barLeft + barWidth + 2, centerY);
-
-				Console.Write($"{i}%".Pastel("#FFFFFF"));
-
-
-
-				// Erratic speed variation
-
-				if (i < 20) Thread.Sleep(rnd.Next(50, 100));
-
-				else if (i < 70) Thread.Sleep(rnd.Next(10, 30));
-
-				else Thread.Sleep(rnd.Next(40, 80));
-
-
-
-				// Small chance of a "glitch jump" in progress
-
-				if (rnd.Next(0, 50) == 0 && i < 90)
-
-				{
-
-					i += rnd.Next(5, 15); // Jump forward
-
-					if (i > 100) i = 100;
-
-				}
-
+				if (rnd.Next(0, 70) == 0 && i < 90) i += rnd.Next(2, 8);
 			}
 
-
-
-			// --- Final Unsettling Message ---
-
+			// --- STEP 4: FINAL MESSAGE ---
 			Console.Clear();
-
-			string finalMessage = "T̷H̷E̵ ̸G̷A̷T̷E̵S̷ ̷A̶R̸E̵ ̷O̷P̷E̶N̸...".Pastel("#FF0000");
-
-			UiEngine.DrawCentered(finalMessage, centerY);
-
-			Thread.Sleep(1500); // Hold the message
-
-
-
-			// 3. Cleanup
+			UiEngine.DrawCentered("T̷H̷E̵ ̸G̷A̷T̷E̵S̷ ̷A̶R̸E̵ ̷O̷P̷E̶N̸...".Pastel("#FF0000"), centerY);
+			Thread.Sleep(2500);
 
 			Console.ResetColor();
-
 			Console.Clear();
-
-			Console.CursorVisible = true;
-
 		}
 		#endregion
 		#region//ShowCreationAnimation

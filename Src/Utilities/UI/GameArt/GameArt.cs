@@ -1,5 +1,4 @@
-﻿using DungeonAdventures.Src.Interfaces;
-using DungeonAdventures.Src.Utilities.UI;
+﻿using DungeonAdventures.Src.Utilities.UI;
 using Pastel;
 using System;
 

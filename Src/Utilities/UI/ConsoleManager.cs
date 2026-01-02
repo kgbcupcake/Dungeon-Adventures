@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace DungeonAdventures.Src.Utilities
+namespace DungeonAdventures.csproj.Src.Utilities.UI
 {
     public static class ConsoleManager
     {

@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using Pastel;
 
-namespace DungeonAdventures.Src.Utilities
+namespace DungeonAdventures.csproj.Src.Utilities.UI
 {
     public static class RenderService
     {
