@@ -184,6 +184,7 @@ namespace DungeonAdventures.Src.GameEngine.Interfaces
 					if (GameState.CurrentPlayer != null) // Check if character was successfully created
 					{
 						UiFunctions.TitleBar(); // Update title bar to established state
+						TownSquare.MainTownSquare(); // Transition to Town Square after character creation
 					}
 					return false; // Exit menu to enter game loop
 
