@@ -1,6 +1,7 @@
 using DungeonAdventures.Src.GameData;
 using DungeonAdventures.Src.GameData.Components;
 using DungeonAdventures.Src.Interfaces;
+using DungeonAdventures.Src.GameData.Entities;
 using static DungeonAdventures.Src.GameData.Entities.PlayerData;
 
 namespace DungeonAdventures.Src.GameEngine
@@ -100,29 +101,73 @@ namespace DungeonAdventures.Src.GameEngine
         		/// <param name="data">The data object to export.</param>
         		/// <param name="category">The subfolder category within the master path (e.g., "profiles", "items").</param>
         		/// <param name="fileName">The name of the file (without extension) to save the data to.</param>
-        		public void ExportData<T>(T data, string category, string fileName)
-        		{
-        			try
-        			{
-
-        				SaveGame.ExportToMaster(data, category, fileName);
-        				DevGuiRenderer.DevLog.Write($"[CONDUCTOR] Successfully exported '{fileName}' to category '{category}'.", "INFO");
-        			}
-        			catch (Exception ex)
-        			{
-        				DevGuiRenderer.DevLog.Write($"[CONDUCTOR ERROR] Failed to export '{fileName}' to category '{category}': {ex.Message}", "ERROR");
-        			}
-        		}
-
-		public ThemeConfig GetTheme(string fileName = "ui_config")
-		{
-			// Use the LoadAllFromFolder method from LoadGame.cs
-			var settings = LoadGame.LoadAllFromFolder<ThemeConfig>("settings");
-
-			// Return the first config found, or a new default one if none exist
-			return settings.FirstOrDefault() ?? new ThemeConfig();
-		}
-
+        				public void ExportData<T>(T data, string category, string fileName)
+        				{
+        					try
+        					{
+        		
+        						SaveGame.ExportToMaster(data, category, fileName);
+        						DevGuiRenderer.DevLog.Write($"[CONDUCTOR] Successfully exported '{fileName}' to category '{category}'.", "INFO");
+        					}
+        					catch (Exception ex)
+        					{
+        						DevGuiRenderer.DevLog.Write($"[CONDUCTOR ERROR] Failed to export '{fileName}' to category '{category}': {ex.Message}", "ERROR");
+        					}
+        				}
+        		
+        				public PlayerData.loadPlayer? LoadPlayerProfile(string filePath)
+        				{
+        					try
+        					{
+        						PlayerData.loadPlayer? player = LoadGame.LoadProfile(filePath);
+        						if (player != null)
+        						{
+        							DevGuiRenderer.DevLog.Write($"[CONDUCTOR] Player profile loaded from '{filePath}'.", "INFO");
+        						}
+        						else
+        						{
+        							DevGuiRenderer.DevLog.Write($"[CONDUCTOR ERROR] Failed to load player profile from '{filePath}'.", "ERROR");
+        						}
+        						return player;
+        					}
+        					catch (Exception ex)
+        					{
+        						DevGuiRenderer.DevLog.Write($"[CONDUCTOR ERROR] Exception loading player profile from '{filePath}': {ex.Message}", "ERROR");
+        						return null;
+        					}
+        				}
+        		
+        				public bool DeletePlayerProfile(string filePath)
+        				{
+        					try
+        					{
+        						if (File.Exists(filePath))
+        						{
+        							File.Delete(filePath);
+        							DevGuiRenderer.DevLog.Write($"[CONDUCTOR] Player profile deleted from '{filePath}'.", "INFO");
+        							return true;
+        						}
+        						else
+        						{
+        							DevGuiRenderer.DevLog.Write($"[CONDUCTOR] Attempted to delete non-existent player profile at '{filePath}'.", "WARNING");
+        							return false;
+        						}
+        					}
+        					catch (Exception ex)
+        					{
+        						DevGuiRenderer.DevLog.Write($"[CONDUCTOR ERROR] Exception deleting player profile from '{filePath}': {ex.Message}", "ERROR");
+        						return false;
+        					}
+        				}
+        		
+        				public ThemeConfig GetTheme(string fileName = "ui_config")
+        				{
+        					// Use the LoadAllFromFolder method from LoadGame.cs
+        					var settings = LoadGame.LoadAllFromFolder<ThemeConfig>("settings");
+        		
+        					// Return the first config found, or a new default one if none exist
+        					return settings.FirstOrDefault() ?? new ThemeConfig();
+        				}
 
 
 

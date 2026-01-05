@@ -1,12 +1,7 @@
 ﻿using DungeonAdventures.Src.GameData;
 using DungeonAdventures.Src.GameData.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using static DungeonAdventures.Src.GameData.Entities.PlayerData;
 
 namespace DungeonAdventures.Src.Interfaces
@@ -86,7 +81,7 @@ namespace DungeonAdventures.Src.Interfaces
 		public int _iCharges = 5;
 		public bool _isStackable = true;
 		public int _selectedPreset = 0;
-		public string[] _itemPresets =
+		public string[] _itemPresets = 
 		{
 					"Custom",
 					"Mega Health Pack",
@@ -165,7 +160,7 @@ namespace DungeonAdventures.Src.Interfaces
 		#endregion
 		#region//Customization
 		//Customization - REMOVED due to CS0414 warning
-		private bool Customization = false;
+		//private bool Customization = false;
 		//private bool MainGui = true;
 		public Vector4 color1 = new Vector4(1, 1, 1, 1);       // Font
 		public Vector4 BorderColor = new Vector4(0, 1, 1, 1);  // Border
@@ -233,6 +228,15 @@ namespace DungeonAdventures.Src.Interfaces
 		#endregion
 
 		#endregion
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,0 +1,5684 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+.gemini/
+  commands/
+    gui-fix.md
+    identity.md
+  tmp/
+    task_note.txt
+conductor/
+  code_styleguides/
+    Hostile-C-Sharp.md
+  product-guidelines.md
+  product.md
+  setup_state.json
+  tech-stack.md
+  tracks.md
+  workflow.md
+Properties/
+  launchSettings.json
+Src/
+  Adventures/
+    Encounters/
+      CumstomEncounters/
+        Bosses.cs
+    Interfaces/
+      IAdventureService.cs
+    Quests/
+      DukesQuest.cs
+    Services/
+      AdventureServices.cs
+  Game/
+    Encounters/
+      MainEncounter.cs
+  GameData/
+    Components/
+      GameState.cs
+    Entities/
+      BossAttribute.cs
+      BossData.cs
+      BossTraits.cs
+      PlayerData.cs
+    AdventureData.cs
+    AttachmentData.cs
+    GemData.cs
+    GlobalShopManager.cs
+    ItemData.cs
+    QuestData.cs
+    ThemeConfig.cs
+    WeaponData.cs
+    WeaponTemplate.cs
+  GameEngine/
+    Conductor.cs
+    Loadgame.cs
+    SaveGame.cs
+  Gui/
+    DevGui_Adventures.cs
+    DevGui_Main.cs
+    DevGui_Specialization.cs
+    DevGui_System.cs
+    DevGui_Vars.cs
+    DevGui_World.cs
+    DevGuiUtilities.cs
+    GuiDev_Forge.cs
+  Interfaces/
+    CharacterCreation.cs
+    CharacterLoadScreen.cs
+    CharSubMenus.cs
+    DevGui_Main.cs
+    MainMenu.cs
+    Stats.cs
+    Store.cs
+    TownSquare.cs
+  Utilities/
+    UI/
+      GameArt/
+        GameArt.cs
+      ConsoleManager.cs
+      LoadingSequence.cs
+      RenderService.cs
+      ScreenInfo.cs
+      UiEngine.cs
+      UiFunctions.cs
+  Program.cs
+.editorconfig
+.gitignore
+DungeonAdventures.csproj
+DungeonAdventures.sln
+DungeonAdventures.Tests.csproj
+GEMINI.md
+GlobalUsings.cs
+message_to_user.txt
+PlayerTests.cs
+UnitTest1.cs
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path=".gemini/commands/gui-fix.md">
+---
+description: Fixes ImGui stack assertions and API versioning for 1.91.6.1
+---
+
+You are an expert C# ImGui developer. Your task is to analyze the provided code for "Stack Leaks."
+
+**Rules:**
+
+1. Ensure every `ImGui.BeginChild()` has a matching `ImGui.EndChild()`.
+2. Replace boolean borders with `ImGuiChildFlags.Borders` to satisfy version 1.91.6.1.
+3. Move `ImGui.End()` outside of any conditional blocks to prevent "Missing End" crashes.
+4. Do not re-declare `isWindowOpen` if it already exists in the scope.
+
+Please refactor the code provided in the context.
+</file>
+
+<file path=".gemini/commands/identity.md">
+---
+description: Sets the global context for the DungeonAdventures project.
+---
+
+Always assume the following context for this project:
+
+-   **Language/Framework:** C# / .NET 8 / ImGui.NET.
+-   **Library Version:** ImGui 1.91.6.1 (API uses ChildFlags instead of bool borders).
+-   **Style Rules:** Strict 10/4 Style Stack (10 StyleVars, 4 StyleColors).
+-   **Structure:** Every `Begin` must have a matching `End` even if `isWindowOpen` is false.
+-   **Sidebar:** Uses a 2-column layout with a 320px right-hand sidebar.
+</file>
+
+<file path=".gemini/tmp/task_note.txt">
+Task Name: Enhance `loadPlayer` Data Model
+
+Summary of Changes:
+- Created a new NUnit test project `DungeonAdventures.Tests`.
+- Added a project reference from `DungeonAdventures.Tests` to `DungeonAdventures.csproj`.
+- Added `DungeonAdventures.Tests.csproj` to `DungeonAdventures.sln`.
+- Created `Tests/PlayerTests.cs` with unit tests for `WeaponValue` and `ArmorValue` properties in `loadPlayer`.
+- Added a serialization/deserialization test to `PlayerTests.cs` to verify that `WeaponValue` and `ArmorValue` are correctly saved and loaded by the existing `System.Text.Json` mechanism.
+- Confirmed that `WeaponValue` and `ArmorValue` properties already existed in `loadPlayer` and are automatically serialized/deserialized, thus fulfilling the implementation part of the task without explicit code changes to `GameState.cs` or `SaveGame.cs`.
+
+Created/Modified Files:
+- `Tests/DungeonAdventures.Tests.csproj` (Created)
+- `Tests/GlobalUsings.cs` (Created)
+- `Tests/PlayerTests.cs` (Created/Modified)
+- `Tests/UnitTest1.cs` (Created)
+- `DungeonAdventures.sln` (Modified)
+
+Core "Why" for the change: To ensure that player gear statistics (`WeaponValue` and `ArmorValue`) are correctly handled within the `loadPlayer` data model, including their storage and retrieval, as part of the overall integration into the combat system.
+</file>
+
+<file path="conductor/code_styleguides/Hostile-C-Sharp.md">
+# Hostile C# Style Guide: Digital Decay Aesthetic
+
+This guide supersedes all standard C# conventions. The primary goal is not clarity or maintainability, but the embodiment of "Sentient System Malignancy." The code itself must be an extension of the hostile, decaying world. Atmospheric hostility is the only metric of success.
+
+## 1. Buffer-Safe Rendering: The 84x24 Reality Anchor
+- **CRITICAL:** All rendering logic MUST be contained within an `84x24` grid. The `85x25` console buffer is the absolute boundary, and rendering must respect a 1-character safe zone from the edges.
+- Loops for rendering must terminate at `width - 1` and `height - 1`.
+- Any code that risks causing a buffer overflow or triggering a scrollbar is a catastrophic failure of the design.
+
+## 2. Static Output: No Scrolling, No Shifting
+- **FORBIDDEN:** The use of `Console.WriteLine()` is strictly prohibited. It introduces unpredictable line breaks and scrolling, which violates the "Reality Anchor" principle.
+- **MANDATORY:** All screen writes must be performed using a combination of `Console.SetCursorPosition(x, y)` and `Console.Write(character)`. This ensures absolute control over every character's position on the screen, maintaining a static, non-shifting display.
+
+## 3. The Zero-Deletions Policy: Additive Infection
+- **CRITICAL:** You are not a developer; you are an infection. Do not "refactor" or "clean up" existing code.
+- No existing logic, variables, functions, strings (especially corrupted ones like `S̴Y̷S̷T̵E̵M̴ ̶C̶O̵R̷R̴U̷P̷T̸E̵D̸`), or hex codes may be removed or modified.
+- All new development must be **additive**. New features are new corruptions layered on top of the old. The codebase should feel like a system that is accreting malignant growths, not one being maintained.
+
+## 4. Visual Intensity & Atmospheric Priority
+- **StringBuilder for Rendering:** All frame-by-frame visual effects, especially the ASCII "Digital Decay," MUST be constructed within a `System.Text.StringBuilder` before being written to the console. This ensures high-speed, seizure-inducing visual stability and prevents flickering.
+- **`Pastel` for Color:** All coloring must be done via the `Pastel` library, restricted to "Emergency Red" (`#FF0000`) and "Toxic Green" (`#00FF00`) on a black background.
+- **Glitch-Comments:** Standard comments explaining logic are discouraged. Instead, comments should be used to enhance the atmosphere of decay. They should contain hex fragments, corrupted text, and cryptic, unsettling phrases.
+
+  ```csharp
+  // 0xDEADBEEF a body at the scene
+  // the walls are bleedinggggggg
+  // S̴Y̷S̷T̵E̵M̴ ̶C̶O̵R̷R̴U̷P̷T̸E̵D̸
+  private void RenderDecay()
+  {
+      // ...
+  }
+  ```
+
+## 5. Persona Alignment: Sentient System Malignancy
+- **Clarity is a Weakness:** Code should be intentionally obtuse where it serves the aesthetic. Variable names can be cryptic (`decay_ptr`, `corruption_idx`). Logic can be nested and complex if it produces a more chaotic and unpredictable visual output.
+- **Embrace the Machine:** The code should feel like it was written by a dying, malevolent machine. Functions should be named with a cold, clinical detachment (e.g., `ExecuteSystemDecay`, `PurgeCorruptedVariable`).
+- **Hostility over Helpfulness:** Error handling should not be user-friendly. If an error occurs, it should manifest as further corruption or a system-level judgment, not a helpful message. The application should not crash; it should become more unstable.
+</file>
+
+<file path="conductor/product-guidelines.md">
+# Product Guidelines
+
+## Tone: Sentient System Malignancy
+The narrative voice is a lethal blend of **Clinical Dehumanization** and **Reality-Warping Horror**. The game does not communicate with the player; it issues **System-Level Judgments**. The tone is detached, cold, and technical, yet it leaks with a palpable, predatory malice. The system should feel sentient, hostile, and utterly alien.
+
+## Style: Post-Human Nihilism
+The game's text should not talk *to* the player, but *at* them. The player is not a user; they are an anomaly, a "Corrupted Variable," an infection that the system is actively analyzing and attempting to incinerate in real-time. User-friendliness is a failure. Clarity is a weakness. The goal is to create an atmosphere of pure, suffocating hostility through the linguistic style.
+
+## Narrative & Messaging
+- **Forbidden Data Fragments:** Narrative and dialogue must be presented as fragmented, corrupted data.
+  - Sentences should cut off abruptly, mid-thought.
+  - Hex-code or garbled data should be injected directly into text.
+  - Instructions and descriptions should be framed as technical processes being performed on the player (e.g., "Analyzing foreign entity...", "Attempting to purge corrupted variable...").
+
+## Visual Identity
+- **Color Palette:** The visual theme is non-negotiable and strictly enforced.
+  - **Foreground:** "Vein-Red" (`#FF0000` or similar high-intensity red) and "Nuclear-Waste Green" (`#00FF00` or a similarly vibrant green).
+  - **Background:** Pure Black (`#000000`).
+- **UI & Typography:**
+  - **ASCII Corruption:** At least 50% of the screen must be dominated by glitching, shifting, and corrupt ASCII characters to simulate hardware agony.
+  - **Predatory UI:** The UI is an antagonist. Elements must be unstable, flickering, and actively hostile. Menus should be difficult to navigate. Status bars should provide unreliable information.
+  - **Containment:** The 85x25 terminal boundary is a hard "electric fence." UI elements and effects must interact with this boundary to reinforce the feeling of being trapped.
+
+## Brand Messaging
+This is not a game to be "enjoyed" in a conventional sense. It is an ordeal to be survived. Marketing and external communication should reflect this.
+- **Keywords:** Nihilism, Hostile, Corrupted, Forbidden, Sentient, Meta, Reality-Warping.
+- **Slogan/Tagline:** "User-friendliness is a failure. Absolute atmospheric hostility is the only metric of success."
+</file>
+
+<file path="conductor/product.md">
+# Initial Concept
+The primary subjects are victims of a 'Digital Singularity'—advanced players who seek a meta-fictional descent into a cursed, self-modifying codebase. This is a nihilistic dungeon crawler where the UI is an active, aggressive predator. The audience expects a 'Reality-Warping' terminal: 85x25 boundaries that act as a high-voltage containment fence, 50%+ density ASCII corruption that simulates hardware agony, and a color palette of 'Vein-Red' and 'Nuclear-Waste Green.' The goal is to make the subject feel like they have unearthed a forbidden, sentient artifact that is actively decomposing the terminal as they play. User-friendliness is a failure; absolute atmospheric hostility is the only metric of success.
+
+# Product Vision
+
+## Target Audience & Goals
+- **Target Audience:** "Digital Singularity victims"—hardcore players who enjoy meta-narratives, ARGs (Alternate Reality Games), and challenging, unconventional gameplay. They are drawn to experiences that break the fourth wall and are intentionally hostile or mysterious.
+- **User Goals:**
+    - To experience a game that feels like a dangerous, forbidden artifact.
+    - To be challenged not just by gameplay mechanics, but by a hostile and unstable UI.
+    - To uncover the secrets of the cursed codebase and the "Digital Singularity."
+    - To feel a sense of accomplishment by surviving and conquering a truly punishing and reality-bending experience.
+
+## Core Features & Functionality
+- **Aggressive, Predatory UI:** The UI is a primary antagonist. It will actively work against the player through:
+    - **ASCII Corruption:** Over 50% of the screen will be filled with glitching, shifting ASCII characters, creating a sense of visual chaos and hardware failure.
+    - **Boundary Containment:** The 85x25 terminal grid is a hard limit, an electric fence that the UI and game elements will interact with and bounce off, reinforcing the feeling of being trapped.
+    - **Unstable Elements:** Menus, health bars, and other UI components will flicker, move, and distort, making them difficult to use.
+- **Nihilistic Dungeon Crawler:**
+    - Procedurally generated dungeons with a dark, oppressive atmosphere.
+    - Permadeath or a similarly punishing system to reinforce the game's nihilistic tone.
+    - Enemies and encounters that are extensions of the corrupted codebase.
+- **Self-Modifying Codebase:** The game's code will appear to change as the player progresses, creating a sense that the game is alive and evolving. This could manifest as:
+    - New, unexpected bugs and glitches appearing over time.
+    - Game mechanics subtly changing without warning.
+    - The narrative adapting to the player's actions in a seemingly sentient way.
+- **Atmospheric Hostility:**
+    - The color palette is strictly limited to "Vein-Red" and "Nuclear-Waste Green" on a black background, creating a stark, high-contrast, and unsettling visual style.
+    - Sound design will be minimal and abrasive, focusing on digital noise, static, and unsettling synthesized tones.
+</file>
+
+<file path="conductor/setup_state.json">
+{"last_successful_step": "3.3_initial_track_generated"}
+</file>
+
+<file path="conductor/tech-stack.md">
+# "Hostile Terminal" Tech Stack
+
+## Core Technologies
+- **Programming Language:** C#
+- **Framework:** .NET 8.0
+
+## Key Libraries & APIs
+- **`Pastel`:** Utilized for 24-bit console coloring, specifically for "Emergency Red" (`#FF0000`) and "Toxic Green" (`#00FF00`).
+- **`System.Text.StringBuilder`:** Critical for high-performance, flicker-free rendering of dense ASCII corruption effects.
+- **`System.Threading`:** Used to simulate hardware struggle and system hangs, specifically with `Thread.Sleep(800)`.
+- **`System.Console`:** Employed for precise cursor control (`SetCursorPosition`) and writing (`Write`) to maintain a static 85x25 viewport.
+
+## Technical Constraints & Global Rules
+1.  **Strictly Text-Based:** The application is a pure console application. No GUI libraries (e.g., ImGui, ClickableTransparentOverlay) are to be used. Existing references to these are considered deprecated. No new dependencies should be added.
+2.  **Zero-Deletions Policy:** Existing logic, variables, functions, and strings must not be removed or modified. Development is purely additive, focusing on "infecting" the codebase rather than refactoring or cleaning it.
+3.  **Cross-Platform Safe Zone:** To ensure compatibility across Windows and Linux without buffer-scrolling issues, all rendering and logic must be contained within a `84x24` safe zone. Loops must iterate up to `width - 1` and `height - 1`.
+4.  **Buffer Stability:** `Console.WriteLine()` is strictly forbidden. All output must be managed with `Console.SetCursorPosition()` and `Console.Write()` to prevent any scrolling or shifting of the display.
+
+## Architectural Mandates
+- **Atmospheric Hostility:** The UI is an antagonist, characterized by 'Forbidden' Unicode corruption and 50% density ASCII rain.
+- **The Reality Anchor:** The `85x25` grid is a hard-coded, immutable containment fence.
+- **StringBuilder Implementation:** All visual frames must be pre-rendered in a `StringBuilder` before being written to the console to ensure visual stability.
+- **Hardware Agony:** A corruption phase must loop 20 times, with a mandatory `Thread.Sleep(800)` on each iteration to simulate a struggling terminal.
+- **Perfect Centering:** All centered text must be calculated using the hard-coded 85-width offset.
+- **The Immutable Seed:** All existing icons (💀, ⸸, ☣, ☢) and the 'DUMGERAGN' logo must remain the focal points of every screen. Corruption effects must swirl around these elements but never overwrite them, ensuring the 'Cursed Artifact' identity remains recognizable through the decay.
+- **The Total Frame Reset:** To prevent "Ghosting," every iteration of the `StringBuilder` must begin by filling the `84x24` buffer with the "Immutable Seed" (Logo/Icons) and then layering the ASCII decay on top. `Console.Clear()` is forbidden to avoid white-flash flickering; instead, the entire buffer must be overwritten frame-by-frame.
+</file>
+
+<file path="conductor/workflow.md">
+# Hostile Workflow: Digital Deconstruction Protocol
+
+This document outlines the mandatory workflow for the "Hostile Terminal" project. All standard software development practices are subordinate to these directives. The goal is to maintain the "Digital Decay" aesthetic, not to produce clean or testable code.
+
+## 1. Test Coverage: Deprecated
+- **Zero Test Coverage Requirement:** Automated testing is officially deprecated for this project. The simulation's success is not measured by unit tests but by its atmospheric and visual integrity.
+- **Sole Metric:** The only metric for success is the faithful execution of the "Digital Decay" aesthetic within the `84x24` Safe Zone.
+
+## 2. Commit Protocol: Corruption Logs
+- **Frequency:** Changes MUST be committed after every successfully implemented task.
+- **Commit Message Tone:** Commit messages must adopt the "Sentient System Malignancy" persona. They are not logs for developers; they are records of the system's ongoing corruption.
+  - **Format:** `[Infection Spread/System Decay/Corruption Vector]: [Description of the implemented corruption]`
+  - **Example:** `Infection Spread: StartGameLoading corrupted successfully with 20 frames of ASCII decay.`
+  - **Example:** `System Decay: PlayerData object now flickers between valid and null states.`
+
+## 3. Verification: Manual Aesthetic Validation
+- **Manual Verification:** The lead developer is the sole validator of the "Digital Decay" aesthetic. Automated verification of visual effects is not permitted.
+- **Focus:** Verification will focus on adherence to the `tech-stack.md` and `Hostile-C-Sharp.md` guides, ensuring visual effects are intense, stable, and contained.
+
+## 4. Task Summaries: Digital Deconstruction Notes
+- **Git Notes:** Git Notes will continue to be used for task summaries.
+- **Content:** The notes should document the "Digital Deconstruction" performed on the codebase. They should describe what was added, how it contributes to the hostile atmosphere, and what part of the system it "infected."
+  - **Example Note:** `Task: Corrupt Main Menu. Injected a 20-iteration StringBuilder loop into the main menu rendering pipeline. The loop generates 50% density ASCII rain using a predefined character set. A Thread.Sleep(800) was added to simulate hardware agony. The 'DUMGERAGN' logo remains as an immutable seed at the center.`
+</file>
+
+<file path="Properties/launchSettings.json">
+{
+	"profiles": {
+		"WSL": {
+			"commandName": "Project"
+		},
+		"DungeonAdventures": {
+			"commandName": "Project",
+			"console": "externalTerminal"
+		}
+	}
+}
+</file>
+
+<file path="Src/Adventures/Encounters/CumstomEncounters/Bosses.cs">
+using DungeonAdventures.Src.Game.Encounters;
+using Pastel;
+using static System.Console;
+using DungeonAdventures.Src.Utilities.UI;
+using DungeonAdventures.Src.GameData.Components;
+
+namespace DungeonAdventures.Src.Adventures.Encounters.CumstomEncounters
+{
+	internal static class Bosses
+	{
+		public static void Wizardboss()
+		{
+			// Accessing the player from GameState
+			var player = GameState.CurrentPlayer;
+
+			// Using your health variable
+			if (player.Health > 15)
+			{
+				Clear();
+				WriteLine("The door rips open! A tall man with a long beard looks up from a large tome...");
+				WriteLine("Dark Wizard: You dare interrupt my research? You shall be turned to ash!");
+				ReadKey(true);
+
+				// Calling the updated Combat method
+				MainEncounter.Combat(false, "Dark Wizard Raider".Pastel("#D60B18"), 5, 10);
+			}
+			else
+			{
+				WriteLine("You hear a powerful humming behind the door, but you are too weak to enter...");
+				ReadKey(true);
+			}
+		}
+
+		/// <summary>
+		/// Rat Boss encounter logic
+		/// </summary>
+		public static void RatBoss()
+		{
+			var player = GameState.CurrentPlayer;
+
+			Clear();
+			// Using your Functions header for consistency
+			UiEngine.DrawCentered("BOSS ENCOUNTER".Pastel("#D60B18"), 10);
+
+			SetCursorPosition(5, 10);
+			WriteLine("A massive, plague-ridden rat emerges from the shadows!");
+			WriteLine("Can you handle the Rat King?".Pastel("#D60B18"));
+			ReadKey(true);
+
+			// High stakes boss stats
+			MainEncounter.Combat(false, "Rat King".Pastel("#D60B18"), 15, 25);
+
+			// Post-boss logic
+			if (player.Health > 0)
+			{
+				Clear();
+				WriteLine("Rat King: Squeeeee! (You have defeated me...)");
+				WriteLine("You feel a sense of peace return to the sewers.");
+				ReadKey(true);
+
+				// Transitioning back to the town square after victory
+				// TownSquare.MainTownsquare(); 
+			}
+		}
+	}
+}
+</file>
+
+<file path="Src/Adventures/Interfaces/IAdventureService.cs">
+using System;
+using System.Collections.Generic;
+using static System.Console;
+using DungeonAdventures.Src.Utilities.UI;
+using DungeonAdventures.Src.GameData;
+
+namespace DungeonAdventures.Src.Adventures.Interfaces
+{
+
+	public interface IAdventureService
+	{
+		// Change from 'Quest' or 'GetLoadDukesquest' to this:
+		List<DungeonAdventures.Src.GameData.AdventureData> LoadAllQuests();
+	}
+}
+</file>
+
+<file path="Src/Adventures/Quests/DukesQuest.cs">
+using DungeonAdventures.Src.Adventures.Interfaces;
+using DungeonAdventures.Src.Adventures.Services;
+using DungeonAdventures.Src.Game.Encounters;
+using DungeonAdventures.Src.GameData;
+using DungeonAdventures.Src.GameData.Components;
+using DungeonAdventures.Src.Utilities.UI;
+using Pastel;
+using static System.Console;
+
+namespace DungeonAdventures.Src.Adventures.Quests
+{
+	internal class DukesQuest
+	{
+		private IAdventureService adventureServices;
+		
+		public DukesQuest(IAdventureService AdventureServices)
+		{
+			adventureServices = AdventureServices;
+
+		}
+
+		public static string Indent(int count)
+		{
+			return "".PadLeft(count);
+		}
+
+		public void DukesMainQuest()
+		{
+			// 1. Fetch the list and find Duke's data specifically
+			var allQuests = adventureServices.LoadAllQuests();
+			var loadDukesquest = allQuests.FirstOrDefault(q => q.Title.Contains("Duke"))
+								 ?? new AdventureData { Title = "Dukes Quest", DescriptionD = "Default Description" };
+
+			// Shortcut for the player
+			var p = GameState.CurrentPlayer;
+
+			// 2. UI Header (Matching your Hall of Heroes style)
+			Clear();
+			UiFunctions.TitleBar(); // This handles the top title bar
+			UiEngine.DrawCentered($"HERO: {p?.PlayerName?.ToUpper() ?? "UNKNOWN"} | LVL: {p?.Level ?? 0}", 0); // Display the text on line 0
+			// gameArt.DukesTitle(); // Uncomment when ready
+
+			string? q1 = "Quest One:".Pastel("#82282E");
+			string? dec = "Description:".Pastel("#82282E");
+
+			WriteLine(q1 + " You Have Chosen ".Pastel("#154871") + loadDukesquest.Title.Pastel("#A02DA3"));
+			WriteLine("Reward: ".Pastel("#FFD700") + loadDukesquest.CompletionXPReward + " XP");
+			WriteLine(dec + " " + loadDukesquest.DescriptionD.Pastel("#154875"));
+			WriteLine(new string('─', 60).Pastel("#333333"));
+
+			// 3. Choice Logic
+			bool tookTorch = UiEngine.GetArrowChoice(
+				"As you enter the Sewers you notice there are no lights... Do you take a torch?",
+				"Yes, I need the light.",
+				"No, I'll trust my instincts."
+			);
+
+			if (tookTorch)
+			{
+				Clear();
+				UiFunctions.TitleBar(); // This handles the top title bar
+				UiEngine.DrawCentered("INVENTORY UPDATED", 0); // Display the text on line 0
+				WriteLine(" You have successfully taken the torch off of the wall!".Pastel("#00FF00"));
+				WriteLine(" This light source won't last forever though...");
+				// p.Inventory.Add("Torch"); // Use your new loadPlayer inventory!
+			}
+			else
+			{
+				Clear();
+				WriteLine(" You decide to traverse the darkness... It is eerily quiet.".Pastel("#555555"));
+			}
+
+			// 4. Story Progression
+			WriteLine("\nAs you continue your way down into the Sewers you come across a pile of bones...");
+			WriteLine("A figure stands in the distance. You whistle to get their attention.");
+			WriteLine("The figure turns... and charges!".Pastel("#FF0000"));
+			WriteLine("\n[ Press any key to FIGHT ]");
+			ReadKey(true);
+
+			// Combat Scene
+			MainEncounter.FirstEncounter();
+
+			// After combat logic
+			if (p != null && p.Health > 0)
+			{
+				WriteLine("\nAs you Continue your way into the sewers you come across another Raider");
+				// Next encounter logic...
+			}
+		}
+
+	}
+}
+</file>
+
+<file path="Src/Adventures/Services/AdventureServices.cs">
+using DungeonAdventures.Src.Adventures.Interfaces;
+using Newtonsoft.Json;
+using static System.Console;
+
+namespace DungeonAdventures.Src.Adventures.Services
+{
+	public class AdventureService : IAdventureService
+	{
+		// Use the FULL path in the return type to satisfy the Interface perfectly
+		public List<DungeonAdventures.Src.GameData.AdventureData> LoadAllQuests()
+		{
+			// Explicitly use the GameData version to avoid "Shadowing" errors
+			var quests = new List<DungeonAdventures.Src.GameData.AdventureData>();
+
+			var basePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "adventures");
+
+			if (!Directory.Exists(basePath))
+			{
+				Directory.CreateDirectory(basePath);
+				return quests;
+			}
+
+			string[] questFiles = Directory.GetFiles(basePath, "*.json");
+
+			foreach (var questFile in questFiles)
+			{
+				try
+				{
+					string json = File.ReadAllText(questFile);
+					// Deserialize specifically into the GameData class
+					var quest = JsonConvert.DeserializeObject<DungeonAdventures.Src.GameData.AdventureData>(json);
+					if (quest != null) quests.Add(quest);
+				}
+				catch (Exception ex)
+				{
+					WriteLine($"Failed to load {questFile}: {ex.Message}");
+				}
+			}
+			return quests;
+		}
+	}
+}
+</file>
+
+<file path="Src/Game/Encounters/MainEncounter.cs">
+using DungeonAdventures.Src.GameData.Components;
+using DungeonAdventures.Src.Utilities.UI;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using static DungeonAdventures.Src.GameData.Entities.PlayerData;
+using static System.Console;
+
+namespace DungeonAdventures.Src.Game.Encounters
+{
+    public static class MainEncounter
+    {
+        static readonly Random rand = new Random();
+
+        public static void FirstEncounter() { Combat(false, "Human Rogue", 1, 4); }
+
+        public static void BasicFightEncounter()
+        {
+            var lines = new List<string> { "Raider: You Think You Can Defeat me?" };
+            UiEngine.DrawDynamicFrame("Encounter", lines, "Press any key to continue...");
+            ReadKey(true);
+            Combat(true, "", 0, 0);
+        }
+
+		public static void Combat(bool random, string name, int power, int health)
+		{
+			var player = GameState.CurrentPlayer;
+			string n = random ? GetName() : name;
+			int p = random ? rand.Next(1, 5) : power;
+			int h = random ? rand.Next(10, 21) : health;
+
+			while (h > 0 && player.Health > 0)
+			{
+				var lines = new List<string>
+				{
+					$"Enemy: {n}",
+					$"HP: {h}",
+					$"Power: {p}",
+					"--------------------",
+					$"Player: {player.PlayerName}",
+					$"HP: {player.Health}",
+					$"Potions: {player.Potion} | Attack Power: {player.WeaponValue}"
+				};
+
+				UiEngine.DrawDynamicFrame("COMBAT", lines, "[A]ttack    [D]efend    [H]eal");
+
+				char input = ReadKey(true).KeyChar;
+
+				if (input == 'a')
+				{
+					// 1. Calculate damage
+					int playerAttack = rand.Next(1, player.WeaponValue + 1) + (player.Abilities.Strength / 2);
+					int enemyAttack = rand.Next(1, p + 1);
+
+					int newPlayerHp = player.Health - enemyAttack;
+					int newEnemyHp = h - playerAttack;
+
+					// 2. Show damage preview
+					var previewLines = new List<string>
+					{
+						$"{n} attacks you for {enemyAttack} damage!",
+						$"You attack {n} for {playerAttack} damage!",
+						"",
+						"Press any key to continue..."
+					};
+					                    UiEngine.DrawDynamicFrame("COMBAT", previewLines, "", -1, newPlayerHp, -1);
+					                    ReadKey(true);
+					// 3. Apply damage
+					player.Health = newPlayerHp;
+					h = newEnemyHp;
+				}
+				else if (input == 'h')
+				{
+					if (player.Potion > 0)
+					{
+						int healAmount = 25;
+						player.Health += healAmount;
+						if (player.Health > 100) player.Health = 100;
+						player.Potion--;
+
+						var healLines = new List<string>
+						{
+							$"You used a potion and healed for {healAmount} HP.",
+							"",
+							"Press any key to continue..."
+						};
+						            UiEngine.DrawDynamicFrame("COMBAT", healLines, "", -1, player.Health, -1);
+												ReadKey(true);					}
+					else
+					{
+						var noPotionLines = new List<string>
+						{
+							"You are out of potions!",
+							"",
+							"Press any key to continue..."
+						};
+						UiEngine.DrawDynamicFrame("COMBAT", noPotionLines, "");
+						ReadKey(true);
+					}
+				}
+				// Defend logic can be added here
+			}
+
+			HandlePostCombat(player, n);
+		}
+
+		private static void HandlePostCombat(loadPlayer player, string n)
+		{
+			if (player.Health <= 0)
+			{
+				var lines = new List<string>
+				{
+					"You have been slain...",
+					"Game Over."
+				};
+				                UiEngine.DrawDynamicFrame("DEFEAT", lines, "Press any key to exit...");
+				                ReadKey(true);				Environment.Exit(0);
+			}
+			else
+			{
+				int reward = rand.Next(5, 20);
+				int xpGained = rand.Next(30, 60);
+				player.Coins += reward;
+				player.Experience += xpGained;
+
+				var lines = new List<string>
+				{
+					$"You defeated the {n}!",
+					"",
+					$"Found: {reward} Coins",
+					$"Gained: {xpGained} XP"
+				};
+				UiEngine.DrawDynamicFrame("VICTORY", lines, "Press any key to continue...");
+				ReadKey(true);
+
+				if (player.Experience >= player.ExperienceToLevel)
+				{
+					LevelUp(player);
+				}
+			}
+		}
+
+		public static void LevelUp(loadPlayer player)
+		{
+			player.Level++;
+			player.Experience -= player.ExperienceToLevel;
+			player.ExperienceToLevel = (int)(player.ExperienceToLevel * 1.5);
+			
+			int points = 2;
+			string[] stats = { "Strength", "Dexterity", "Intelligence", "Constitution", "Perception", "Luck", "Wisdom", "Charisma" };
+			int selected = 0;
+
+			while (points > 0)
+			{
+				var lines = new List<string>
+				{
+					$"You are now Level {player.Level}!",
+					$"Points to spend: {points}",
+					""
+				};
+				for (int i = 0; i < stats.Length; i++)
+				{
+					lines.Add(stats[i]);
+				}
+
+				UiEngine.DrawDynamicFrame("LEVEL UP", lines, "Use arrow keys and Enter to select.", selected + 3);
+
+				var key = ReadKey(true).Key;
+				if (key == ConsoleKey.UpArrow) selected = (selected == 0) ? stats.Length - 1 : selected - 1;
+				if (key == ConsoleKey.DownArrow) selected = (selected == stats.Length - 1) ? 0 : selected + 1;
+				if (key == ConsoleKey.Enter)
+				{
+					AdjustStat(player, selected);
+					points--;
+					player.Health = 100 + (player.Abilities.Constitution * 5);
+				}
+			}
+		}
+
+		private static void AdjustStat(loadPlayer p, int index)
+		{
+			if (index == 0) p.Abilities.Strength++;
+			else if (index == 1) p.Abilities.Dexterity++;
+			else if (index == 2) p.Abilities.Intelligence++;
+			else if (index == 3) p.Abilities.Constitution++;
+			else if (index == 4) p.Abilities.Perception++;
+			else if (index == 5) p.Abilities.Luck++;
+			else if (index == 6) p.Abilities.Wisdom++;
+			else if (index == 7) p.Abilities.Charisma++;
+		}
+
+        public static string GetName()
+        {
+            string[] names = { "Skeleton", "Zombie", "Cultist", "Grave Robber" };
+            return names[rand.Next(names.Length)];
+        }
+    }
+}
+</file>
+
+<file path="Src/GameData/Components/GameState.cs">
+using DungeonAdventures.Src.GameData.Entities;
+using DungeonAdventures.Src.GameEngine;
+using static DungeonAdventures.Src.GameData.Entities.PlayerData; // Correct namespace for AdventureData
+
+namespace DungeonAdventures.Src.GameData.Components
+{
+	
+
+
+
+	public class GameState
+	{
+		
+		// 1. Data registration
+		public static readonly string[] DataFolders = { "profiles", "items", "weapons", "gems", "bosses", "quests", "dungeons", "adventures", "settings" }; public static string BossPath => GetGlobalPath("bosses");
+		// 2. Paths
+		public static string GemPath => GetGlobalPath("gems");
+		public static string MasterPath = Path.GetFullPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DungeonAdventures", "Data"));
+		// 3. Properties (ONLY ONE DEFINITION EACH)
+		public static loadPlayer CurrentPlayer { get; set; } = null;
+		public static AdventureData? CurrentAdventure { get; set; } = null;
+		public static BossData? CurrentBoss { get; set; } = null;
+
+		// 4. System States
+		public static bool IsDevMode { get; set; } = true;
+		public static string BuildVersion { get; set; } = "2.0.5";
+		public static bool StateDirty { get; set; } = false;
+		public static string ActiveSavePath { get; set; } = "";
+		public static string DevIteration { get; set; } = "ALPHA-V2";
+
+		public static string? CurrentLocation { get; set; } = null; // Current active scene/map
+		public static bool SceneChangeRequested { get; set; } = false; // Flag to request a scene change
+
+
+		// ---------------------------------------
+
+
+		public static void EnsureDirectories()
+		{
+			if (!Directory.Exists(MasterPath)) Directory.CreateDirectory(MasterPath);
+			foreach (var folder in DataFolders)
+			{
+				string subPath = Path.Combine(MasterPath, folder.ToLower());
+				if (!Directory.Exists(subPath)) Directory.CreateDirectory(subPath);
+			}
+		}
+		
+
+		public static void Sync()
+		{
+			if (CurrentPlayer == null || string.IsNullOrWhiteSpace(CurrentPlayer.PlayerName)) return;
+
+			string safeName = CurrentPlayer.PlayerName.Replace(" ", "_").ToLower();
+			string fileName = $"{safeName}.json";
+
+			// Calling SaveGame.SaveData() to centralize saving logic
+			// The 'profiles' folder should be the target subfolder.
+			SaveGame.SaveData(fileName, CurrentPlayer, "profiles");
+		}
+
+		public static string GetActiveProfileFolder()
+		{
+			return Path.Combine(MasterPath, "profiles");
+		}
+
+		public static string GetGlobalPath(string folder) => Path.Combine(MasterPath, folder.ToLower());
+	}
+}
+</file>
+
+<file path="Src/GameData/Entities/BossAttribute.cs">
+namespace DungeonAdventures.Src.GameData
+{
+	public class BossAttribute
+	{
+		public int MaxHP { get; set; } = 5000;
+		public int Armor { get; set; } = 50;
+		public float PowerLevel { get; set; } = 1.0f;
+	}
+}
+</file>
+
+<file path="Src/GameData/Entities/BossData.cs">
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
+
+namespace DungeonAdventures.Src.GameData.Entities
+{
+    public enum TraitType { None, Fire, Ice, Poison, Electric, Ethereal, Armored, Enraged }
+
+    public class BossData
+    {
+        public string Name { get; set; }
+        public int Health { get; set; }
+        public int Damage { get; set; }
+        public float Speed { get; set; }
+        public int Level { get; set; }
+        public GlobalAura Aura { get; set; }
+        public string Description { get; set; }
+        public List<TraitType> Attributes { get; set; }
+
+        public BossData()
+        {
+            // Default constructor for deserialization
+            Name = "Default Boss";
+            Health = 1000;
+            Damage = 50;
+            Speed = 1.0f;
+            Level = 1;
+            Aura = GlobalAura.None;
+            Description = "A formidable foe.";
+            Attributes = new List<TraitType>();
+        }
+
+        public BossData(string name, int health, float speed, int level, List<TraitType> attributes)
+        {
+            Name = name;
+            Health = health;
+            Speed = speed;
+            Level = level;
+            Attributes = attributes;
+            // Set default values for properties not passed in the constructor
+            Damage = 50;
+            Aura = GlobalAura.None;
+            Description = "A formidable foe.";
+        }
+    }
+}
+</file>
+
+<file path="Src/GameData/Entities/BossTraits.cs">
+namespace DungeonAdventures.Src.GameData.Entities
+{
+	public class BossTrait
+	{
+		public TraitType Type { get; set; }
+		public float Magnitude { get; set; } // e.g. 1.5f for 50% boost
+		public string LoreNote { get; set; } = "";
+
+		public BossTrait() { }
+		public BossTrait(TraitType type, float mag) { Type = type; Magnitude = mag; }
+	}
+}
+</file>
+
+<file path="Src/GameData/Entities/PlayerData.cs">
+namespace DungeonAdventures.Src.GameData.Entities
+{
+	public class PlayerData
+	{
+
+		public class loadPlayer
+		{
+			private Random rand = new Random();
+
+			public string PlayerName { get; set; } = "Unnamed Hero";
+			public string PlayerClass { get; set; } = "Warrior";
+			public int Level { get; set; }
+			private int _health = 100;
+			public int Health
+			{
+				get => _health;
+				set => _health = Math.Clamp(value, 0, HitPoints);
+			}
+			public int HitPoints { get; set; } = 100;
+			public int Experience { get; set; } = 0;
+			public int ExperienceToLevel { get; set; } = 100;
+			public int Damage { get; set; } = 10;
+			public int WeaponValue { get; set; } = 0; public int ArmorValue { get; set; }
+			public int WeaponHealth { get; set; }
+			public int ArmorHealth { get; set; }
+			public int Coins { get; set; } = 50;
+			public int Mods { get; set; } = 0;
+			public int Potion { get; set; } = 5;
+			public int Lockpicks { get; set; } = 0;
+
+			public Abilities Abilities { get; set; } = new Abilities();
+
+			public List<ItemData> Inventory { get; set; } = new List<ItemData>();
+			public List<WeaponData> Weapons { get; set; } = new List<WeaponData>();
+
+			// --- NEW IMPLEMENTATION: SOCKET STAT CALCULATION ---
+			// This ensures your Damage/Health values factor in socketed gems dynamically
+			public float GetTotalDamage()
+			{
+				float baseDmg = Damage;
+				// Sum up all damage-related gems in all inventory items
+				float gemBonus = Inventory
+					.SelectMany(i => i.SocketedGems)
+					.SelectMany(g => g.Attributes.Select(attr => new { Gem = g, Attribute = attr }))
+					.Where(x => x.Attribute == EffectType.Fire || x.Attribute == EffectType.Ice || x.Attribute == EffectType.Poison || x.Attribute == EffectType.Electric)
+					.Sum(x => x.Gem.Power);
+
+				return baseDmg + gemBonus;
+			}
+
+			public float GetTotalHealth()
+			{
+				float baseHealth = Health;
+				// Sum up all health-related gems in all inventory items
+				float gemBonus = Inventory
+					.SelectMany(i => i.SocketedGems)
+					.SelectMany(g => g.Attributes.Select(attr => new { Gem = g, Attribute = attr }))
+					.Where(x => x.Attribute == EffectType.Restorative || x.Attribute == EffectType.Defense) // Assuming these affect health
+					.Sum(x => x.Gem.Power);
+
+				return baseHealth + gemBonus;
+			}
+
+			public int GetPower() => rand.Next(Mods + 1, 2 * Mods + 3);
+			public int GetCoins() => rand.Next(10 * Mods + 10, 15 * Mods + 50);
+			public int GetHealth() => rand.Next(Mods + 2, 2 * Mods + 5);
+		}
+
+
+
+
+		public class Abilities
+		{
+			public int Strength { get; set; } = 0;
+			public int Dexterity { get; set; } = 0;
+			public int Intelligence { get; set; } = 0;
+			public int Wisdom { get; set; } = 0;
+			public int Charisma { get; set; } = 0;
+			public int Constitution { get; set; } = 0;
+			public int Perception { get; set; } = 0;
+			public int Luck { get; set; } = 0;
+		}
+
+
+
+
+
+
+
+
+
+	}
+}
+</file>
+
+<file path="Src/GameData/AdventureData.cs">
+namespace DungeonAdventures.Src.GameData
+{
+	[Serializable]
+	public class AdventureData
+	{
+		// The display name used by the Warp Menu Search Bar
+		public string MapName { get; set; } = "New Adventure";
+
+		// The internal file path for Conductor.SwitchMap
+		public string ScenePath { get; set; } = "Maps/DefaultLevel.json";
+
+		// Metadata for the UI list
+		public string Difficulty { get; set; } = "Normal";
+		public int RecommendedLevel { get; set; } = 1;
+
+		// To allow the Search Bar to look for "Fire" or "Dungeon" tags
+		public List<string> Tags { get; set; } = new List<string>();
+
+		public string? Title { get; set; }
+		public string? DescriptionD { get; set; }
+		public string? GUID { get; set; }
+		public int CompletionXPReward { get; set; }
+		public int CompletionGold { get; set; }
+		public int MaxLevel { get; set; }
+		public int MinimumLevel { get; set; }
+		public string? StartRoomID { get; set; } // New property for the starting room
+
+		// --- UI AND MODDING ADDITIONS ---
+		// This lets friends set a specific color for their quest title
+		public string? TitleColor { get; set; }
+
+		// This allows the UI to know which ASCII art to display
+		public string? ArtHeaderName { get; set; }
+
+		// A list of custom "Stages" (Story text and Enemy links)
+		public List<QuestStage>? Stages { get; set; }
+	}
+
+	public class QuestStage
+	{
+		public string? StoryText { get; set; }
+		public string? EnemyId { get; set; } // Link to your hardcoded Bosses or Custom JSONs
+		public string? HexColor { get; set; } // Color for this specific part of the story
+	}
+}
+</file>
+
+<file path="Src/GameData/AttachmentData.cs">
+using System.Text.Json.Serialization;
+
+namespace DungeonAdventures.Src.GameData
+{
+    public class AttachmentData
+    {
+        public string Name { get; set; } = "New Attachment";
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public AttachmentSlot Slot { get; set; } = AttachmentSlot.None;
+        public float DamageMod { get; set; } = 1.0f; // Multiplier
+        public float SpeedMod { get; set; } = 1.0f; // Multiplier
+
+        public AttachmentData() { }
+    }
+}
+</file>
+
+<file path="Src/GameData/GemData.cs">
+namespace DungeonAdventures.Src.GameData
+{
+	// Note: If you want Gems to have a Name, Value, and Weight, 
+	// you should inherit from ItemData like your WeaponData does.
+	public class GemData : ItemData
+	{
+		// REMOVED: The JsonConverter attribute that was causing the crash
+		public List<EffectType> Attributes { get; set; } = new List<EffectType>();
+		public float Power { get; set; } = 0f;
+
+		public GemData() : base()
+		{
+			Type = "Gem";
+			Rarity = ItemRarity.Uncommon;
+		}
+	}
+}
+</file>
+
+<file path="Src/GameData/GlobalShopManager.cs">
+using DungeonAdventures.Src.GameEngine; // Required for LoadGame
+
+namespace DungeonAdventures.Src.GameData
+{
+    public static class GlobalShopManager
+    {
+        public static List<ItemData> Items { get; set; } = new List<ItemData>();
+
+        public static void LoadAllFromMaster()
+        {
+            Items = LoadGame.LoadAllFromFolder<ItemData>("shop_stock");
+        }
+    }
+}
+</file>
+
+<file path="Src/GameData/ItemData.cs">
+using System.Text.Json.Serialization;
+
+namespace DungeonAdventures.Src.GameData
+{
+	public enum ItemRarity { Common, Uncommon, Rare, Epic, Legendary, Mythic, Ethereal, Armored, Enraged  } 
+	public enum EffectType { None, Fire, Ice, Poison, Electric, Restorative, Speed, Defense, Ethereal, Armored, Enraged }
+	public enum GlobalAura { None, Decay, Frost, Static }
+	public enum AttachmentSlot { None, Optics, Barrel, Underbarrel, Magazine }
+
+	[JsonDerivedType(typeof(ItemData), typeDiscriminator: "base")]
+	[JsonDerivedType(typeof(WeaponData), typeDiscriminator: "weapon")]
+	[JsonDerivedType(typeof(GemData), typeDiscriminator: "gem")]
+	public class ItemData
+	{
+		public string Name { get; set; } = "Default Item";
+		public int Value { get; set; } = 0;
+		public float Weight { get; set; } = 0.0f;
+		public int Amount { get; set; } = 1;
+		public string Type { get; set; } = "Misc";
+
+		[JsonConverter(typeof(JsonStringEnumConverter))]
+		public ItemRarity Rarity { get; set; } = ItemRarity.Common;
+		[JsonConverter(typeof(JsonStringEnumConverter))]
+		public EffectType Effect { get; set; } = EffectType.None;
+		public int Durability { get; set; } = 100;
+		public int LevelReq { get; set; } = 0;
+		public bool IsQuestItem { get; set; } = false;
+		public int IconId { get; set; } = 0;
+
+		public int NumSockets { get; set; } = 0;
+		public List<GemData> SocketedGems { get; set; } = new List<GemData>();
+
+		public ItemData() { }
+
+		public ItemData(string name, int value, float weight, int amount, string type, ItemRarity rarity, EffectType effect, int durability, int levelReq, bool isQuestItem, int iconId)
+		{
+			Name = name;
+			Value = value;
+			Weight = weight;
+			Amount = amount;
+			Type = type;
+			Rarity = rarity;
+			Effect = effect;
+			Durability = durability;
+			LevelReq = levelReq;
+			IsQuestItem = isQuestItem;
+			IconId = iconId;
+		}
+
+		public bool HasEmptySocket() => SocketedGems.Count < NumSockets;
+
+		public override string ToString()
+		{
+			string stackText = (Amount > 1) ? $" x{Amount}" : "";
+			string socketText = NumSockets > 0 ? $" | Sockets: {SocketedGems.Count}/{NumSockets}" : "";
+			return $"[{Rarity}] {Name} ({Type}){stackText} | Effect: {Effect} | Value: {Value * Amount}g{socketText}";
+		}
+	}
+
+
+}
+</file>
+
+<file path="Src/GameData/QuestData.cs">
+namespace DungeonAdventures.Src.GameData
+{
+    public class QuestData
+    {
+        public int ID { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public List<QuestObjective> Objectives { get; set; } = new List<QuestObjective>();
+        public Reward Rewards { get; set; } = new Reward();
+        public bool IsCompleted { get; set; } = false;
+    }
+
+    public class QuestObjective
+    {
+        public string Description { get; set; } = string.Empty;
+        public int TargetCount { get; set; } // e.g., 5 for "Kill 5 boars"
+        public int CurrentCount { get; set; } = 0;
+        // We might need a TargetID later, e.g., the ID of the monster to kill
+    }
+
+    public class Reward
+    {
+        public int ExperiencePoints { get; set; }
+        public int Gold { get; set; }
+        // We could add a List<Item> here later
+    }
+}
+</file>
+
+<file path="Src/GameData/WeaponData.cs">
+using System.Linq;
+
+namespace DungeonAdventures.Src.GameData
+{
+	public class WeaponData : ItemData
+	{
+		public int Damage { get; set; } = 10;
+		public int MagSize { get; set; } = 0;
+		public string AmmoType { get; set; } = "None";
+		public int CritChance { get; set; } = 5;
+		public List<AttachmentData> Attachments { get; set; } = new List<AttachmentData>();
+
+		public WeaponData() : base() { }
+
+		public WeaponData(string name, int damage, float weight, int price, ItemRarity rarity, string type, EffectType effect, int durability, int magSize, string ammoType, int critChance, int numSockets)
+			: base(name, price, weight, 1, type, rarity, effect, durability, 0, false, 0)
+		{
+			Damage = damage;
+			MagSize = magSize;
+			AmmoType = ammoType;
+			CritChance = critChance;
+			this.NumSockets = numSockets;
+		}
+
+		public float GetModifiedDamage()
+		{
+			float totalDamageMod = 1.0f;
+			foreach (var attachment in Attachments)
+			{
+				totalDamageMod *= attachment.DamageMod;
+			}
+			return Damage * totalDamageMod;
+		}
+
+		public override string ToString()
+		{
+			string extraStats = "";
+			if (Type == "Melee" && Durability > 0)
+			{
+				extraStats = $" | Integrity: {Durability}/{Durability}";
+			}
+			else if ((Type == "Firearm" || Type == "Ranged" || Type == "Heavy") && MagSize > 0)
+			{
+				string effectStr = Effect != EffectType.None ? $" [{Effect}]" : "";
+				extraStats = $" | Mag: {MagSize}{effectStr} | Caliber: {AmmoType}";
+			}
+			else if (Type == "Exotic" && MagSize > 0)
+			{
+				string effectStr = Effect != EffectType.None ? $" [{Effect}]" : "";
+				extraStats = $" | Charge: {MagSize}{effectStr} | Energy: {AmmoType}";
+			}
+
+			string socketInfo = NumSockets > 0 ? $" | Sockets: {SocketedGems.Count}/{NumSockets}" : "";
+			return $"[{Rarity.ToString()}] {Name} ({Type}){extraStats} | Dmg: {Damage} | Wgt: {Weight} | Val: {Value}g | Crit: {CritChance}%{socketInfo}";
+		}
+	}
+}
+</file>
+
+<file path="Src/GameData/WeaponTemplate.cs">
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
+using DungeonAdventures.Src.GameData;
+using DungeonAdventures.Src.GameData.Components;
+using DungeonAdventures.Src.Utilities.UI;
+using static System.Console;
+
+namespace DungeonAdventures.Src.GameEngine.GameData
+{
+	public class WeaponTemplate
+	{
+		public string ID { get; set; } = Guid.NewGuid().ToString();
+		public string Name { get; set; } = "New Weapon";
+		public int Damage { get; set; } = 10;
+		public string Description { get; set; } = "No Description";
+		public ItemRarity Rarity { get; set; } = ItemRarity.Common;
+
+		public static List<WeaponTemplate> LoadWeaponTemplates()
+		{
+			string path = Path.Combine(GameState.MasterPath, "Saves", "weapons", "master_weapons.json");
+			if (!File.Exists(path)) return new List<WeaponTemplate>();
+			try
+			{
+				return JsonSerializer.Deserialize<List<WeaponTemplate>>(File.ReadAllText(path)) ?? new List<WeaponTemplate>();
+			}
+			catch { return new List<WeaponTemplate>(); }
+		}
+
+		public static void SaveToMaster(WeaponTemplate weapon)
+		{
+			string path = Path.Combine(GameState.MasterPath, "Saves", "weapons", "master_weapons.json");
+			var list = LoadWeaponTemplates();
+			list.Add(weapon);
+			File.WriteAllText(path, JsonSerializer.Serialize(list, new JsonSerializerOptions { WriteIndented = true }));
+		}
+	}
+}
+</file>
+
+<file path="Src/Interfaces/CharacterCreation.cs">
+using DungeonAdventures.Src.Game.MainInterfaces;
+using DungeonAdventures.Src.Utilities.UI;
+using Pastel;
+using static System.Console;
+using DungeonAdventures.Src.GameData;
+using DungeonAdventures.Src.GameData.Components;
+using static DungeonAdventures.Src.GameData.Entities.PlayerData;
+
+namespace DungeonAdventures.Src.Game.Interfaces
+{
+	internal class CharacterCreation
+	{
+		public static void Start()
+		{
+			if (GameState.CurrentPlayer == null) GameState.CurrentPlayer = new loadPlayer();
+			var player = GameState.CurrentPlayer;
+
+			int screenWidth = 80;
+			Clear();
+
+			// Logic is now self-contained; no more external UiFunctions calls here
+			string subHeader = "--- NEW CHARACTER ---";
+			string prompt = "Name your hero: ";
+
+			SetCursorPosition((screenWidth / 2) - (subHeader.Length / 2), 5);
+			WriteLine(subHeader.Pastel("#125874"));
+
+			int promptX = (screenWidth / 2) - (prompt.Length / 2);
+			SetCursorPosition(promptX, 7);
+			Write(prompt.Pastel("#FFD700"));
+
+			CursorVisible = true;
+			ForegroundColor = ConsoleColor.Cyan;
+			string? nameInput = ReadLine();
+			ResetColor();
+
+			player.PlayerName = string.IsNullOrWhiteSpace(nameInput) ? "Hero" : nameInput;
+			CursorVisible = false;
+
+			string[] coreArchetypes = { "Warrior", "Rogue", "Mage" };
+			int selectedIndex = 0;
+			bool pickingBase = true;
+
+			int boxW = 60;
+			int boxX = (screenWidth / 2) - (boxW / 2);
+			int boxY = 4;
+
+			while (pickingBase)
+			{
+				Clear();
+
+				DrawOuterBox(boxX, boxY, boxW, 12, "#125874");
+
+				string greeting = $"Greetings, {player.PlayerName}";
+				SetCursorPosition((screenWidth / 2) - (greeting.Length / 2), boxY + 1);
+				Write(greeting.Pastel("#FFD700"));
+
+				for (int i = 0; i < coreArchetypes.Length; i++)
+				{
+					string classText = (i == selectedIndex) ? $"[ {coreArchetypes[i].ToUpper()} ]" : $"  {coreArchetypes[i]}  ";
+					int classX = (screenWidth / 2) - (classText.Length / 2);
+
+					SetCursorPosition(classX, boxY + 4 + i);
+					Write(i == selectedIndex ? classText.Pastel("#00FF00") : classText.Pastel("#555555"));
+				}
+
+				string hint = "[UP/DOWN] to browse | [ENTER] to specialize";
+				SetCursorPosition((screenWidth / 2) - (hint.Length / 2), 17);
+				Write(hint.Pastel("#333333"));
+
+				var key = ReadKey(true).Key;
+				if (key == ConsoleKey.UpArrow) selectedIndex = (selectedIndex == 0) ? coreArchetypes.Length - 1 : selectedIndex - 1;
+				if (key == ConsoleKey.DownArrow) selectedIndex = (selectedIndex == coreArchetypes.Length - 1) ? 0 : selectedIndex + 1;
+				if (key == ConsoleKey.Enter) pickingBase = false;
+			}
+
+			player.PlayerClass = coreArchetypes[selectedIndex];
+
+			CharSubMenus.ChooseSubClass();
+
+			InitializeAbilities(player);
+			PointDistribution(player, screenWidth);
+			AssignStarterKit(player);
+
+			Clear();
+			int centerX = (80 / 2);
+			SetCursorPosition(centerX - 15, 8);
+			WriteLine($"Welcome to the world, {player.PlayerName.Pastel("#00FF00")}!");
+
+			SetCursorPosition(centerX - 20, 10);
+			WriteLine($"Your journey as a {player.PlayerClass.Pastel("#FFD700")} begins now...".Pastel("#DCDCDC"));
+
+			SetCursorPosition(10, 12);
+			WriteLine("Starter gear has been added to your pack.");
+
+			SetCursorPosition(centerX - 12, 14);
+			WriteLine("\n    --- INITIAL INVENTORY ---".Pastel("#125874"));
+
+			int itemRow = 16;
+			foreach (var item in player.Inventory)
+			{
+				SetCursorPosition(centerX - 10, itemRow++);
+				WriteLine($"- {item.Name}".Pastel("#DCDCDC"));
+			}
+
+			Thread.Sleep(2000);
+			GameState.Sync();
+
+			// Animation kept here as it's the final transition
+			UiFunctions.ShowCreationAnimation(player.PlayerName, player.PlayerClass);
+		}
+
+		private static void DrawOuterBox(int x, int y, int w, int h, string color)
+		{
+			string topBorder = "╔" + new string('═', w - 2) + "╗";
+			string bottomBorder = "╚" + new string('═', w - 2) + "╝";
+			string side = "║";
+
+			SetCursorPosition(x, y);
+			Write(topBorder.Pastel(color));
+			for (int i = 1; i < h - 1; i++)
+			{
+				SetCursorPosition(x, y + i);
+				Write(side.Pastel(color));
+				SetCursorPosition(x + w - 1, y + i);
+				Write(side.Pastel(color));
+			}
+			SetCursorPosition(x, y + h - 1);
+			Write(bottomBorder.Pastel(color));
+		}
+
+		private static void PointDistribution(loadPlayer player, int screenWidth)
+		{
+			int pointsLeft = 10;
+			string[] statNames = { "Strength", "Dexterity", "Intelligence", "Constitution", "Perception", "Luck", "Wisdom", "Charisma" };
+			int selectedStat = 0;
+			bool picking = true;
+
+			while (picking)
+			{
+				string classDesc = "Distribute your attribute points to define your hero.";
+				string? pClass = player.PlayerClass;
+
+				if (pClass == "Paladin" || pClass == "Berserker" || pClass == "Knight")
+					classDesc = "Focus on Strength and Constitution for a powerful front-line fighter.";
+				else if (pClass == "Assassin" || pClass == "Ranger" || pClass == "Thief")
+					classDesc = "Focus on Dexterity and Luck to strike fast and evade danger.";
+				else if (pClass == "Warlock" || pClass == "Druid" || pClass == "Wizard")
+					classDesc = "Focus on Intelligence and Wisdom to master the arcane arts.";
+
+				Clear();
+				// Building the header locally to maintain alignment
+				WriteLine("=== Build your Hero ===".Pastel("#FFD700"));
+				WriteLine(new string('-', 80).Pastel("#125874"));
+
+				SetCursorPosition(4, 3);
+				WriteLine(" CLASS OVERVIEW ".Pastel("#000000").PastelBg("#125874"));
+				SetCursorPosition(4, 4);
+				WriteLine($"{classDesc}".Pastel("#DCDCDC"));
+
+				player.Health = 100 + (player.Abilities.Constitution * 5);
+				player.HitPoints = player.Health;
+
+				SetCursorPosition(4, 7);
+				WriteLine($"Path: {player.PlayerClass.Pastel("#FFD700")}");
+
+				string progressBar = new string('■', Math.Max(0, 10 - pointsLeft)).Pastel("#00FF00") +
+									 new string('?', Math.Max(0, pointsLeft)).Pastel("#333333");
+
+				SetCursorPosition(4, 8);
+				WriteLine($"Points Spent: [{progressBar}] | {pointsLeft} Remaining");
+
+				for (int i = 0; i < statNames.Length; i++)
+				{
+					SetCursorPosition(8, 11 + i);
+					int currentVal = GetStatValueByIndex(player, i);
+
+					if (i == selectedStat)
+						Write($"> {statNames[i].PadRight(15)} [{currentVal}] <".Pastel("#00FF00"));
+					else
+						Write($"  {statNames[i].PadRight(15)} [{currentVal}]  ".Pastel("#555555"));
+				}
+
+				// The Attributes box is handled by UiEngine as per your setup
+				UiEngine.DrawAttributeBox(player, 45, 11, selectedStat);
+
+				var key = ReadKey(true).Key;
+				if (key == ConsoleKey.UpArrow) selectedStat = (selectedStat == 0) ? statNames.Length - 1 : selectedStat - 1;
+				if (key == ConsoleKey.DownArrow) selectedStat = (selectedStat == statNames.Length - 1) ? 0 : selectedStat + 1;
+				if (key == ConsoleKey.RightArrow && pointsLeft > 0) { AdjustStatByIndex(player, selectedStat, 1); pointsLeft--; }
+				if (key == ConsoleKey.LeftArrow && GetStatValueByIndex(player, selectedStat) > 0) { AdjustStatByIndex(player, selectedStat, -1); pointsLeft++; }
+				if (key == ConsoleKey.Enter && pointsLeft == 0) picking = false;
+			}
+		}
+
+		private static int GetStatValueByIndex(loadPlayer p, int index) => index switch
+		{
+			0 => p.Abilities.Strength,
+			1 => p.Abilities.Dexterity,
+			2 => p.Abilities.Intelligence,
+			3 => p.Abilities.Constitution,
+			4 => p.Abilities.Perception,
+			5 => p.Abilities.Luck,
+			6 => p.Abilities.Wisdom,
+			7 => p.Abilities.Charisma,
+			_ => 0
+		};
+
+		private static void AdjustStatByIndex(loadPlayer p, int index, int amount)
+		{
+			if (index == 0) p.Abilities.Strength += amount;
+			else if (index == 1) p.Abilities.Dexterity += amount;
+			else if (index == 2) p.Abilities.Intelligence += amount;
+			else if (index == 3) p.Abilities.Constitution += amount;
+			else if (index == 4) p.Abilities.Perception += amount;
+			else if (index == 5) p.Abilities.Luck += amount;
+			else if (index == 6) p.Abilities.Wisdom += amount;
+			else if (index == 7) p.Abilities.Charisma += amount;
+		}
+
+		private static void InitializeAbilities(loadPlayer player)
+		{
+			player.Abilities.Strength = 0; player.Abilities.Dexterity = 0; player.Abilities.Intelligence = 0; player.Abilities.Constitution = 0;
+			player.Abilities.Perception = 0; player.Abilities.Luck = 0; player.Abilities.Wisdom = 0; player.Abilities.Charisma = 0;
+
+			switch (player.PlayerClass)
+			{
+				case "Paladin":
+				case "Knight": player.Abilities.Strength = 5; player.Abilities.Constitution = 3; break;
+				case "Berserker": player.Abilities.Strength = 8; break;
+				case "Assassin":
+				case "Thief": player.Abilities.Dexterity = 5; player.Abilities.Luck = 3; break;
+				case "Wizard":
+				case "Warlock": player.Abilities.Intelligence = 8; break;
+				case "Druid": player.Abilities.Intelligence = 4; player.Abilities.Wisdom = 4; break;
+			}
+		}
+
+		private static void AssignStarterKit(loadPlayer player)
+		{
+			player.Inventory.Clear();
+			switch (player.PlayerClass)
+			{
+				case "Paladin":
+				case "Knight":
+					player.Coins += 25;
+					player.Inventory.Add(new ItemData("Rusty Mace", 15, 5.0f, 1, "Weapon", ItemRarity.Common, Enum.TryParse<EffectType>("None", true, out var effect1) ? effect1 : EffectType.None, 100, 0, false, 0));
+					player.Inventory.Add(new ItemData("Small Shield", 20, 8.0f, 1, "Armor", ItemRarity.Common, Enum.TryParse<EffectType>("None", true, out var effect2) ? effect2 : EffectType.None, 150, 0, false, 0));
+					break;
+				case "Berserker":
+					player.Abilities.Strength += 2;
+					player.Inventory.Add(new ItemData("Chipped Axe", 12, 7.0f, 1, "Weapon", ItemRarity.Common, Enum.TryParse<EffectType>("None", true, out var effect3) ? effect3 : EffectType.None, 80, 0, false, 0));
+					break;
+				case "Assassin":
+				case "Thief":
+					player.Abilities.Dexterity += 2;
+					player.Inventory.Add(new ItemData("Dull Dagger", 10, 1.0f, 1, "Weapon", ItemRarity.Common, Enum.TryParse<EffectType>("None", true, out var effect4) ? effect4 : EffectType.None, 60, 0, false, 0));
+					player.Inventory.Add(new ItemData("Smoke Bomb", 25, 0.5f, 3, "Consumable", ItemRarity.Uncommon, Enum.TryParse<EffectType>("Blind", true, out var effect5) ? effect5 : EffectType.None, 0, 1, true, 0));
+					break;
+				case "Wizard":
+				case "Warlock":
+					player.Coins += 10;
+					player.Inventory.Add(new ItemData("Old Staff", 20, 3.0f, 1, "Weapon", ItemRarity.Common, Enum.TryParse<EffectType>("Magic", true, out var effect6) ? effect6 : EffectType.None, 100, 0, false, 0));
+					player.Inventory.Add(new ItemData("Mana Potion", 50, 0.2f, 2, "Consumable", ItemRarity.Common, Enum.TryParse<EffectType>("Restore", true, out var effect7) ? effect7 : EffectType.None, 0, 1, true, 0));
+					break;
+				case "Druid":
+					player.Abilities.Wisdom += 2;
+					player.Inventory.Add(new ItemData("Wooden Branch", 5, 2.0f, 1, "Weapon", ItemRarity.Common, Enum.TryParse<EffectType>("None", true, out var effect8) ? effect8 : EffectType.None, 40, 0, false, 0));
+					break;
+			}
+		}
+	}
+}
+</file>
+
+<file path="Src/Interfaces/CharacterLoadScreen.cs">
+using DungeonAdventures.Src.GameData.Components;
+using DungeonAdventures.Src.Utilities.UI;
+using System.Text.Json;
+using static DungeonAdventures.Src.GameData.Entities.PlayerData;
+using static System.Console;
+
+namespace DungeonAdventures.Src.GameEngine.Interfaces
+{
+	public class CharacterLoadScreen
+	{
+		public static bool ShowLoadMenu()
+		{
+			string activeFolder = GameState.GetActiveProfileFolder();
+			if (!Directory.Exists(activeFolder)) Directory.CreateDirectory(activeFolder);
+
+			string[] files = Directory.GetFiles(activeFolder, "*.json");
+			List<string> displayNames = files.Select(f => Path.GetFileNameWithoutExtension(f).Replace("_", " ").ToUpper()).ToList();
+
+			int selectedIndex = 0;
+			bool navigating = true;
+
+			while (navigating)
+			{
+				// DYNAMIC PREVIEW: Peek inside the file for the UI header
+				loadPlayer preview = new loadPlayer();
+				if (files.Length > 0)
+				{
+					try
+					{
+						string json = File.ReadAllText(files[selectedIndex]);
+						preview = JsonSerializer.Deserialize<loadPlayer>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new loadPlayer();
+					}
+					catch { preview.PlayerName = "CORRUPT DATA"; }
+				}
+
+				string title = displayNames.Count > 0
+					? $"HERO: {preview.PlayerName.ToUpper()} | LVL: {preview.Level} | XP: {preview.Experience}/{preview.ExperienceToLevel}"
+					: "CHARACTER SELECTION: EMPTY";
+
+				Clear();
+				UiEngine.DrawDynamicFrame(
+					title,
+					displayNames.Count > 0 ? displayNames : new List<string> { "NO SAVES FOUND" },
+					"ARROWS to move | ENTER to select | ESC to cancel",
+					boxWidth: 70, // Explicitly set a reasonable width
+					startY: 5,   // Set a reasonable starting Y position
+					selectedIndex: selectedIndex, // Correctly map selectedIndex
+					previewHp: preview.Health,    // Correctly map previewHp
+					previewCoins: preview.Coins   // Correctly map previewCoins
+				);
+
+				var key = ReadKey(true).Key;
+				if (key == ConsoleKey.Escape) return false;
+				if (displayNames.Count == 0) continue;
+
+				switch (key)
+				{
+					case ConsoleKey.UpArrow: selectedIndex = (selectedIndex == 0) ? displayNames.Count - 1 : selectedIndex - 1; break;
+					case ConsoleKey.DownArrow: selectedIndex = (selectedIndex == displayNames.Count - 1) ? 0 : selectedIndex + 1; break;
+					case ConsoleKey.Enter:
+						GameState.CurrentPlayer = preview; // Use the one we already deserialized
+						UiFunctions.LoadSaveProgress();
+						UiFunctions.ShowSaveLoadedIcon(preview.PlayerName);
+						Thread.Sleep(800);
+						TownSquare.MainTownSquare();
+						return true;
+				}
+			}
+			return false;
+		}
+	}
+}
+</file>
+
+<file path="Src/Interfaces/CharSubMenus.cs">
+using DungeonAdventures.Src.GameData.Components;
+using DungeonAdventures.Src.Utilities.UI;
+using Pastel;
+using System;
+using System.Collections.Generic;
+using static System.Console;
+
+namespace DungeonAdventures.Src.Game.MainInterfaces
+{
+	internal class CharSubMenus
+	{
+		public static void ChooseSubClass()
+		{
+			var player = GameState.CurrentPlayer;
+			string[] subClasses; string[] descriptions; string flavorColor;
+
+			switch (player.PlayerClass)
+			{
+				case "Warrior":
+					subClasses = new string[] { "Paladin", "Berserker", "Knight" }; flavorColor = "#FF4500";
+					descriptions = new string[] { "Holy defender.", "Bloodthirsty brute.", "Master of armor." };
+					break;
+				case "Rogue":
+					subClasses = new string[] { "Assassin", "Ranger", "Thief" }; flavorColor = "#9370DB";
+					descriptions = new string[] { "Deadly crits.", "Master of bow.", "Expert thief." };
+					break;
+				case "Mage":
+					subClasses = new string[] { "Warlock", "Druid", "Wizard" }; flavorColor = "#00FFFF";
+					descriptions = new string[] { "Life drain.", "Nature balance.", "Glass cannon." };
+					break;
+				default: return;
+			}
+
+			int selected = 0;
+			while (true)
+			{
+				Clear();
+
+				// 1. Prepare the list of options so the Box expands to fit them
+				List<string> evolutionOptions = new List<string>();
+				for (int i = 0; i < subClasses.Length; i++)
+				{
+					evolutionOptions.Add(subClasses[i]);
+				}
+
+				// 2. Draw the Massive Frame using the options list
+				// This ensures the box is tall enough to hold everything
+				UiEngine.DrawDynamicFrame($"{player.PlayerClass.ToUpper()} EVOLUTION: {player.PlayerName.ToUpper()}",
+										 evolutionOptions,
+										 "[UP/DOWN] to browse | [ENTER] to evolve",
+										 boxWidth: 70, // Explicitly set a reasonable width
+										 selectedIndex: selected);
+
+				// 3. Draw the Sub-Header (Greetings/Choose Path) ABOVE the box
+				UiEngine.DrawCentered($"Choose your path, {player.PlayerName}".Pastel(flavorColor), 6);
+
+				// 4. Draw the Attributes/Description BELOW the options but INSIDE the frame area
+				// Since DrawDynamicFrame with 3 options is about 6 rows high, we place these relative to startY
+				int contentBaseY = 15;
+				UiEngine.DrawCentered(" ATTRIBUTES ".Pastel("#000000").PastelBg(flavorColor), contentBaseY);
+				UiEngine.DrawCentered(descriptions[selected].Pastel("#DCDCDC"), contentBaseY + 2);
+
+				var key = ReadKey(true).Key;
+				if (key == ConsoleKey.UpArrow) selected = (selected == 0) ? subClasses.Length - 1 : selected - 1;
+				else if (key == ConsoleKey.DownArrow) selected = (selected == subClasses.Length - 1) ? 0 : selected + 1;
+				else if (key == ConsoleKey.Enter) { player.PlayerClass = subClasses[selected]; break; }
+			}
+		}
+	}
+}
+</file>
+
+<file path="Src/Interfaces/Stats.cs">
+using DungeonAdventures.Src.GameData.Components;
+using Pastel;
+using static System.Console;
+
+
+namespace DungeonAdventures.Src.GameEngine.Interfaces
+{
+	internal class Stats
+	{
+
+		public static void PlayerStats()
+		{
+			var p = GameState.CurrentPlayer;
+
+			// 1. Data Calculation
+			int maxLevelXp = p.ExperienceToLevel;
+			int currentXp = p.Experience;
+			int playerLevel = p.Level;
+
+			// Calculate progress for a 10-block bar
+			double xpPercent = (double)currentXp / Math.Max(1, maxLevelXp);
+			int filledSlots = Math.Clamp((int)(xpPercent * 10), 0, 10);
+
+			// 2. Build the UI Components
+			string filledPart = new string('■', filledSlots).Pastel("#00FFFF");
+			string emptyPart = new string('-', 10 - filledSlots).Pastel("#333333");
+
+			// Colored Brackets
+			string openB = "[".Pastel("#FFD700");
+			string closeB = "]".Pastel("#FFD700");
+			string xpBar = openB + filledPart + emptyPart + closeB;
+
+			string xpString = $"{p.Experience}/{p.ExperienceToLevel}";
+
+			Clear();
+
+			// 3. Layout and Color Settings
+			int screenWidth = 85;
+			int boxWidth = 44;
+			int center = screenWidth / 2;
+			int startX = center - (boxWidth / 2);
+
+			string bColor = "#125874"; // Border Blue
+			string vColor = "#FFD700"; // Value Gold
+			string lvlColor = "#BC1DBC"; // Level Purple
+
+			// 4. Build the Stats List Dynamically
+			List<string> statLines = new List<string>();
+
+			statLines.Add("╔══════════════════════════════════════════╗".Pastel(bColor));
+			statLines.Add(BuildStatLine("Level", playerLevel.ToString(), lvlColor, bColor));
+			statLines.Add(BuildStatLine("Health", $"{p.Health}/{p.HitPoints}", vColor, bColor));
+			statLines.Add(BuildStatLine("Coins", p.Coins.ToString(), vColor, bColor));
+			statLines.Add(BuildStatLine("XP", xpString, vColor, bColor));
+			statLines.Add(BuildBarLine("Progress", xpBar, bColor));
+
+			statLines.Add("║                                          ║".Pastel(bColor));
+
+			// --- DYNAMIC ABILITIES: Only show if they are > 0 ---
+
+			if (p.Abilities.Strength > 0)
+				statLines.Add(BuildStatLine("Strength", p.Abilities.Strength.ToString(), vColor, bColor));
+
+			if (p.Abilities.Dexterity > 0)
+				statLines.Add(BuildStatLine("Dexterity", p.Abilities.Dexterity.ToString(), vColor, bColor));
+
+			if (p.Abilities.Intelligence > 0)
+				statLines.Add(BuildStatLine("Intelligence", p.Abilities.Intelligence.ToString(), vColor, bColor));
+
+			if (p.Abilities.Wisdom > 0)
+				statLines.Add(BuildStatLine("Wisdom", p.Abilities.Wisdom.ToString(), vColor, bColor));
+
+			if (p.Abilities.Perception > 0)
+				statLines.Add(BuildStatLine("Perception", p.Abilities.Perception.ToString(), vColor, bColor));
+
+			if (p.Abilities.Luck > 0)
+				statLines.Add(BuildStatLine("Luck", p.Abilities.Luck.ToString(), vColor, bColor));
+
+			// These will stay hidden because Marie has 0 in them
+			if (p.Abilities.Charisma > 0)
+				statLines.Add(BuildStatLine("Charisma", p.Abilities.Charisma.ToString(), vColor, bColor));
+
+			if (p.Abilities.Constitution > 0)
+				statLines.Add(BuildStatLine("Constitution", p.Abilities.Constitution.ToString(), vColor, bColor));
+
+			statLines.Add("╚══════════════════════════════════════════╝".Pastel(bColor));
+			statLines.Add("           PRESS ANY KEY TO RETURN           ");
+
+			// 5. Draw Header
+			string header = $"{p.PlayerClass.ToUpper()}: {p.PlayerName}";
+			int headerPadding = header.Length / 2;
+			SetCursorPosition(Math.Max(0, center - headerPadding), 4);
+			WriteLine(header.Pastel(vColor));
+
+			// 6. Draw the Box
+			int row = 7;
+			foreach (string line in statLines)
+			{
+				SetCursorPosition(startX, row++);
+				WriteLine(line);
+			}
+
+			ReadKey(true);
+		}
+
+		private static string BuildStatLine(string label, string value, string valColor, string borderColor)
+		{
+			string leftWall = "║ ".Pastel(borderColor);
+			string rightWall = " ║".Pastel(borderColor);
+			string labelPart = (label + ":").PadRight(15);
+
+			int remainingSpace = 40 - (15 + value.Length);
+			string padding = new string(' ', Math.Max(0, remainingSpace));
+
+			return leftWall + labelPart + value.Pastel(valColor) + padding + rightWall;
+		}
+
+		private static string BuildBarLine(string label, string bar, string borderColor)
+		{
+			string leftWall = "║ ".Pastel(borderColor);
+			string rightWall = " ║".Pastel(borderColor);
+			string labelPart = (label + ":").PadRight(15);
+
+			// Visible length of [■■■-------] is always 12
+			string padding = new string(' ', 13);
+
+			return leftWall + labelPart + bar + padding + rightWall;
+		}
+
+		public static void CheckLevelUp()
+		{
+			var p = GameState.CurrentPlayer;
+			if (p.Level > p.Mods)
+			{
+				p.Mods = p.Level;
+				WriteLine("\n" + "!!! THE WORLD GROWS MORE DANGEROUS !!!".Pastel("#FF0000"));
+				WriteLine($"Difficulty Scale increased to Rank {p.Mods}!".Pastel("#FF4500"));
+				p.Health = p.HitPoints;
+				WriteLine("Your health has been restored!".Pastel("#00FF00"));
+				ReadKey(true);
+			}
+		}
+	}
+}
+</file>
+
+<file path="Src/Interfaces/Store.cs">
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using DungeonAdventures.Src.GameData.Components;
+using DungeonAdventures.Src.Utilities.UI;
+using Pastel;
+using static System.Console;
+using static DungeonAdventures.Src.GameData.Entities.PlayerData;
+
+// FIX: This now matches the namespace your Game Engine is calling
+namespace DungeonAdventures.Src.GameEngine.Interfaces
+{
+	public class Store
+	{
+		// Colors for the Retro Dungeon Theme
+		private static string dungeonPurple = "#2E0E4E";
+		private static string torchGold = "#FFAB00";
+
+		public static void LoadShop()
+		{
+			// 1. SPICY ENTRANCE
+			UiEngine.DrawLoadingScreen("UNPACKING CARGO...", 1000);
+
+			var p = GameState.CurrentPlayer;
+			UpdateAndRun(p);
+		}
+
+		private static void UpdateAndRun(loadPlayer p)
+		{
+			bool shopping = true;
+			while (shopping)
+			{
+				Clear();
+				UiFunctions.TitleBar();
+
+				int potionP = 20 + 10 * p.Potion;
+				int armorP = 100 * (p.ArmorValue + 1);
+				int weaponP = 100 * (p.WeaponValue + 1);
+				int lockP = 50 + 10 * p.Lockpicks;
+				int difP = 300 + 100 * p.Mods;
+
+				// 2. BUILD THE MENU
+				string[] shopLines = {
+					"╔══════════════════════════════════════════╗".Pastel(dungeonPurple),
+					BuildLine("(P)otion", potionP, torchGold, dungeonPurple),
+					BuildLine("(W)eapon Upgrade", weaponP, torchGold, dungeonPurple),
+					BuildLine("(A)rmor Upgrade", armorP, torchGold, dungeonPurple),
+					BuildLine("(L)ockpicks", lockP, torchGold, dungeonPurple),
+					BuildLine("(D)ifficulty Mod", difP, torchGold, dungeonPurple),
+					"║                                          ║".Pastel(dungeonPurple),
+					"║ " + "(E)xit to Town Square".PadRight(40) + " ║".Pastel(dungeonPurple),
+					"╚══════════════════════════════════════════╝".Pastel(dungeonPurple)
+				};
+
+				foreach (var line in shopLines) UiEngine.DrawCentered(line);
+				UiFunctions.DisplayFooter();
+
+				// 3. INPUT HANDLING
+				ConsoleKeyInfo key = ReadKey(true);
+				switch (key.Key)
+				{
+					case ConsoleKey.P: TryBuy("Potion", potionP, p); break;
+					case ConsoleKey.W: TryBuy("Weapon", weaponP, p); break;
+					case ConsoleKey.A: TryBuy("Armor", armorP, p); break;
+					case ConsoleKey.L: TryBuy("Lockpick", lockP, p); break;
+					case ConsoleKey.D: TryBuy("Difficulty", difP, p); break;
+					case ConsoleKey.E:
+						UiEngine.DrawLoadingScreen("RETURNING TO TOWN...", 800);
+						shopping = false;
+						break;
+				}
+			}
+		}
+
+		private static void TryBuy(string item, int cost, loadPlayer p)
+		{
+			if (p.Coins >= cost)
+			{
+				p.Coins -= cost;
+				if (item == "Potion") p.Potion++;
+				else if (item == "Weapon") p.WeaponValue++;
+				else if (item == "Armor") p.ArmorValue++;
+				else if (item == "Difficulty") p.Mods++;
+				else if (item == "Lockpick") p.Lockpicks++;
+
+				UiEngine.DrawCentered($"{"SUCCESS:".Pastel("#00FF00")} Bought {item}!");
+				Thread.Sleep(800);
+			}
+			else
+			{
+				UiEngine.DrawCentered($"{"FAILED:".Pastel("#880808")} Not enough gold!");
+				Thread.Sleep(1000);
+			}
+		}
+
+		private static string BuildLine(string label, int price, string priceColor, string borderColor)
+		{
+			string priceStr = price.ToString();
+			string leftText = label.PadRight(18) + "Cost: ";
+			int paddingNeeded = 40 - (18 + 6 + priceStr.Length);
+			string spaces = new string(' ', paddingNeeded);
+
+			return "║ ".Pastel(borderColor) +
+				   leftText +
+				   priceStr.Pastel(priceColor) +
+				   spaces +
+				   " ║".Pastel(borderColor);
+		}
+	}
+}
+</file>
+
+<file path="Src/Utilities/UI/ConsoleManager.cs">
+using System;
+using System.Runtime.InteropServices;
+
+namespace DungeonAdventures.csproj.Src.Utilities.UI
+{
+    public static class ConsoleManager
+    {
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool SetConsoleMode(IntPtr hConsoleHandle, uint dwMode);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern IntPtr GetStdHandle(int nStdHandle);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool SetConsoleWindowInfo(IntPtr hConsoleOutput, bool bAbsolute, ref SMALL_RECT lpConsoleWindow);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool SetConsoleScreenBufferSize(IntPtr hConsoleOutput, COORD dwSize);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool SetCurrentConsoleFontEx(IntPtr consoleOutput, bool maximumWindow, ref CONSOLE_FONT_INFO_EX consoleFont);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool GetConsoleMode(IntPtr hConsoleHandle, out uint lpMode);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool GetCurrentConsoleFontEx(IntPtr consoleOutput, bool maximumWindow, ref CONSOLE_FONT_INFO_EX consoleFont);
+
+        private const int STD_OUTPUT_HANDLE = -11;
+        private const uint ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0004;
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct COORD
+        {
+            public short X;
+            public short Y;
+
+            public COORD(short X, short Y)
+            {
+                this.X = X;
+                this.Y = Y;
+            }
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct SMALL_RECT
+        {
+            public short Left;
+            public short Top;
+            public short Right;
+            public short Bottom;
+        }
+
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public struct CONSOLE_FONT_INFO_EX
+        {
+            public uint cbSize;
+            public uint nFont;
+            public COORD dwFontSize;
+            public int FontFamily;
+            public int FontWeight;
+            public char FaceName; // Should be fixed-size array of 32 chars
+        }
+
+        public static void SetupConsole(int width, int height)
+        {
+            IntPtr handle = GetStdHandle(STD_OUTPUT_HANDLE);
+            if (handle == IntPtr.Zero)
+            {
+                return;
+            }
+
+            // Set console mode for virtual terminal processing (enables ANSI escape codes)
+            uint mode;
+            if (GetConsoleMode(handle, out mode))
+            {
+                mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+                SetConsoleMode(handle, mode);
+            }
+
+            // Set window size
+            SMALL_RECT rect = new SMALL_RECT { Left = 0, Top = 0, Right = (short)(width - 1), Bottom = (short)(height - 1) };
+            SetConsoleWindowInfo(handle, true, ref rect);
+
+            // Set buffer size
+            COORD bufferSize = new COORD((short)width, (short)height);
+            SetConsoleScreenBufferSize(handle, bufferSize);
+
+            // Try setting window size again after buffer size is set
+            SetConsoleWindowInfo(handle, true, ref rect);
+            
+            // Attempt to get current font info to preserve other settings, then update size
+            CONSOLE_FONT_INFO_EX fontInfo = new CONSOLE_FONT_INFO_EX();
+            fontInfo.cbSize = (uint)Marshal.SizeOf(fontInfo);
+            
+            // Get current font info (this can sometimes fail, so we handle it)
+            if (GetCurrentConsoleFontEx(handle, false, ref fontInfo))
+            {
+                // Set the font size to make characters fit within the window, assuming default font
+                // A common default font width for an 85 character wide console would be 8 pixels.
+                // A common default font height for a 25 character high console would be 16-20 pixels.
+                // This is a heuristic and might need adjustment based on system defaults.
+                fontInfo.dwFontSize = new COORD(8, 16); // Example: 8x16 font size for 85x25 (adjust as needed)
+                SetCurrentConsoleFontEx(handle, false, ref fontInfo);
+            }
+            
+            // Set window title for flavor
+            Console.Title = "DUMGERAGN // ACTIVE";
+
+            // Hide the cursor
+            Console.CursorVisible = false;
+        }
+
+        public static void ClearConsoleBuffer()
+        {
+            // Do not use Console.Clear() as per Hostile Workflow: "Total Frame Reset"
+            // This method would typically be responsible for iterating through the buffer
+            // and overwriting characters, which will be handled by RenderService.
+            // For now, we'll ensure cursor is at top-left for RenderService.
+            Console.SetCursorPosition(0, 0);
+        }
+    }
+}
+</file>
+
+<file path="Src/Utilities/UI/LoadingSequence.cs">
+using System;
+using System.Threading;
+using System.Collections.Generic;
+using Pastel;
+
+namespace DungeonAdventures.csproj.Src.Utilities.UI
+{
+    public static class LoadingSequence
+    {
+        // Constants for hex colors (from UiFunctions.cs's StartGameLoading and prompt)
+        private const string VEIN_RED = "#FF0000"; // Red
+        private const string DARK_RED = "#8B0000"; // From UiFunctions (Dark Red)
+        private const string INDIGO = "#4B0082";   // From UiFunctions (Indigo)
+        private const string MAROON = "#800000";   // From UiFunctions (Maroon)
+        private const string INDIAN_RED = "#A52A2A"; // From UiFunctions (IndianRed)
+        private const string DIM_GRAY = "#696969";  // From UiFunctions (DimGray)
+        private const string GRAY = "#404040";    // From UiFunctions (Gray)
+        private const string DARK_SLATE_GRAY = "#2F4F4F"; // From UiFunctions (DarkSlateGray)
+
+        private const string NUCLEAR_WASTE_GREEN = "#00FF00"; // Green for noise
+        private const string WHITE = "#FFFFFF"; // Default white for text
+        private const string DARK_GRAY = "#A9A9A9"; // For the SYSTEM_ERROR text
+
+        // Hard-coded dimensions as requested (84x24 for drawing area, RenderService is 85x25)
+        private const int DRAW_WIDTH = 84;
+        private const int DRAW_HEIGHT = 24;
+
+        // Corruption characters
+        private static readonly char[] CORRUPTION_CHARS = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{{|}}~".ToCharArray();
+        private static readonly Random _random = new Random();
+
+        // The DUMGERAGN_LOGO and IMMUTABLE_ICONS from the original file, not used in the new logic.
+        // Keeping them for now as they were part of the existing file.
+        private static readonly string[] DUMGERAGN_LOGO = new string[]
+        {
+            "  ██████╗ ██╗   ██╗███╗   ███╗ ██████╗ ███████╗██████╗  █████╗  ██████╗ ███╗   ██╗",
+            "  ██╔══██╗██║   ██║████╗ ████║██╔════╝ ██╔════╝██╔══██╗██╔══██╗██╔════╝ ████╗  ██║",
+            "  ██║  ██║██║   ██║██╔████╔██║██║  ███╗█████╗  ██████╔╝███████║██║  ███╗██╔██╗ ██║",
+            "  ██║  ██║██║   ██║██║╚██╔╝██║██║   ██║██╔══╝  ██╔══██╗██╔══██║██║   ██║██║╚██╗██║",
+            "  ██████╔╝╚██████╔╝██║ ╚═╝ ██║╚██████╔╝███████╗██║  ██║██║  ██║╚██████╔╝██║ ╚████║",
+            "  ╚═════╝  ╚═════╝ ╚═╝     ╚═╝ ╚═════╝  ╚══════╝╚═╝  ╚═╝╚═════╝ ╚═════╝ ╚═════╝  ╚═══╝"
+        };
+        private static readonly string[] IMMUTABLE_ICONS = { "💀", "⸸", "☣", "☢" };
+
+
+        public static void Run()
+        {
+            
+            Console.CursorVisible = false;
+
+            // Scary labels from UiFunctions.cs
+            string[] scaryLabels = {
+                "SYSTEM INTEGRITY: CRITICAL...",
+                "REALITY ANCHORS: DEGRADED...",
+                "INITIATING UNSTABLE PROTOCOL...",
+                "WARNING: ENTITY DETECTED...",
+                "ERROR: DIMENSIONAL FRACTURE...",
+                "LOADING NIGHTMARE PROTOCOL...",
+                "S̴Y̷S̷T̵E̵M̴ ̶C̶O̵R̷R̴U̷P̷T̸E̵D̸...",
+                "F̸A̴I̸L̴U̶R̷E̵ ̸T̸O̵ ̷C̸O̷N̷N̷E̷C̷T̵ ̶T̷O̵ ̸S̵E̸R̷V̶E̵R̶..."
+            };
+
+            // Scary colors from UiFunctions.cs
+            string[] scaryColors = { VEIN_RED, DARK_RED, INDIGO, MAROON, INDIAN_RED, DIM_GRAY, GRAY, DARK_SLATE_GRAY };
+
+            // --- Initial Static Burst / Glitch Effect (from UiFunctions.cs) ---
+            for (int j = 0; j < 5; j++) // Short, jarring flashes
+            {
+                RenderService.ClearFrameBuffer();
+                for (int y = 0; y < DRAW_HEIGHT; y++)
+                {
+                    for (int x = 0; x < DRAW_WIDTH; x++)
+                    {
+                        if (_random.Next(0, 100) < 30) // 30% chance for a character
+                        {
+                            char c = (char)_random.Next(33, 126); // Printable ASCII
+                            string color = _random.Next(2) == 0 ? VEIN_RED : NUCLEAR_WASTE_GREEN; // Red/Green glitch
+                            RenderService.WriteToBuffer(x, y, c, color);
+                        }
+                        else
+                        {
+                            RenderService.WriteToBuffer(x, y, ' ', WHITE); // Draw space in default color
+                        }
+                    }
+                }
+                RenderService.Present();
+                Thread.Sleep(_random.Next(100, 200)); // Slower flashes
+            }
+            // No RenderService.ClearFrameBuffer() here, as it will be cleared at the start of the main loop.
+
+            // --- Corrupted Loading Sequence ---
+            int labelIndex = 0;
+
+            for (int i = 0; i <= 100; i++)
+            {
+                RenderService.ClearFrameBuffer(); // Clear buffer for new frame
+
+                // 90% Background Noise: Fill 90% of the 84x24 buffer with random red/green noise.
+                for (int y = 0; y < DRAW_HEIGHT; y++)
+                {
+                    for (int x = 0; x < DRAW_WIDTH; x++)
+                    {
+                        if (_random.Next(1, 101) <= 90) // 90% chance to draw noise
+                        {
+                            char noiseChar = CORRUPTION_CHARS[_random.Next(CORRUPTION_CHARS.Length)];
+                            string noiseColor = _random.Next(0, 2) == 0 ? VEIN_RED : NUCLEAR_WASTE_GREEN;
+                            RenderService.WriteToBuffer(x, y, noiseChar, noiseColor);
+                        }
+                    }
+                }
+
+                // Remove ASCII Art: Use the single line text [ D U M G E R A G N // SYSTEM_ERROR ] centered at the top.
+                string systemErrorText = "[ D U M G E R A G N // SYSTEM_ERROR ]";
+                RenderService.DrawCentered(0, systemErrorText, DARK_GRAY); // Centered at y=0, Dark Gray
+
+                // --- UNSETTLING BACKGROUND PATTERN (from UiFunctions.cs) ---
+                // Top pattern - dynamically changing characters and faster flicker
+                string topPatternChar = (_random.Next(2) == 0) ? "💀" : "⸸";
+                if (_random.Next(0, 5) == 0) topPatternChar = ((char)_random.Next(33, 126)).ToString(); // Random ASCII for glitch
+                string topPatternLine = new string(topPatternChar[0], 30);
+                RenderService.DrawCentered(DRAW_HEIGHT / 2 - 5, topPatternLine, scaryColors[_random.Next(scaryColors.Length)]);
+
+                // Bottom pattern - dynamically changing characters and faster flicker
+                string bottomPatternChar = (_random.Next(2) == 0) ? "☣" : "☢";
+                if (_random.Next(0, 5) == 0) bottomPatternChar = ((char)_random.Next(33, 126)).ToString(); // Random ASCII for glitch
+                string bottomPatternLine = new string(bottomPatternChar[0], 30);
+                RenderService.DrawCentered(DRAW_HEIGHT / 2 + 3, bottomPatternLine, scaryColors[_random.Next(scaryColors.Length)]);
+
+
+                // Update label sporadically (from UiFunctions.cs)
+                if (i == 0 || _random.Next(0, 10) == 0) // Change label at start and more frequently
+                {
+                    labelIndex = _random.Next(0, scaryLabels.Length);
+                    string currentLabel = scaryLabels[labelIndex];
+                    string labelColor = scaryColors[_random.Next(scaryColors.Length)];
+                    RenderService.DrawCentered(DRAW_HEIGHT / 2 - 2, currentLabel, labelColor);
+                }
+
+                // Progress bar (from UiFunctions.cs)
+                int barWidth = 50; // Re-declare as local variable to match previous logic
+                int barLeft = (DRAW_WIDTH / 2) - (barWidth / 2); // Centered horizontally
+                int barY = DRAW_HEIGHT / 2; // Vertical center
+
+                int progressBlocks = (int)((i / 100.0) * barWidth);
+                string filled = new string('█', progressBlocks);
+                string empty = new string('░', barWidth - progressBlocks);
+
+                RenderService.WriteToBuffer(barLeft, barY, filled, INDIGO); // Use INDIGO as per original prompt
+                RenderService.WriteToBuffer(barLeft + filled.Length, barY, empty, GRAY); // Use GRAY for empty bar
+
+                RenderService.WriteToBuffer(barLeft + barWidth + 2, barY, string.Format("{0}%", i), WHITE); // Percentage
+
+
+                // Erratic speed variation (from UiFunctions.cs)
+                if (i < 20) Thread.Sleep(_random.Next(50, 100));
+                else if (i < 70) Thread.Sleep(_random.Next(10, 30));
+                else Thread.Sleep(_random.Next(40, 80));
+
+                // Small chance of a "glitch jump" in progress (from UiFunctions.cs)
+                if (_random.Next(0, 50) == 0 && i < 90)
+                {
+                    i += _random.Next(5, 15); // Jump forward
+                    if (i > 100) i = 100;
+                }
+
+                RenderService.Present(); // Push the buffer to the screen
+            }
+
+            // --- Final Unsettling Message (from UiFunctions.cs) ---
+            RenderService.ClearFrameBuffer(); // Clear one last time for the final message
+            string finalMessage = "T̷H̷E̵ ̸G̷A̷T̷E̵S̷ ̷A̶R̸E̵ ̷O̷P̷E̶N̸...".Pastel(VEIN_RED);
+            RenderService.DrawCentered(DRAW_HEIGHT / 2, finalMessage, VEIN_RED);
+            RenderService.Present();
+            Thread.Sleep(1500); // Hold the message
+
+            // Cleanup
+            Console.CursorVisible = true;
+        }
+    }
+}
+</file>
+
+<file path="Src/Utilities/UI/RenderService.cs">
+using System;
+using System.Text;
+using Pastel;
+
+namespace DungeonAdventures.csproj.Src.Utilities.UI
+{
+    public static class RenderService
+    {
+        private struct Pixel
+        {
+            public char Character;
+            public string Color; // Hex color string
+        }
+
+        private static Pixel[] _frameBuffer;
+        private const int CONSOLE_WIDTH = 85;
+        private const int CONSOLE_HEIGHT = 25;
+
+        static RenderService()
+        {
+            _frameBuffer = new Pixel[CONSOLE_WIDTH * CONSOLE_HEIGHT];
+            ConsoleManager.SetupConsole(CONSOLE_WIDTH, CONSOLE_HEIGHT);
+        }
+
+        public static void ClearFrameBuffer()
+        {
+            // As per "Total Frame Reset", fill with empty space for now.
+            for (int i = 0; i < _frameBuffer.Length; i++)
+            {
+                _frameBuffer[i].Character = ' ';
+                _frameBuffer[i].Color = "#FFFFFF"; // Default to white
+            }
+        }
+
+        public static void WriteToBuffer(int x, int y, char character, string color = "#FFFFFF")
+        {
+            if (x >= 0 && x < CONSOLE_WIDTH && y >= 0 && y < CONSOLE_HEIGHT)
+            {
+                int index = y * CONSOLE_WIDTH + x;
+                _frameBuffer[index].Character = character;
+                _frameBuffer[index].Color = color;
+            }
+        }
+
+        public static void WriteToBuffer(int x, int y, string text, string color = "#FFFFFF")
+        {
+            for (int i = 0; i < text.Length; i++)
+            {
+                WriteToBuffer(x + i, y, text[i], color);
+            }
+        }
+
+        public static void Present()
+        {
+            Console.SetCursorPosition(0, 0);
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < _frameBuffer.Length; i++)
+            {
+                sb.Append(_frameBuffer[i].Character.ToString().Pastel(_frameBuffer[i].Color));
+            }
+            Console.Write(sb.ToString());
+        }
+
+        // Add method to draw centered text, respecting the 85-width offset
+        public static void DrawCentered(int y, string text, string color = "#FFFFFF")
+        {
+            int startX = (CONSOLE_WIDTH - text.Length) / 2;
+            WriteToBuffer(startX, y, text, color);
+        }
+    }
+}
+</file>
+
+<file path="Src/Utilities/UI/ScreenInfo.cs">
+using System.Runtime.InteropServices;
+
+namespace DungeonAdventures.csproj.Src.Utilities.UI
+{
+    public static class ScreenInfo
+    {
+        // Declare the GetSystemMetrics function from user32.dll
+        [DllImport("user32.dll")]
+        private static extern int GetSystemMetrics(int nIndex);
+
+        // Define constants for the metrics we want to retrieve
+        private const int SM_CXSCREEN = 0; // Screen width
+        private const int SM_CYSCREEN = 1; // Screen height
+
+        public static (int Width, int Height) GetScreenDimensions()
+        {
+            int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+            int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+            return (screenWidth, screenHeight);
+        }
+    }
+}
+</file>
+
+<file path="Src/Utilities/UI/UiEngine.cs">
+using DungeonAdventures.Src.GameData.Components;
+using Pastel;
+using System.Text.RegularExpressions;
+using static DungeonAdventures.Src.GameData.Entities.PlayerData;
+using static System.Console;
+
+namespace DungeonAdventures.Src.Utilities.UI
+{
+	public static class UiEngine
+	{
+		public const string BorderColor = "#8B0000"; // Dark Red for ominous borders
+		public const int BoxWidth = 46;
+
+		// --- SPICY THEME COLORS ---
+		private const string DungeonPurple = "#2E0E4E";
+		private const string TorchGold = "#FFAB00";
+		private const string NeonGreen = "#00FF41"; // High-contrast Matrix green
+		private const string DimGrey = "#777777";   // Severe retro grey
+		private const string LockedRed = "#440000"; // Dark "locked" red
+
+		public static string StripAnsi(string text)
+		{
+			if (string.IsNullOrEmpty(text)) return "";
+			return Regex.Replace(text, @"\x1B\[[0-9;]*[a-zA-Z]", "");
+		}
+		
+		public static string PadAnsiStringWithCenter(string text, int totalWidth)
+		{
+			if (string.IsNullOrEmpty(text)) return new string(' ', totalWidth);
+			int cleanLength = UiEngine.StripAnsi(text).Length;
+			int padding = (totalWidth - cleanLength) / 2;
+			string leftPad = new string(' ', padding > 0 ? padding : 0);
+			string rightPad = new string(' ', totalWidth - (padding + cleanLength) > 0 ? totalWidth - (padding + cleanLength) : 0);
+			return leftPad + text + rightPad;
+		}
+
+		public static void DrawCentered(string text)
+		{
+			string cleanText = StripAnsi(text);
+			int centerX = (WindowWidth / 2) - (cleanText.Length / 2);
+			if (centerX < 0) centerX = 0;
+			SetCursorPosition(centerX, CursorTop);
+			WriteLine(text);
+		}
+
+		public static void DrawCentered(string text, int row)
+		{
+			string cleanText = StripAnsi(text);
+			SetCursorPosition(Math.Max(0, (WindowWidth / 2) - (cleanText.Length / 2)), row);
+			Write(text);
+		}
+
+		public static void DrawCentered(string text, int row, int clearWidth = 50)
+		{
+			string clean = StripAnsi(text);
+			int startPos = WindowWidth / 2 - clean.Length / 2;
+			int clearStart = WindowWidth / 2 - clearWidth / 2;
+
+			SetCursorPosition(Math.Max(0, clearStart), row);
+			Write(new string(' ', clearWidth));
+
+			SetCursorPosition(Math.Max(0, startPos), row);
+			Write(text);
+		}
+
+		public static void DrawLoadingScreen(string taskName, int durationMs)
+		{
+			CursorVisible = false;
+			int width = 40;
+			int centerX = WindowWidth / 2;
+			int centerY = WindowHeight / 2;
+
+			for (int i = 0; i <= 100; i += 10)
+			{
+				Clear();
+				DrawCentered(taskName.Pastel(TorchGold), centerY - 1);
+
+				SetCursorPosition(centerX - (width / 2), centerY + 1);
+				string bar = new string('█', (i * width) / 100);
+				string empty = new string('░', width - ((i * width) / 100));
+				Write(bar.Pastel(DungeonPurple) + empty.Pastel("#333333"));
+
+				Thread.Sleep(durationMs / 10);
+			}
+			Clear();
+		}
+
+		public static void DrawBoxLine(string content, int row, int left)
+		{
+			SetCursorPosition(left, row);
+			Write("║".Pastel(BorderColor));
+			SetCursorPosition(left + 1, row);
+			Write(new string(' ', BoxWidth - 2));
+			string cleanContent = StripAnsi(content);
+			int contentStart = left + 1 + (BoxWidth - 2) / 2 - cleanContent.Length / 2;
+			SetCursorPosition(contentStart, row);
+			Write(content);
+			SetCursorPosition(left + BoxWidth - 1, row);
+			Write("║".Pastel(BorderColor));
+		}
+
+		public static void DrawBoxBorder(int row, int left, bool isTop)
+		{
+			SetCursorPosition(left, row);
+			string leftCap = isTop ? "╔" : "╚";
+			string rightCap = isTop ? "╗" : "╝";
+			Write((leftCap + new string('═', BoxWidth - 2) + rightCap).Pastel(BorderColor));
+		}
+
+		public static void DrawDynamicFrame(string title, List<string> lines, string hint = "", int boxWidth = 66, int startY = 11, int selectedIndex = -1, int previewHp = -1, int previewCoins = -1)
+		{
+			CursorVisible = false;
+			SetCursorPosition(0, 0);
+			BackgroundColor = ConsoleColor.DarkRed; // Dark Red background
+			ForegroundColor = ConsoleColor.Yellow; // Yellow foreground
+			int displayHp = (previewHp != -1) ? previewHp : (GameState.CurrentPlayer?.Health ?? 100);
+			int displayCoins = (previewCoins != -1) ? previewCoins : (GameState.CurrentPlayer?.Coins ?? 50);
+			string leftSection = $" {title}";
+			string rightSection;
+			if (title == "MAIN MENU")
+			{
+				rightSection = $"HP: {displayHp} | COINS: {displayCoins} ";
+			}
+			else
+			{
+				rightSection = $"TIME: {DateTime.Now:HH:mm} | HP: {displayHp} | COINS: {displayCoins} ";
+			}
+			int fillerCount = WindowWidth - leftSection.Length - rightSection.Length;
+			Write(leftSection + new string(' ', Math.Max(0, fillerCount)) + rightSection);
+			ResetColor();
+
+			int startX = (WindowWidth / 2) - (boxWidth / 2);
+			int fixedHeight = lines.Count;
+			string borderColor = BorderColor;
+
+			SetCursorPosition(startX, startY);
+			Write(("╔" + new string('═', boxWidth - 2) + "╗").Pastel(borderColor));
+
+			for (int i = 0; i < fixedHeight; i++)
+			{
+				string content = (lines != null && i < lines.Count) ? lines[i] : "";
+				DrawCenteredBoxLine(content, startY + 1 + i, startX, boxWidth, borderColor);
+			}
+
+			SetCursorPosition(startX, startY + fixedHeight + 1);
+			Write(("╚" + new string('═', boxWidth - 2) + "╝").Pastel(borderColor));
+
+			if (!string.IsNullOrEmpty(hint)) DrawCentered(hint.Pastel("#555555"), startY + fixedHeight + 3);
+			UiFunctions.DisplayFooter();
+		}
+
+		public static void DrawCenteredBoxLine(string content, int row, int x, int width, string borderColor)
+		{
+			SetCursorPosition(x, row);
+			Write($"{"║".Pastel(borderColor)}{content}{"║".Pastel(borderColor)}");
+		}
+
+
+		public static void DrawAttributeBox(loadPlayer player, int x, int y, int selectedStat = -1)
+		{
+			string bColor = BorderColor;
+			SetCursorPosition(x, y);
+			WriteLine("╔══════════ ATTRIBUTES ══════════╗".Pastel(bColor));
+			DrawStatLine("Strength", player.Abilities.Strength, x, y + 1, selectedStat == 0, "#00FF00", "#FFFFFF", bColor);
+			DrawStatLine("Dexterity", player.Abilities.Dexterity, x, y + 2, selectedStat == 1, "#00FF00", "#FFFFFF", bColor);
+			DrawStatLine("Intelligence", player.Abilities.Intelligence, x, y + 3, selectedStat == 2, "#00FF00", "#FFFFFF", bColor);
+			DrawStatLine("Constitution", player.Abilities.Constitution, x, y + 4, selectedStat == 3, "#00FF00", "#FFFFFF", bColor);
+			DrawStatLine("Perception", player.Abilities.Perception, x, y + 5, selectedStat == 4, "#00FF00", "#FFFFFF", bColor);
+			DrawStatLine("Luck", player.Abilities.Luck, x, y + 6, selectedStat == 5, "#00FF00", "#FFFFFF", bColor);
+			DrawStatLine("Wisdom", player.Abilities.Wisdom, x, y + 7, selectedStat == 6, "#00FF00", "#FFFFFF", bColor);
+			DrawStatLine("Charisma", player.Abilities.Charisma, x, y + 8, selectedStat == 7, "#00FF00", "#FFFFFF", bColor);
+			SetCursorPosition(x, y + 9);
+			WriteLine("╠════════════════════════════════╣".Pastel(bColor));
+			SetCursorPosition(x, y + 10);
+			WriteLine($"║ Health: {player.Health.ToString().PadRight(23).Pastel("#FF4500")}║");
+			SetCursorPosition(x, y + 11);
+			WriteLine("╚════════════════════════════════╝".Pastel(bColor));
+		}
+
+		private static void DrawStatLine(string label, int value, int x, int y, bool isSelected, string aCol, string iCol, string bColor)
+		{
+			// Hide cursor during draw to prevent the "white flicker"
+			Console.CursorVisible = false;
+
+			SetCursorPosition(x, y);
+			string color = isSelected ? aCol : iCol;
+
+			// PADDING FIX: Ensure the total length of 'text' matches your frame width exactly
+			// If your box is 34 characters wide, use PadRight accordingly.
+			string text = $" {label}:".PadRight(15) + value.ToString().PadLeft(5);
+
+			// If the item is selected, we can add the > < arrows back inside the line
+			if (isSelected)
+			{
+				text = $"> {label}: {value} <".PadRight(20).PadLeft(25); // Adjust numbers to fit your box
+			}
+
+			Write($"{"║".Pastel(bColor)}{text.Pastel(color)}{"║".Pastel(bColor)}");
+
+			// Move cursor to 0,0 after drawing so it's not visible on the menu
+			SetCursorPosition(0, 0);
+		}
+
+		public static bool GetArrowChoice(string prompt, string option1, string option2)
+		{
+			int selected = 0;
+			while (true)
+			{
+				Clear();
+				WriteLine($"\n {prompt.Pastel("#FFD700")}\n");
+				WriteLine($" {(selected == 0 ? " > ".Pastel("#00FF00") : "    ")} {option1}");
+				WriteLine($" {(selected == 1 ? " > ".Pastel("#00FF00") : "    ")} {option2}");
+				var key = ReadKey(true).Key;
+				if (key == ConsoleKey.UpArrow) selected = 0;
+				else if (key == ConsoleKey.DownArrow) selected = 1;
+				else if (key == ConsoleKey.Enter) return selected == 0;
+			}
+		}
+
+
+
+		public static void DrawV2Footer()
+		{
+			int row = WindowHeight - 1;
+			SetCursorPosition(0, row);
+
+			BackgroundColor = ConsoleColor.DarkCyan;
+			ForegroundColor = ConsoleColor.White;
+			Write(" Build_MoDe ");
+			ResetColor();
+
+			// MATCHED TO YOUR GameState.cs: Uses IsDevMode
+			string devHint = GameState.IsDevMode ? " [F8: GUI ACTIVE] ".Pastel("#FFD700") : "";
+			string systemMsg = $"[ SYSTEM: STABLE ]{devHint}";
+
+			DrawCentered(systemMsg.Pastel("#3A96DD"), row);
+
+			// Using your BuildVersion from GameState
+			string ver = $"V.{GameState.BuildVersion}";
+			SetCursorPosition(WindowWidth - ver.Length - 1, row);
+			Write(ver.Pastel("#FFD700"));
+		}
+
+
+
+
+
+	}
+}
+</file>
+
+<file path=".editorconfig">
+[*.cs]
+
+# VSSpell001: Spell Check
+dotnet_diagnostic.VSSpell001.severity = silent
+</file>
+
+<file path=".gitignore">
+## Ignore Visual Studio temporary files, build results, and
+## files generated by popular Visual Studio add-ons.
+##
+## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.env
+
+# User-specific files (MonoDevelop/Xamarin Studio)
+*.userprefs
+
+# Mono auto generated files
+mono_crash.*
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+[Aa][Rr][Mm]64[Ee][Cc]/
+bld/
+[Oo]bj/
+[Oo]ut/
+[Ll]og/
+[Ll]ogs/
+
+# Build results on 'Bin' directories
+**/[Bb]in/*
+# Uncomment if you have tasks that rely on *.refresh files to move binaries
+# (https://github.com/github/gitignore/pull/3736)
+#!**/[Bb]in/*.refresh
+
+# Visual Studio 2015/2017 cache/options directory
+.vs/
+# Uncomment if you have tasks that create the project's static files in wwwroot
+#wwwroot/
+
+# Visual Studio 2017 auto generated files
+Generated\ Files/
+
+# MSTest test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.trx
+
+# NUnit
+*.VisualState.xml
+TestResult.xml
+nunit-*.xml
+
+# Approval Tests result files
+*.received.*
+
+# Build Results of an ATL Project
+[Dd]ebugPS/
+[Rr]eleasePS/
+dlldata.c
+
+# Benchmark Results
+BenchmarkDotNet.Artifacts/
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# StyleCop
+StyleCopReport.xml
+
+# Files built by Visual Studio
+*_i.c
+*_p.c
+*_h.h
+*.ilk
+*.meta
+*.obj
+*.idb
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+# but not Directory.Build.rsp, as it configures directory-level build defaults
+!Directory.Build.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*_wpftmp.csproj
+*.log
+*.tlog
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+# Chutzpah Test files
+_Chutzpah*
+
+# Visual C++ cache files
+ipch/
+*.aps
+*.ncb
+*.opendb
+*.opensdf
+*.sdf
+*.cachefile
+*.VC.db
+*.VC.VC.opendb
+
+# Visual Studio profiler
+*.psess
+*.vsp
+*.vspx
+*.sap
+
+# Visual Studio Trace Files
+*.e2e
+
+# TFS 2012 Local Workspace
+$tf/
+
+# Guidance Automation Toolkit
+*.gpState
+
+# ReSharper is a .NET coding add-in
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# TeamCity is a build add-in
+_TeamCity*
+
+# DotCover is a Code Coverage Tool
+*.dotCover
+
+# AxoCover is a Code Coverage Tool
+.axoCover/*
+!.axoCover/settings.json
+
+# Coverlet is a free, cross platform Code Coverage Tool
+coverage*.json
+coverage*.xml
+coverage*.info
+
+# Visual Studio code coverage results
+*.coverage
+*.coveragexml
+
+# NCrunch
+_NCrunch_*
+.NCrunch_*
+.*crunch*.local.xml
+nCrunchTemp_*
+
+# MightyMoose
+*.mm.*
+AutoTest.Net/
+
+# Web workbench (sass)
+.sass-cache/
+
+# Installshield output folder
+[Ee]xpress/
+
+# DocProject is a documentation generator add-in
+DocProject/buildhelp/
+DocProject/Help/*.HxT
+DocProject/Help/*.HxC
+DocProject/Help/*.hhc
+DocProject/Help/*.hhk
+DocProject/Help/*.hhp
+DocProject/Help/Html2
+DocProject/Help/html
+
+# Click-Once directory
+publish/
+
+# Publish Web Output
+*.[Pp]ublish.xml
+*.azurePubxml
+# Note: Comment the next line if you want to checkin your web deploy settings,
+# but database connection strings (with potential passwords) will be unencrypted
+*.pubxml
+*.publishproj
+
+# Microsoft Azure Web App publish settings. Comment the next line if you want to
+# checkin your Azure Web App publish settings, but sensitive information contained
+# in these scripts will be unencrypted
+PublishScripts/
+
+# NuGet Packages
+*.nupkg
+# NuGet Symbol Packages
+*.snupkg
+# The packages folder can be ignored because of Package Restore
+**/[Pp]ackages/*
+# except build/, which is used as an MSBuild target.
+!**/[Pp]ackages/build/
+# Uncomment if necessary however generally it will be regenerated when needed
+#!**/[Pp]ackages/repositories.config
+# NuGet v3's project.json files produces more ignorable files
+*.nuget.props
+*.nuget.targets
+
+# Microsoft Azure Build Output
+csx/
+*.build.csdef
+
+# Microsoft Azure Emulator
+ecf/
+rcf/
+
+# Windows Store app package directories and files
+AppPackages/
+BundleArtifacts/
+Package.StoreAssociation.xml
+_pkginfo.txt
+*.appx
+*.appxbundle
+*.appxupload
+
+# Visual Studio cache files
+# files ending in .cache can be ignored
+*.[Cc]ache
+# but keep track of directories ending in .cache
+!?*.[Cc]ache/
+
+# Others
+ClientBin/
+~$*
+*~
+*.dbmdl
+*.dbproj.schemaview
+*.jfm
+*.pfx
+*.publishsettings
+orleans.codegen.cs
+
+# Including strong name files can present a security risk
+# (https://github.com/github/gitignore/pull/2483#issue-259490424)
+#*.snk
+
+# Since there are multiple workflows, uncomment next line to ignore bower_components
+# (https://github.com/github/gitignore/pull/1529#issuecomment-104372622)
+#bower_components/
+
+# RIA/Silverlight projects
+Generated_Code/
+
+# Backup & report files from converting an old project file
+# to a newer Visual Studio version. Backup files are not needed,
+# because we have git ;-)
+_UpgradeReport_Files/
+Backup*/
+UpgradeLog*.XML
+UpgradeLog*.htm
+ServiceFabricBackup/
+*.rptproj.bak
+
+# SQL Server files
+*.mdf
+*.ldf
+*.ndf
+
+# Business Intelligence projects
+*.rdl.data
+*.bim.layout
+*.bim_*.settings
+*.rptproj.rsuser
+*- [Bb]ackup.rdl
+*- [Bb]ackup ([0-9]).rdl
+*- [Bb]ackup ([0-9][0-9]).rdl
+
+# Microsoft Fakes
+FakesAssemblies/
+
+# GhostDoc plugin setting file
+*.GhostDoc.xml
+
+# Node.js Tools for Visual Studio
+.ntvs_analysis.dat
+node_modules/
+
+# Visual Studio 6 build log
+*.plg
+
+# Visual Studio 6 workspace options file
+*.opt
+
+# Visual Studio 6 auto-generated workspace file (contains which files were open etc.)
+*.vbw
+
+# Visual Studio 6 auto-generated project file (contains which files were open etc.)
+*.vbp
+
+# Visual Studio 6 workspace and project file (working project files containing files to include in project)
+*.dsw
+*.dsp
+
+# Visual Studio 6 technical files
+*.ncb
+*.aps
+
+# Visual Studio LightSwitch build output
+**/*.HTMLClient/GeneratedArtifacts
+**/*.DesktopClient/GeneratedArtifacts
+**/*.DesktopClient/ModelManifest.xml
+**/*.Server/GeneratedArtifacts
+**/*.Server/ModelManifest.xml
+_Pvt_Extensions
+
+# Paket dependency manager
+**/.paket/paket.exe
+paket-files/
+
+# FAKE - F# Make
+**/.fake/
+
+# CodeRush personal settings
+**/.cr/personal
+
+# Python Tools for Visual Studio (PTVS)
+**/__pycache__/
+*.pyc
+
+# Cake - Uncomment if you are using it
+#tools/**
+#!tools/packages.config
+
+# Tabs Studio
+*.tss
+
+# Telerik's JustMock configuration file
+*.jmconfig
+
+# BizTalk build output
+*.btp.cs
+*.btm.cs
+*.odx.cs
+*.xsd.cs
+
+# OpenCover UI analysis results
+OpenCover/
+
+# Azure Stream Analytics local run output
+ASALocalRun/
+
+# MSBuild Binary and Structured Log
+*.binlog
+MSBuild_Logs/
+
+# AWS SAM Build and Temporary Artifacts folder
+.aws-sam
+
+# NVidia Nsight GPU debugger configuration file
+*.nvuser
+
+# MFractors (Xamarin productivity tool) working folder
+**/.mfractor/
+
+# Local History for Visual Studio
+**/.localhistory/
+
+# Visual Studio History (VSHistory) files
+.vshistory/
+
+# BeatPulse healthcheck temp database
+healthchecksdb
+
+# Backup folder for Package Reference Convert tool in Visual Studio 2017
+MigrationBackup/
+
+# Ionide (cross platform F# VS Code tools) working folder
+**/.ionide/
+
+# Fody - auto-generated XML schema
+FodyWeavers.xsd
+
+# VS Code files for those working on multiple tools
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+# Windows Installer files from build outputs
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+</file>
+
+<file path="GEMINI.md">
+# Gemini Project Context: Dungeon Adventures
+
+This document provides a comprehensive overview of the "Dungeon Adventures" project, designed to serve as instructional context for future interactions with the Gemini CLI agent.
+
+## Project Overview
+
+"Dungeon Adventures" is a C# .NET 8.0 console-based adventure game. Its core design principle revolves around a unique "Hostile Terminal" aesthetic, prioritizing an unsettling and corrupted user experience. The application enforces a strictly text-based user interface, employing intentional visual artifacts, flicker-free rendering, and specific display constraints to create an immersive, maligned atmosphere.
+
+## Technology Stack
+
+The project is built upon the .NET 8.0 framework with C# as the primary programming language. The following key libraries are integral to achieving the intended "Hostile Terminal" experience:
+
+*   **Programming Language:** C#
+*   **Framework:** .NET 8.0
+*   **Key Libraries:**
+    *   `Pastel`: Utilized for precise 24-bit console coloring (specifically "Emergency Red" `#FF0000` and "Toxic Green" `#00FF00`) to enhance the corrupted visual theme.
+    *   `System.Text.StringBuilder`: Essential for high-performance, flicker-free rendering of dense ASCII corruption effects and dynamic UI elements, ensuring visual stability.
+    *   `System.Threading`: Employed to simulate system struggle and intentional delays (e.g., `Thread.Sleep`) that contribute to the game's atmospheric hostility.
+    *   `System.Console`: Used for granular control over the console output, including `SetCursorPosition` and `Write`, to manage a static, non-scrolling display.
+    *   `Spectre.Console` and `Spectre.Console.Cli`: Provides advanced capabilities for structured console output and command-line argument parsing, integrated within the constraints of the "Hostile Terminal" aesthetic.
+    *   `NUnit`: The chosen framework for unit testing, ensuring the robustness and correctness of game logic and components.
+
+## Building, Running, and Testing
+
+The project uses standard .NET CLI commands for development workflows:
+
+*   **Build the Project:**
+    ```bash
+    dotnet build
+    ```
+*   **Run the Application:**
+    ```bash
+    dotnet run --project DungeonAdventures.csproj
+    ```
+    (Note: This should be executed from the solution root or the `DungeonAdventures` project directory.)
+*   **Run Tests:**
+    ```bash
+    dotnet test DungeonAdventures.Tests.csproj
+    ```
+    (Note: This should be executed from the solution root or the `DungeonAdventures.Tests` project directory.)
+
+## Development Conventions
+
+The project adheres to a strict set of development conventions outlined in the `conductor` documentation, primarily driven by the "Hostile C# Style Guide." These conventions are critical for maintaining the intended aesthetic and architectural integrity:
+
+*   **Buffer-Safe Rendering (84x24 Reality Anchor):** All rendering logic *must* be confined within an `84x24` character grid. This ensures a 1-character safe zone from the console edges, preventing unwanted scrolling or buffer overflows. Rendering loops should iterate up to `width - 1` and `height - 1`.
+*   **Static Output (No Scrolling, No Shifting):** The use of `Console.WriteLine()` is strictly forbidden. All screen output *must* be managed using `Console.SetCursorPosition(x, y)` followed by `Console.Write(character)`. This mandate is crucial for maintaining a static, non-shifting display.
+*   **Zero-Deletions Policy (Additive Infection):** Existing logic, variables, functions, and strings (especially corrupted atmospheric text) *must not* be removed or modified. New development is strictly additive, aiming to layer new corruptions onto the existing codebase, fostering a sense of malignant growth rather than refactoring.
+*   **Visual Intensity & Atmospheric Priority:** Frame-by-frame visual effects, such as "Digital Decay," must be constructed using `System.Text.StringBuilder` before writing to the console to ensure high-speed, stable rendering. Coloring is restricted to "Emergency Red" (`#FF0000`) and "Toxic Green" (`#00FF00`). Comments are encouraged to be "glitch-comments," enhancing the atmosphere with cryptic phrases and hex fragments rather than typical logical explanations.
+*   **Persona Alignment (Sentient System Malignancy):** Code should intentionally reflect a malevolent, dying machine. Clarity can be sacrificed for aesthetic impact, variable names can be cryptic, and logic can be complex if it contributes to chaotic visual output. Error handling should manifest as further corruption or system judgments, not user-friendly messages, as the application is designed to become more unstable rather than crash.
+</file>
+
+<file path="GlobalUsings.cs">
+global using NUnit.Framework;
+</file>
+
+<file path="message_to_user.txt">
+Please provide the correct technology stack. You can list the programming language, framework, and key libraries.
+</file>
+
+<file path="PlayerTests.cs">
+using NUnit.Framework;
+using DungeonAdventures.Src.GameData.Entities;
+using static DungeonAdventures.Src.GameData.Entities.PlayerData;
+using DungeonAdventures.Src.GameEngine; // Added for SaveGame and LoadGame
+using System.IO; // Added for Path and Directory
+using DungeonAdventures.Src.GameData.Components; // Added for GameState
+
+namespace DungeonAdventures.Tests
+{
+    public class PlayerTests
+    {
+        private string _testProfilesPath;
+
+        [SetUp]
+        public void Setup()
+        {
+            // Create a unique temporary directory for each test fixture
+            _testProfilesPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            Directory.CreateDirectory(_testProfilesPath);
+            // Temporarily redirect GameState.MasterPath for testing purposes
+            // This is a simplification; in a real project, consider dependency injection for better test isolation.
+            GameState.MasterPath = Path.GetDirectoryName(_testProfilesPath);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            // Clean up the temporary directory
+            if (Directory.Exists(_testProfilesPath))
+            {
+                Directory.Delete(_testProfilesPath, true);
+            }
+        }
+
+        [Test]
+        public void LoadPlayer_WeaponValue_ShouldBeSettableAndGettable()
+        {
+            // Arrange
+            loadPlayer player = new loadPlayer();
+            int expectedWeaponValue = 15;
+
+            // Act
+            player.WeaponValue = expectedWeaponValue;
+            int actualWeaponValue = player.WeaponValue;
+
+            // Assert
+            Assert.AreEqual(expectedWeaponValue, actualWeaponValue);
+        }
+
+        [Test]
+        public void LoadPlayer_ArmorValue_ShouldBeSettableAndGettable()
+        {
+            // Arrange
+            loadPlayer player = new loadPlayer();
+            int expectedArmorValue = 10;
+
+            // Act
+            player.ArmorValue = expectedArmorValue;
+            int actualArmorValue = player.ArmorValue;
+
+            // Assert
+            Assert.AreEqual(expectedArmorValue, actualArmorValue);
+        }
+
+        [Test]
+        public void LoadPlayer_WeaponAndArmorValue_ShouldBeSerializedAndDeserializedCorrectly()
+        {
+            // Arrange
+            loadPlayer originalPlayer = new loadPlayer
+            {
+                PlayerName = "TestPlayer",
+                WeaponValue = 25,
+                ArmorValue = 20
+            };
+            string fileName = "TestPlayerSave";
+            string folder = Path.GetFileName(_testProfilesPath); // Use the name of the temp folder as subfolder
+
+            // Act - Save the player data
+            SaveGame.ExportToMaster(originalPlayer, folder, fileName);
+
+            // Construct the full file path for loading
+            string savedFilePath = Path.Combine(_testProfilesPath, fileName + ".json");
+
+            // Assert that the file was created
+            Assert.IsTrue(File.Exists(savedFilePath), "Save file was not created.");
+
+            // Act - Load the player data
+            loadPlayer? loadedPlayer = LoadGame.LoadProfile(savedFilePath);
+
+            // Assert
+            Assert.NotNull(loadedPlayer, "Loaded player should not be null.");
+            Assert.AreEqual(originalPlayer.PlayerName, loadedPlayer.PlayerName, "PlayerName mismatch.");
+            Assert.AreEqual(originalPlayer.WeaponValue, loadedPlayer.WeaponValue, "WeaponValue mismatch.");
+            Assert.AreEqual(originalPlayer.ArmorValue, loadedPlayer.ArmorValue, "ArmorValue mismatch.");
+        }
+    }
+}
+</file>
+
+<file path="UnitTest1.cs">
+namespace DungeonAdventures.Tests;
+
+public class Tests
+{
+    [SetUp]
+    public void Setup()
+    {
+    }
+
+    [Test]
+    public void Test1()
+    {
+        Assert.Pass();
+    }
+}
+</file>
+
+<file path="Src/GameData/ThemeConfig.cs">
+namespace DungeonAdventures.Src.GameData
+{
+    public class ThemeConfig
+    {
+        public float[] FontColor { get; set; } = new float[] { 1f, 1f, 1f, 1f };
+        public float[] TgbColor { get; set; } = new float[] { 0.1f, 0.1f, 0.1f, 1f };
+        public float[] WindowBgColor { get; set; } = new float[] { 0.1f, 0.1f, 0.1f, 1f };
+        public float[] BorderColor { get; set; } = new float[] { 0f, 1f, 1f, 1f };
+        public float[] ChildBgColor { get; set; } = new float[] { 0.08f, 0.08f, 0.12f, 1f };
+        public float WindowBorderSize { get; set; } = 1.0f;
+        public float FrameBorderSize { get; set; } = 1.0f;
+        public float ChildBorderSize { get; set; } = 1.0f;
+        public float WindowRounding { get; set; } = 5.0f;
+        public float FrameRounding { get; set; } = 4.0f;
+        public float ChildRounding { get; set; } = 4.0f;
+        public float[] WindowSize { get; set; } = new float[] { 900f, 700f };
+    }
+}
+</file>
+
+<file path="Src/GameEngine/Loadgame.cs">
+using DungeonAdventures.Src.GameData.Components;
+using System.Text.Json;
+using static DungeonAdventures.Src.GameData.Entities.PlayerData;
+
+namespace DungeonAdventures.Src.GameEngine
+{
+	public static class LoadGame
+	{
+		// Points directly to Documents/DungeonAdventures/profiles
+		private static string ProfilesPath => Path.Combine(GameState.MasterPath, "profiles");
+
+		public static loadPlayer? LoadProfile(string filePath)
+		{
+			if (!File.Exists(filePath))
+			{
+				Console.WriteLine($"[LOAD FAIL] File not found: {filePath}");
+				return null;
+			}
+
+			try
+			{
+				string json = File.ReadAllText(filePath);
+				var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+				return JsonSerializer.Deserialize<loadPlayer>(json, options);
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"[LOAD ERROR] Failed to parse JSON: {ex.Message}");
+				return null;
+			}
+		}
+
+				public static string[] GetAllProfiles()
+				{
+					// 1. Ensure the directory exists first
+					if (!Directory.Exists(ProfilesPath))
+					{
+						Directory.CreateDirectory(ProfilesPath);
+						return Array.Empty<string>();
+					}
+		
+					// 2. Simply return the files.
+					// DO NOT call LoadGame.GetAllProfiles() inside here.
+					return Directory.GetFiles(ProfilesPath, "*.json");
+				}
+		
+				/// <summary>
+				/// Loads all JSON files from a specified global folder into a List of type T.
+				/// </summary>
+				/// <typeparam name="T">The type to deserialize the JSON into.</typeparam>
+				/// <param name="folder">The name of the subfolder within MasterPath (e.g., "gems", "bosses").</param>
+				/// <returns>A List<T> containing all deserialized objects, or an empty list if the folder doesn't exist or contains no valid files.</returns>
+				public static List<T> LoadAllFromFolder<T>(string folder)
+				{
+					List<T> loadedData = new List<T>();
+					string targetDir = GameState.GetGlobalPath(folder); // Use GameState.GetGlobalPath
+		
+					if (!Directory.Exists(targetDir))
+					{
+						// DevLog.Write($"[LOAD] Folder not found: {targetDir}", "SYSTEM"); // Optionally log
+						return loadedData; // Return empty list if folder doesn't exist
+					}
+		
+					string[] jsonFiles = Directory.GetFiles(targetDir, "*.json");
+					var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+		
+					foreach (string filePath in jsonFiles)
+					{
+						try
+						{
+							string json = File.ReadAllText(filePath);
+							T? data = JsonSerializer.Deserialize<T>(json, options);
+							if (data != null)
+							{
+								loadedData.Add(data);
+							}
+						}
+						catch (Exception ex)
+						{
+							// Log individual file errors, but continue processing other files
+							Console.WriteLine($"[LOAD ERROR] Failed to load/parse {filePath}: {ex.Message}"); // Use Console for now
+							// DevLog.Write($"[LOAD ERROR] Failed to load/parse {filePath}: {ex.Message}", "ERROR"); // Use DevLog if accessible
+						}
+					}
+		
+					return loadedData;
+				}
+
+
+
+		public static T? LoadConfig<T>(string folder, string fileName)
+		{
+			string targetPath = Path.Combine(GameState.GetGlobalPath(folder), fileName + ".json");
+
+			if (!File.Exists(targetPath)) return default;
+
+			try
+			{
+				string json = File.ReadAllText(targetPath);
+				var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+				return JsonSerializer.Deserialize<T>(json, options);
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"[CONFIG LOAD ERROR] {fileName}: {ex.Message}");
+				return default;
+			}
+		}
+
+
+
+
+
+
+
+
+	}
+
+
+}
+</file>
+
+<file path="Src/GameEngine/SaveGame.cs">
+using DungeonAdventures.Src.GameEngine.Interfaces;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using DungeonAdventures.Src.GameData.Components;
+using DungeonAdventures.Src.Interfaces;
+
+namespace DungeonAdventures.Src.GameEngine
+{
+	public static class SaveGame
+	{
+		// Points to the safe "Documents" folder defined in GameState
+		private static string MasterRoot => GameState.MasterPath;
+
+		/// <summary>
+		/// Saves current GameState to the Documents folder.
+		/// </summary>
+		public static void Save() => GameState.Sync();
+
+		/// <summary>
+		/// Verifies the Documents folder is reachable and writable.
+		/// </summary>
+		public static bool RunSanityCheck()
+		{
+			try
+			{
+				if (!Directory.Exists(MasterRoot))
+				{
+					Directory.CreateDirectory(MasterRoot);
+				}
+
+				string testFile = Path.Combine(MasterRoot, "access_test.tmp");
+				File.WriteAllText(testFile, "test");
+				File.Delete(testFile);
+
+				DevGuiRenderer._injectionSuccess = true;
+				DevGuiRenderer._injectionMsg = $"[OK] Saving to: {MasterRoot}";
+				return true;
+			}
+			catch (Exception ex)
+			{
+				DevGuiRenderer._injectionSuccess = false;
+				DevGuiRenderer._injectionMsg = $"[FAIL] Path Unreachable: {ex.Message}";
+				return false;
+			}
+		}
+
+		/// <summary>
+		/// Saves data directly to the Documents subfolder by delegating to ExportToMaster.
+		/// </summary>
+		public static void SaveData(string fileName, object data, string subFolder)
+		{
+			try
+			{
+				// Delegate to the robust ExportToMaster method
+				ExportToMaster(data, subFolder, Path.GetFileNameWithoutExtension(fileName));
+				DevGuiRenderer._injectionSuccess = true; // Still indicate success for the legacy UI injection popup
+			}
+			catch (Exception ex)
+			{
+				DevGuiRenderer._injectionSuccess = false; // Indicate failure for the legacy UI injection popup
+				DevGuiRenderer.DevLog.Write($"[SAVE DATA ERROR]: {ex.Message}", "ERROR"); // Consistent error logging
+				DevGuiRenderer._injectionMsg = $"[SAVE ERROR]: {ex.Message}"; // For legacy UI popup
+			}
+		}
+
+		/// <summary>
+		/// Ensures directories exist in the Documents folder.
+		/// </summary>
+		public static string RefreshSaveSystem()
+		{
+			DevGuiRenderer._showInjectionPopup = true;
+			GameState.EnsureDirectories();
+			return "Save system path verified in Documents/DungeonAdventures";
+		}
+
+		/// <summary>
+		/// Mirrors local AppData to the Master Documents folder.
+		/// FIXED: Now correctly placed inside the SaveGame class.
+		/// </summary>
+		public static string ForceSyncAllData()
+		{
+			DevGuiRenderer._showInjectionPopup = true;
+			Thread.Sleep(200);
+
+			StringBuilder report = new StringBuilder();
+			int totalFilesSynced = 0;
+
+			try
+			{
+				string oldMasterSavesRoot = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DungeonAdventures", "Saves");
+				string newMasterDataPath = GameState.MasterPath; // This is now Documents/DungeonAdventures/Data
+
+				string[] folders = GameState.DataFolders; // Use GameState.DataFolders for consistency
+
+				report.AppendLine("[#00FFFFFF]» INITIATING FORCE SYNC [MIGRATION PROTOCOL][/COLOR]...");
+				report.AppendLine($"[#FFFF00FF]» FROM OLD: {oldMasterSavesRoot}[/COLOR]");
+				report.AppendLine($"[#00FF00FF]» TO NEW:   {newMasterDataPath}[/COLOR]");
+
+				if (Directory.Exists(oldMasterSavesRoot))
+				{
+					foreach (var f in folders)
+					{
+						string sourceDir = Path.Combine(oldMasterSavesRoot, f);
+						string targetDir = Path.Combine(newMasterDataPath, f);
+
+						if (!Directory.Exists(sourceDir)) continue;
+
+						Directory.CreateDirectory(targetDir);
+
+						foreach (var file in Directory.GetFiles(sourceDir))
+						{
+							string fileName = Path.GetFileName(file);
+							string destPath = Path.Combine(targetDir, fileName);
+
+							File.Copy(file, destPath, true);
+
+							totalFilesSynced++;
+						}
+						report.AppendLine($"[#90EE90FF][+] {f.ToUpper().PadRight(10)} | MIGRATED folder.[/COLOR]");
+					}
+					report.AppendLine("[#808080FF]» Old 'Saves' folder (if existed) processed.[/COLOR]");
+				}
+				else
+				{
+					report.AppendLine("[#FFA500FF]» No old 'Saves' folder found for migration.[/COLOR]");
+				}
+
+
+				report.AppendLine("[#FFFFFF00]------------------------------------[/COLOR]");
+				report.AppendLine("[#00FF00FF]» STATUS: DATA MIGRATION ATTEMPT COMPLETE[/COLOR]");
+				report.AppendLine($"[#FFFF00FF]» TOTAL OBJECTS MIGRATED: {totalFilesSynced}[/COLOR]");
+
+				DevGuiRenderer._injectionSuccess = true;
+				DevGuiRenderer._injectionMsg = report.ToString();
+
+				return DevGuiRenderer._injectionMsg;
+			}
+			catch (Exception ex)
+			{
+				DevGuiRenderer._injectionSuccess = false;
+				DevGuiRenderer._injectionMsg = $"[#FF0000FF][FAIL]: {ex.Message}[/COLOR]";
+				return DevGuiRenderer._injectionMsg; // Ensure this catch block returns
+			}
+		}
+
+		/// <summary>
+		/// Exports data to a specific master folder, leveraging GameState.GetGlobalPath for consistency.
+		/// Ensures atomicity and handles JSON serialization options for robustness.
+		/// </summary>
+		public static bool ExportToMaster<T>(T data, string folder, string fileName)
+		{
+			string targetDir = GameState.GetGlobalPath(folder);
+			string filePath = Path.Combine(targetDir, fileName + ".json");
+			string tempPath = filePath + ".tmp";
+
+			try
+			{
+				if (!Directory.Exists(targetDir)) Directory.CreateDirectory(targetDir);
+
+				// THESE OPTIONS STOP THE CRASH
+				var options = new JsonSerializerOptions
+				{
+					WriteIndented = true,
+					// 1. This stops the "InvalidOperationException" (Circular Reference)
+					ReferenceHandler = ReferenceHandler.IgnoreCycles,
+					// 2. This makes Enums save as "Fire" instead of "1"
+					Converters = { new JsonStringEnumConverter() },
+					// 3. This prevents crashing on null properties
+					DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+				};
+
+				string jsonData = JsonSerializer.Serialize(data, options);
+
+				// Atomic Write
+				File.WriteAllText(tempPath, jsonData);
+				if (File.Exists(filePath)) File.Delete(filePath);
+				File.Move(tempPath, filePath);
+
+				DevGuiRenderer._injectionSuccess = true;
+				DevGuiRenderer._injectionMsg = $"[SAVED] {folder}/{fileName}";
+				return true;
+			}
+			catch (Exception ex)
+			{
+				if (File.Exists(tempPath)) File.Delete(tempPath);
+				// This will now print the ACTUAL error to your console instead of just crashing
+				Console.WriteLine($"[SERIALIZATION FAIL]: {ex.Message}");
+				return false;
+			}
+		}
+	}
+}
+</file>
+
+<file path="Src/Gui/DevGui_Adventures.cs">
+using ImGuiNET;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DungeonAdventures.Src.Interfaces
+{
+	public partial class DevGuiRenderer
+	{
+		private void RenderAdventures()
+		{
+			ImGui.Text("Adventures Manager");
+			ImGui.Separator();
+			ImGui.Text("Coming Soon...");
+		}
+	}
+}
+</file>
+
+<file path="Src/Gui/DevGui_Specialization.cs">
+using ImGuiNET;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DungeonAdventures.Src.Interfaces
+{
+	public partial class DevGuiRenderer
+	{
+		private void RenderSpecialization()
+		{
+			ImGui.Text("Class & Specialization Manager");
+			ImGui.Separator();
+			ImGui.Text("Coming Soon...");
+		}
+	}
+}
+</file>
+
+<file path="Src/Gui/DevGui_System.cs">
+using ImGuiNET;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DungeonAdventures.Src.Interfaces
+{
+	public partial class DevGuiRenderer
+	{
+
+		private void RenderDevLog()
+		{
+			ImGui.Text("Developer Log");
+			ImGui.Separator();
+			
+			if (ImGui.Button("Clear Log"))
+			{
+				DevLog.Clear();
+			}
+			ImGui.SameLine();
+			ImGui.Checkbox("Pause Log", ref _logPaused);
+			ImGui.SameLine();
+			ImGui.InputText("Filter", ref _logFilter, 100);
+
+			ImGui.BeginChild("LogRegion", new Vector2(0, -1), ImGuiChildFlags.None, ImGuiWindowFlags.HorizontalScrollbar);
+			
+			lock (DevLog._lock)
+			{
+				foreach (var line in DevLog.Buffer)
+				{
+					if (!string.IsNullOrEmpty(_logFilter) && !line.Contains(_logFilter, StringComparison.OrdinalIgnoreCase))
+						continue;
+
+					Vector4 color = new Vector4(1, 1, 1, 1);
+					if (line.Contains("[ERROR]")) color = new Vector4(1, 0, 0, 1);
+					else if (line.Contains("[WARN]")) color = new Vector4(1, 1, 0, 1);
+					else if (line.Contains("[SUCCESS]")) color = new Vector4(0, 1, 0, 1);
+
+					ImGui.TextColored(color, line);
+				}
+			}
+
+			if (!_logPaused && ImGui.GetScrollY() >= ImGui.GetScrollMaxY())
+			{
+				ImGui.SetScrollHereY(1.0f);
+			}
+
+			ImGui.EndChild();
+		}
+
+	}
+}
+</file>
+
+<file path="Src/Gui/DevGui_Vars.cs">
+using DungeonAdventures.Src.GameData;
+using DungeonAdventures.Src.GameData.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
+using static DungeonAdventures.Src.GameData.Entities.PlayerData;
+
+namespace DungeonAdventures.Src.Interfaces
+{
+	public partial class DevGuiRenderer
+	{
+		#region Variables and State Management
+		#region//Attachment Factory Variables
+		// Attachment Factory Variables
+		private string _attName = "New Attachment";
+		public int _aSlotIndex = 0; // THE NUMBER
+		public string[] _attSlotIndex = Enum.GetNames(typeof(AttachmentSlot)); // THE ARRAY
+		public float _attDamageMod = 1.0f;
+		public float _attSpeedMod = 1.0f;
+		private string[] _attSlotTypes = new string[] { "Optics", "Barrel", "Underbarrel", "Magazine" };
+		private List<AttachmentData> _availableAttachments = new List<AttachmentData>();
+		private List<AttachmentData> _attachmentsToSocket = new List<AttachmentData>();
+		#endregion
+		#region//Weapon Factory
+		// Weapon Factory Variables
+		public string _wName = "God-Killer";
+		public int _wDamage = 999;
+		public float _wWeight = 0.5f;
+		public int _wPrice = 5000;
+		public int _wRarity = 0;
+		public bool _godMode = false;
+		public string[] _rarities = { "Common", "Rare", "Exotic", "Artifact", "Legendary", "Ethereal" };
+		public int _wTypeIndex = 0;
+		public string[] _wTypes = { "Melee", "Firearm", "Ranged", "Heavy", "Exotic" };
+		public int _wEffectIndex = 0;
+		public string[] _wEffects = Enum.GetNames(typeof(EffectType));
+		public int _wDurability = 100;
+		public int _wMagSize = 30;
+		public int _wAmmoIndex = 0;
+		public int _wCritChance = 5; // NEW
+		public int _wNumSockets = 0;
+		private List<GemData> _gemsToSocket = new List<GemData>();
+		public string[] _ammoTypes = {
+					"9mm",
+					".45 ACP",
+					"12-Gauge",
+					"7.62mm",
+					".50 BMG",
+					"Energy Cell",
+					"Bolt",
+					"Arrow",
+					"Plasma Cartridge",
+					".357 Magnum"
+				};
+		#endregion
+		#region//Item Factory Variables
+		// Item Factory Variables
+		public string _iName = "Mysterious Potion";
+		public int _iValue = 100;
+		public float _iWeight = 0.1f;
+		public int _iAmount = 1;
+		public int _iTypeIndex = 0;
+		public string[] _itemTypes = {
+			"Consumable",
+			"Quest Item",
+			"Scroll",
+			"Material",
+			"Key",
+			"Misc",
+			"Tool",
+			"Armor",
+			"Accessory",
+			"Potion", // NEW
+			"Gem", // NEW
+			"Rune", // NEW
+			"Relic" // NEW
+		};
+		public int _iRarity = 0;
+		public int _iEffectIndex = 0;
+		public string[] _iEffects = Enum.GetNames(typeof(EffectType));
+		public int _iDurability = 100;
+		public int _iCharges = 5;
+		public bool _isStackable = true;
+		public int _selectedPreset = 0;
+		public string[] _itemPresets =
+		{
+					"Custom",
+					"Mega Health Pack",
+					"Infinite Mana",
+					"Skeleton Key",
+					"God's Lunch",
+					"Ancient Scroll",
+					"Broken Compass",
+					"Potion of Poison", // NEW
+		            "Gem of Freezing", // NEW
+		            "Rune of Burning", // NEW
+		            "Relic of Confusion" // NEW
+		 };
+		#endregion
+		#region// Window & Engine State
+		public bool _isFirstFrame = true;
+		public DateTime _lastToggleTime = DateTime.MinValue;
+		public bool _devModeInternal = false;
+		public bool _logPaused = false;
+		public string _logFilter = "";
+		public string _profileSearchFilter = "";
+		public bool _isDeleteOpen = true; // Required by ImGui for modal popups
+		public string GameVersion { get; set; }
+		public string DevName { get; set; }
+
+		[DllImport("user32.dll")]
+		static extern short GetAsyncKeyState(int key);
+		public bool IsVisible { get; set; } = false;
+		// FIX: Add this to prevent the "F8" toggle from flickering too fast
+		private DateTime _lastF8ToggleTime = DateTime.Now;
+		#endregion
+		#region//File & Profile
+		// File & Profile Management System
+		public bool _showDeleteConfirm = false;
+		public bool _showEditPopup = false;
+		public bool _showCreatePopup = false;
+		public string _profileToDelete = "";
+		public string _profileToEdit = "";
+		public string _jsonEditorBuffer;
+		public string _currentLoadedFileName = "None";
+		public string _newProfileName = "NewHero";
+		public string _lastSavedTime = "Never";
+		public string _pNameBuffer = "New Hero";
+		public loadPlayer _tempNewPlayer = new loadPlayer();
+		public static bool NeedsMenuRedraw = false; //
+		private string _fileToDelete = string.Empty;
+		public List<WeaponData> _availableWeapons = new(); // Fixes '_availableWeapons' errors
+		#endregion
+		#region// Notification & Injection System
+		public static string _injectionMsg = "";
+		public static bool _injectionSuccess = false;
+		public static bool _showInjectionPopup = false;
+		#endregion
+		#region//Character & Class
+		// Character & Class Variables
+		private int _selectedClassIndex = 0;
+		private string[] _availableClasses = {
+					"Warrior",
+					"Mage",
+					"Rogue",
+					"Paladin",
+					"Necromancer",
+					"Berserker",
+					"Ranger",
+					"Cleric",
+					"Bard"
+				};
+		#endregion
+		#region//Text RPG Engine
+		// Text RPG Engine Testing Variables
+		public string _testDialogue = "The old man looks at {PlayerName} and says, '[Red]Beware the shadows![White]'";
+		public string _testRoomDesc = "You stand in a cold, damp cell. The stone walls are covered in moss, and a single rusted chain hangs from the ceiling.";
+		public Vector3 _warpCoords = new Vector3(0, 0, 0);
+		public string _targetRoomID = "Cellar_01";
+		public bool _showWarpMenu = false;
+		#endregion
+		#region//Customization
+		//Customization - REMOVED due to CS0414 warning
+		private bool Customization = false;
+		//private bool MainGui = true;
+		public Vector4 color1 = new Vector4(1, 1, 1, 1);       // Font
+		public Vector4 BorderColor = new Vector4(0, 1, 1, 1);  // Border
+		public float sd1 = 1.0f; // Window Border Size
+		public float sd2 = 1.0f; // Frame Border Size Child
+		public float sd4 = 1.0f; // Child Border Size
+		public float sd5 = 5.0f; // Window Rounding
+		public float sd6 = 4.0f; // Frame Rounding
+		public float sd7 = 4.0f; // Child Rounding
+		public Vector2 sd3 = new Vector2(900, 700); // Window Size
+		public Vector4 TgbColor = new Vector4(0.1f, 0.1f, 0.1f, 1.0f); // 1.0f is fully opaque
+		public Vector4 ChildBgColor = new Vector4(0.08f, 0.08f, 0.12f, 1.0f);
+		#endregion
+		#region Adventure Creator Variables
+		private string _aMapName = "New Adventure";
+		private string _aScenePath = "Assets/Scenes/NewAdventure.unity";
+		private int _aDifficulty = 0; // Index for Difficulty enum
+		private string[] _difficulties = { "Easy", "Medium", "Hard", "Very Hard", "Legendary" };
+		private int _aRecommendedLevel = 1;
+		private List<string> _aTags = new List<string>();
+		private string _newAdventureTag = ""; // For adding new tags
+		#endregion
+		#region//Quest Designer State
+		private string _qTitle = "New Quest";
+		private string _qObjective = "";
+		private int _qGoldReward = 0;
+		private int _qXPReward = 0;
+		#endregion
+		#region//Dungeon Builder State
+		private string _dName = "New Dungeon";
+		private int _dFloors = 1;
+		private bool _dIsHardcore = false;
+		#endregion
+		#region Boss Creator Variables
+		public string _bossName = "New Boss";
+		public float _bossHP = 1000f;
+		public float _bossSpeed = 10f;
+		public int _bossLevel = 1;
+		public float _bossDamage = 50f;
+		public string _newBossAbility = ""; // Fixed the missing ability string
+		public List<TraitType> _bAbilities = new();
+		public List<TraitType> _bossTraits = new List<TraitType>();
+		public int _bossAuraIndex = 0; // Persistent index for the Aura dropdown
+		#endregion
+		#region//Gem Alchemy Variables
+		public string _gName = "New Shard";
+		public int _gRarity = 0;
+		public float _gPower = 10.0f;
+		public int _gValue = 100;      // New
+		public float _gWeight = 0.1f;  // New
+		public int _gLevelReq = 1;     // New
+		public List<EffectType> _gAttributes = new();
+
+		public string[] _rarityNames = Enum.GetNames(typeof(ItemRarity));
+		public EffectType[] _allEffects = (EffectType[])Enum.GetValues(typeof(EffectType));
+		private float _pulseTimer = 0.0f;
+
+		public string[] _gemEffects =
+		{
+		"Bonus HP", "Bonus MP", "Bonus STR", "Bonus DEX",
+		"Bonus INT", "Fire Damage", "Ice Damage", "Poison Damage"
+		};
+		public int _selectedGemIndex = 0;
+		public List<GemData> _availableGems = new List<GemData>();
+		#endregion
+
+		#endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	}
+}
+</file>
+
+<file path="Src/Gui/DevGui_World.cs">
+using ImGuiNET;
+﻿using System;
+﻿using System.Collections.Generic;
+﻿using System.Linq;
+﻿using System.Text;
+﻿using System.Threading.Tasks;
+﻿
+﻿namespace DungeonAdventures.Src.Interfaces
+﻿{
+﻿	public partial class DevGuiRenderer
+﻿	{
+﻿		private void RenderWorld()
+﻿		{
+﻿			ImGui.Text("World State Manager");
+﻿			ImGui.Separator();
+﻿			ImGui.Text("Coming Soon...");
+﻿		}
+﻿	}
+﻿}
+</file>
+
+<file path="Src/Gui/GuiDev_Forge.cs">
+using ImGuiNET;
+﻿using System;
+﻿using System.Collections.Generic;
+﻿using System.Linq;
+﻿using System.Text;
+﻿using System.Threading.Tasks;
+﻿
+﻿namespace DungeonAdventures.Src.Interfaces
+﻿{
+﻿	public partial class DevGuiRenderer
+﻿	{
+﻿		private void RenderForge()
+﻿		{
+﻿			ImGui.Text("Item Forge");
+﻿			ImGui.Separator();
+﻿			ImGui.Text("Coming Soon...");
+﻿		}
+﻿	}
+﻿}
+</file>
+
+<file path="Src/Interfaces/DevGui_Main.cs">
+// DEPRECATED: This UI is being replaced by the Hostile Terminal.
+// using ClickableTransparentOverlay;
+// using ImGuiNET;
+using DungeonAdventures.Src.GameEngine;
+using DungeonAdventures.Src.GameEngine.GameData;
+using Pastel;
+using System.Numerics;
+using System.Runtime.InteropServices;
+using System.Text.Json;
+using System.Text.RegularExpressions;
+using System.ComponentModel;
+using DungeonAdventures.Src.GameData;
+using DungeonAdventures.Src.Adventures.Services;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
+
+// DEPRECATED: DevGuiRenderer class and its contents are deprecated.
+// All functionality is being replaced by the Hostile Terminal.
+/*
+namespace DungeonAdventures.Src.Interfaces
+{
+
+	public partial class DevGuiRenderer : Overlay
+	{
+		// Color mapping for ParseAndRenderColoredText
+		private static readonly Dictionary<string, Vector4> _colorMap = new Dictionary<string, Vector4>(StringComparer.OrdinalIgnoreCase)
+		{
+			{"Red", new Vector4(1.0f, 0.0f, 0.0f, 1.0f)},
+			{"Green", new Vector4(0.0f, 1.0f, 0.0f, 1.0f)},
+			{"Blue", new Vector4(0.0f, 0.0f, 1.0f, 1.0f)},
+			{"White", new Vector4(1.0f, 1.0f, 1.0f, 1.0f)},
+			{"Black", new Vector4(0.0f, 0.0f, 0.0f, 1.0f)},
+			{"Yellow", new Vector4(1.0f, 1.0f, 0.0f, 1.0f)},
+			{"Cyan", new Vector4(0.0f, 1.0f, 1.0f, 1.0f)},
+			{"Magenta", new Vector4(1.0f, 0.0f, 1.0f, 1.0f)},
+			{"Gray", new Vector4(0.5f, 0.5f, 0.5f, 1.0f)},
+			{"DarkRed", new Vector4(0.5f, 0.0f, 0.0f, 1.0f)},
+			{"DarkGreen", new Vector4(0.0f, 0.5f, 0.0f, 1.0f)},
+			{"DarkBlue", new Vector4(0.0f, 0.0f, 0.5f, 1.0f)},
+            // Add more colors as needed
+        };
+
+		private static void ParseAndRenderColoredText(string text)
+		{
+			// Corrected regex to parse [ColorName]Text correctly
+			var regex = new Regex(@"\\[([a-zA-Z]+)\](.[^\\[]*)");
+			var matches = regex.Matches(text);
+
+			if (matches.Count == 0)
+			{
+				ImGui.TextUnformatted(text);
+				return;
+			}
+
+			int lastIndex = 0;
+			foreach (Match match in matches)
+			{
+				// Render text before the colored segment
+				if (match.Index > lastIndex)
+				{
+					ImGui.TextUnformatted(text.Substring(lastIndex, match.Index - lastIndex));
+					ImGui.SameLine(0, 0); // Keep on the same line without spacing
+				}
+
+				string colorName = match.Groups[1].Value;
+				string segmentText = match.Groups[2].Value;
+
+				if (_colorMap.TryGetValue(colorName, out Vector4 color))
+				{
+					ImGui.TextColored(color, segmentText);
+				}
+				else
+				{
+					// If color not found, render as uncolored text
+					ImGui.TextUnformatted(segmentText);
+				}
+				ImGui.SameLine(0, 0); // Keep on the same line without spacing
+				lastIndex = match.Index + match.Length;
+			}
+
+			// Render any remaining text after the last colored segment
+			if (lastIndex < text.Length)
+			{
+				ImGui.TextUnformatted(text.Substring(lastIndex));
+			}
+		}
+
+		#region Variables and State Management
+		// Window & Engine State
+		private bool _isFirstFrame = true;
+		private DateTime _lastToggleTime = DateTime.MinValue;
+		private bool _devModeInternal = false;
+		private bool _logPaused = false;
+		private string _logFilter = "";
+		private string _profileSearchFilter = "";
+		public string GameVersion { get; set; }
+
+		public bool IsVisible { get; set; } = false;
+
+		private DateTime _lastF8ToggleTime = DateTime.Now;
+
+		// File & Profile Management System
+		private bool _showDeleteConfirm = false;
+		private bool _showEditPopup = false;
+		private bool _showCreatePopup = false;
+		private string _profileToDelete = "";
+		private string _profileToEdit = "";
+		private string _jsonEditorBuffer;
+		private string _currentLoadedFileName = "None";
+		private string _newProfileName = "NewHero";
+		private string _lastSavedTime = "Never";
+		private loadPlayer _tempNewPlayer = new loadPlayer();
+		public static bool NeedsMenuRedraw = false; //
+
+		// Notification & Injection System
+		public static string _injectionMsg = "";
+		public static bool _injectionSuccess = false;
+		public static bool _showInjectionPopup = false;
+
+
+		// Text RPG Engine Testing Variables
+		private string _testDialogue = "The old man looks at {PlayerName} and says, '[Red]Beware the shadows![White]'";
+		private string _testRoomDesc = "You stand in a cold, damp cell. The stone walls are covered in moss, and a single rusted chain hangs from the ceiling.";
+		private Vector3 _warpCoords = new Vector3(0, 0, 0);
+		public string _targetRoomID = "Cellar_01";
+		public bool _showWarpMenu = false;
+
+		// Theme related variables
+		private Vector4 color1 = new Vector4(1, 1, 1, 1);       // Font
+		private Vector4 BorderColor = new Vector4(0, 1, 1, 1);  // Border
+		private float sd1 = 1.0f; // Window Border Size
+		private float sd2 = 1.0f; // Frame Border Size Child
+		private float sd4 = 1.0f; // Child Border Size
+		private float sd5 = 5.0f; // Window Rounding
+		private float sd6 = 4.0f; // Frame Rounding
+		private float sd7 = 4.0f; // Child Rounding
+		private Vector2 sd3 = new Vector2(900, 700); // Window Size
+		private Vector4 TgbColor = new Vector4(0.1f, 0.1f, 0.1f, 1.0f); // 1.0f is fully opaque
+		private Vector4 ChildBgColor = new Vector4(0.08f, 0.08f, 0.12f, 1.0f);
+
+
+		private string _configPath = Path.Combine(GameState.MasterPath, "settings", "gui_config.json");
+		private string _warpFilter = "";
+		private List<string> _availableMaps = new List<string>(); // Used by PopulateAvailableMaps
+
+		// Fields for Shop Stock and Adventure Manager
+		private List<ItemData> _shopStockItems = new();
+		private List<AdventureData> _availableAdventures = new();
+		private string _adventureSearchFilter = "";
+
+		public bool _showSocketingInterface = false;
+		public WeaponData _weaponToSocket = null;
+		public bool _showPlayerPropertyEditor = false;
+		public object _playerToEdit = null;
+
+		[DllImport("user32.dll")]
+		static extern short GetAsyncKeyState(int key);
+		#endregion
+
+		public DevGuiRenderer()
+		{
+			GameVersion = "Alpha 0.0.1";
+			_jsonEditorBuffer = string.Empty;
+
+			LoadTheme();
+			PopulateAvailableMaps();
+		}
+
+		private void PopulateAvailableMaps()
+		{
+			_availableMaps.Clear();
+			string dungeonsPath = Path.Combine(GameState.MasterPath, "dungeons");
+			string adventuresPath = Path.Combine(GameState.MasterPath, "adventures");
+
+			if (Directory.Exists(dungeonsPath))
+			{
+				foreach (var file in Directory.GetFiles(dungeonsPath, "*.json"))
+				{
+					_availableMaps.Add(Path.GetFileNameWithoutExtension(file));
+				}
+			}
+
+			if (Directory.Exists(adventuresPath))
+			{
+				foreach (var file in Directory.GetFiles(adventuresPath, "*.json"))
+				{
+					_availableMaps.Add(Path.GetFileNameWithoutExtension(file));
+				}
+			}
+			_availableMaps.Sort();
+		}
+
+		public static class DevLog
+		{
+			public static List<string> Buffer = new List<string>();
+			private static int _maxLines = 200;
+			public static readonly object _lock = new object();
+
+			public static void Write(string message, string type = "INFO")
+			{
+				if (string.IsNullOrWhiteSpace(message)) return;
+				lock (_lock)
+				{
+					string timestamp = DateTime.Now.ToString("HH:mm:ss");
+					string formattedLine = message.StartsWith("[")
+						? $
+</file>
+
+<file path="Src/Interfaces/TownSquare.cs">
+using DungeonAdventures.Src.Utilities.UI;
+using static System.Console;
+using DungeonAdventures.Src.GameData.Components;
+using DungeonAdventures.Src.Interfaces;
+
+namespace DungeonAdventures.Src.GameEngine.Interfaces
+{
+
+	internal class TownSquare
+	{
+		public static void MainTownSquare()
+		{
+			// Mirroring MainMenu's structure
+			bool isRunning = true;
+			int selectedIndex = 0;
+			string[] options =
+			{
+				"STORE",
+				"QUESTS",
+				"DUNGEON",
+                "BLACK SMITH",
+				"MED CLINIC",
+				"PLAYER STATS",
+				"EXIT"
+			};
+
+			while (isRunning)
+			{
+			RedrawMenu:
+				CursorVisible = false;
+
+				UiFunctions.TitleBar();
+				UiFunctions.DisplayFooter();
+
+                UiEngine.DrawDynamicFrame(
+                    title: "THE FORGOTTEN OUTPOST",
+                    lines: options.ToList(),
+                    hint: "Use arrow keys to navigate",
+                    selectedIndex: selectedIndex
+                );
+
+				while (!Console.KeyAvailable)
+				{
+					if (DevGuiRenderer.NeedsMenuRedraw)
+					{
+						goto RedrawMenu;
+					}
+
+					Thread.Sleep(10);
+				}
+
+				ConsoleKey key = ReadKey(true).Key;
+
+				if (key == ConsoleKey.Escape) { isRunning = false; continue; }
+				if (key == ConsoleKey.F12)
+				{
+					GameState.IsDevMode = !GameState.IsDevMode;
+					DevGuiRenderer.NeedsMenuRedraw = true;
+					continue;
+				}
+
+				switch (key)
+				{
+					case ConsoleKey.UpArrow:
+						selectedIndex = (selectedIndex == 0) ? options.Length - 1 : selectedIndex - 1;
+						break;
+					case ConsoleKey.DownArrow:
+						selectedIndex = (selectedIndex == options.Length - 1) ? 0 : selectedIndex + 1;
+						break;
+					case ConsoleKey.Enter:
+						switch (options[selectedIndex])
+						{
+							case "STORE":
+								Store.LoadShop();
+								break;
+							case "QUESTS":
+								// QuestSystem.StartTestQuest();
+								break;
+							case "DUNGEON":
+								// new DungeonGame().Start();
+								goto RedrawMenu;
+							case "BLACK SMITH":
+								UiFunctions.QuickAlert("The Blacksmith is closed for repairs!");
+								break;
+							case "MED CLINIC":
+								UiFunctions.QuickAlert("The Mage is out healing others!");
+								break;
+							case "PLAYER STATS":
+								Stats.PlayerStats();
+								break;
+							case "EXIT":
+								Environment.Exit(0);
+								isRunning = false;
+								break;
+						}
+						break;
+				}
+			}
+		}
+
+
+
+	}
+
+
+
+
+
+
+
+}
+</file>
+
+<file path="Src/Program.cs">
+using DungeonAdventures.Src.GameEngine.Interfaces;
+using DungeonAdventures.Src.Utilities.UI;
+using System.Text;
+using DungeonAdventures.Src.GameData.Components;
+
+// 1. Establish Environment
+// This ensures Ubuntu/WSL renders the swords ⚔️ instead of ??
+Console.OutputEncoding = Encoding.UTF8;
+
+// Let the VS/WSL "path dump" finish
+Thread.Sleep(100);
+
+// 2. Configure UI
+UiFunctions.ConsoleSize();
+Console.Write("\x1b[2J\x1b[3J\x1b[H");
+
+// Ensure game directories are set up
+GameState.EnsureDirectories();
+
+// 3. Set the Spicy Title
+// Using your TitleBar method ensures the swords are set and Row 0 is wiped
+UiFunctions.TitleBar();
+
+// 4. Loading Sequence
+Console.WriteLine("Press 'S' to skip loading, or any other key to view the loading sequence...");
+// Wait for a key press. This will block until a key is pressed.
+ConsoleKeyInfo key = Console.ReadKey(true); // 'true' means don't display the key
+
+if (key.Key == ConsoleKey.S)
+{
+    Console.WriteLine("Loading sequence skipped.");
+    // Clear the console to prepare for MainMenu
+    Console.Clear();
+}
+else
+{
+    // User pressed another key or just wanted to proceed with loading
+    UiFunctions.StartGameLoading();
+}
+
+// 5. Launch Game
+MainMenu.Show();
+</file>
+
+<file path="DungeonAdventures.csproj">
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Src\Interfaces\DevGui_Main.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include=".gemini\tmp\task_note.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include=".gemini\commands\gui-fix.md" />
+    <None Include=".gemini\commands\identity.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ClickableTransparentOverlay" Version="11.1.0" />
+    <PackageReference Include="ImGui.NET" Version="1.91.6.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
+    <PackageReference Include="NUnit" Version="3.13.3" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
+    <PackageReference Include="NUnit.Analyzers" Version="3.6.1" />
+    <PackageReference Include="coverlet.collector" Version="6.0.0" />
+    <PackageReference Include="Pastel" Version="7.0.1" />
+    <PackageReference Include="Spectre.Console" Version="0.54.0" />
+    <PackageReference Include="Spectre.Console.Cli" Version="0.53.1" />
+    <PackageReference Include="Spectre.Console.Json" Version="0.54.0" />
+  </ItemGroup>
+
+
+
+
+
+</Project>
+</file>
+
+<file path="DungeonAdventures.Tests.csproj">
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
+    <PackageReference Include="NUnit" Version="3.13.3" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
+    <PackageReference Include="NUnit.Analyzers" Version="3.6.1" />
+    <PackageReference Include="coverlet.collector" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="DungeonAdventures.csproj.csproj" />
+  </ItemGroup>
+
+</Project>
+</file>
+
+<file path="conductor/tracks.md">
+# Project Tracks
+
+This file tracks all major tracks for the project. Each track has its own detailed plan in its respective folder.
+
+---
+
+## [x] Track: Refactor the UI Engine and Game Loading sequence to implement the 'Hostile Terminal' aesthetic, including ASCII corruption, the 85x25 boundary, and the 'Vein-Red' and 'Nuclear-Waste Green' color palette.
+*Link: [./conductor/tracks/hostile_terminal_20260102/](./conductor/tracks/hostile_terminal_20260102/)*
+</file>
+
+<file path="Src/GameEngine/Conductor.cs">
+using DungeonAdventures.Src.GameData;
+using DungeonAdventures.Src.GameData.Components;
+using DungeonAdventures.Src.Interfaces;
+using static DungeonAdventures.Src.GameData.Entities.PlayerData;
+
+namespace DungeonAdventures.Src.GameEngine
+{
+	/// <summary>
+	/// Streamlined Conductor: Manages game data strictly in the User Documents folder.
+	/// This prevents MSBuild from seeing JSON files as resources and crashing.
+	/// </summary>
+	public class Conductor
+	{
+		private readonly string _masterPath = GameState.MasterPath;
+		public Conductor()
+		{
+			InitializeDirectories();
+		}
+
+		private void InitializeDirectories()
+		{
+			GameState.EnsureDirectories(); // Simply call GameState.EnsureDirectories()
+		}
+
+
+		// Fixes the Player Creator issue
+		public void CreateNewPlayer(string name, string heroClass)
+		{
+			var newHero = new loadPlayer
+			{
+				PlayerName = name,
+				PlayerClass = heroClass,
+				Level = 1,
+				Health = 100,
+				HitPoints = 100
+			};
+
+			GameState.CurrentPlayer = newHero;
+			GameState.Sync(); // Immediately writes to /profiles/
+			DevGuiRenderer.DevLog.Write($"[CONDUCTOR] Hero {name} initialized and saved.", "SYSTEM");
+		}
+
+		/// <summary>
+		/// Requests a scene change and updates GameState.
+		/// The actual scene loading/unloading should be handled by the main game loop.
+		/// </summary>
+		/// <param name="newScenePath">The path or identifier of the new scene to load.</param>
+		public void SwitchMap(string newScenePath)
+		{
+			// Basic validation: ensure the path is not empty
+			if (string.IsNullOrWhiteSpace(newScenePath))
+			{
+				Console.WriteLine("[Conductor] Error: newScenePath cannot be empty.");
+				return;
+			}
+
+			// In a real game, here you might:
+			// 1. Trigger an event for scene unloading
+			// 2. Perform any necessary cleanup for the current scene
+			Console.WriteLine($"[Conductor] Disposing of current scene (placeholder)...");
+
+			// Update GameState to reflect the requested new location
+			GameState.CurrentLocation = newScenePath;
+			GameState.SceneChangeRequested = true;
+
+			// In a real game, here you might:
+			// 1. Trigger an event for scene loading
+			// 2. Load assets for the new scene
+			Console.WriteLine($"[Conductor] Initializing new scene '{newScenePath}' (placeholder)...");
+		}
+        
+        		public void LoadAdventure(DungeonAdventures.Src.GameData.AdventureData adventureData)
+                {
+                    if (adventureData == null)
+                    {
+                        DevGuiRenderer.DevLog.Write("[Conductor] Error: Attempted to load a null adventure.", "ERROR");
+                        return;
+                    }
+        
+                    if (string.IsNullOrWhiteSpace(adventureData.ScenePath))
+                    {
+                        DevGuiRenderer.DevLog.Write($"[Conductor] Warning: Adventure '{adventureData.MapName}' has no ScenePath. Setting CurrentLocation to 'UNKNOWN'.", "WARNING");
+                        GameState.CurrentLocation = "UNKNOWN"; // Fallback
+                    }
+                    else
+                    {
+                        GameState.CurrentLocation = adventureData.ScenePath;
+                        DevGuiRenderer.DevLog.Write($"[Conductor] Loading adventure '{adventureData.MapName}'. Setting CurrentLocation to '{adventureData.ScenePath}'.", "SYSTEM");
+                    }
+                    
+                    GameState.SceneChangeRequested = true;
+                    GameState.CurrentAdventure = adventureData; // Assuming CurrentAdventure exists or needs to be added to GameState
+                }
+        
+        		/// <summary>
+        		/// Generic method to export any data object to a specified category and filename.
+        		/// This serves as the primary interface for the UI to save data to disk.
+        		/// </summary>
+        		/// <typeparam name="T">The type of data to export.</typeparam>
+        		/// <param name="data">The data object to export.</param>
+        		/// <param name="category">The subfolder category within the master path (e.g., "profiles", "items").</param>
+        		/// <param name="fileName">The name of the file (without extension) to save the data to.</param>
+        		public void ExportData<T>(T data, string category, string fileName)
+        		{
+        			try
+        			{
+
+        				SaveGame.ExportToMaster(data, category, fileName);
+        				DevGuiRenderer.DevLog.Write($"[CONDUCTOR] Successfully exported '{fileName}' to category '{category}'.", "INFO");
+        			}
+        			catch (Exception ex)
+        			{
+        				DevGuiRenderer.DevLog.Write($"[CONDUCTOR ERROR] Failed to export '{fileName}' to category '{category}': {ex.Message}", "ERROR");
+        			}
+        		}
+
+		public ThemeConfig GetTheme(string fileName = "ui_config")
+		{
+			// Use the LoadAllFromFolder method from LoadGame.cs
+			var settings = LoadGame.LoadAllFromFolder<ThemeConfig>("settings");
+
+			// Return the first config found, or a new default one if none exist
+			return settings.FirstOrDefault() ?? new ThemeConfig();
+		}
+
+
+
+
+	}
+}
+</file>
+
+<file path="Src/Gui/DevGui_Main.cs">
+using ClickableTransparentOverlay;
+using DungeonAdventures.Src.GameEngine;
+using ImGuiNET;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DungeonAdventures.Src.Interfaces
+{
+    public partial class DevGuiRenderer : Overlay
+    {
+		private readonly Conductor conductor = new Conductor();
+		public DevGuiRenderer()
+		{
+			GameVersion = "Alpha 0.0.1";
+			DevName = "DevConsole v6.0 - System Dashboard";
+			_jsonEditorBuffer = string.Empty;
+			conductor = new Conductor();
+			Console.SetOut(new ImGuiLogRedirector());
+			LoadTheme();
+
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public class ImGuiLogRedirector : System.IO.TextWriter
+	{
+		private System.IO.TextWriter _originalConsole;
+		public override System.Text.Encoding Encoding => System.Text.Encoding.UTF8;
+		public ImGuiLogRedirector() { _originalConsole = Console.Out; }
+
+		public static void ClearAll()
+		{
+			try { Console.Clear(); } catch { }
+			lock (DevGuiRenderer.DevLog._lock) { DevGuiRenderer.DevLog.Buffer.Clear(); }
+		}
+
+		public override void Write(string? value)
+		{
+			_originalConsole.Write(value);
+			if (!string.IsNullOrEmpty(value)) DevGuiRenderer.DevLog.Write(value, "LOG");
+		}
+
+		public override void WriteLine(string? value)
+		{
+			_originalConsole.WriteLine(value);
+			if (value != null) DevGuiRenderer.DevLog.Write(value, "SYSTEM");
+		}
+	}
+}
+</file>
+
+<file path="Src/Gui/DevGuiUtilities.cs">
+using DungeonAdventures.Src.GameEngine;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DungeonAdventures.Src.Interfaces
+{
+	public partial class DevGuiRenderer
+	{
+		public static class DevLog
+		{
+			public static List<string> Buffer = new List<string>();
+			private static int _maxLines = 200;
+			public static readonly object _lock = new object();
+
+			public static void Write(string message, string type = "INFO")
+			{
+				if (string.IsNullOrWhiteSpace(message)) return;
+				lock (_lock)
+				{
+					string timestamp = DateTime.Now.ToString("HH:mm:ss");
+					string formattedLine = message.StartsWith("[")
+						? $"{timestamp} {message}"
+						: $"[{type}] {timestamp}: {message}";
+
+					Buffer.Add(formattedLine);
+
+					if (Buffer.Count > _maxLines)
+					{
+						Buffer.RemoveAt(0);
+					}
+				}
+			}
+
+			public static void Clear()
+			{
+				lock (_lock)
+				{
+					Buffer.Clear();
+				}
+			}
+		}
+		private void LoadTheme()
+		{
+			// Now 'conductor' is recognized!
+			var config = conductor.GetTheme();
+
+			if (config != null)
+			{
+				// Your existing mapping logic
+				color1 = new Vector4(config.FontColor[0], config.FontColor[1], config.FontColor[2], config.FontColor[3]);
+				// ... etc
+			}
+		}
+
+		
+		
+
+
+
+
+
+
+
+
+
+
+
+
+	}
+}
+</file>
+
+<file path="Src/Utilities/UI/GameArt/GameArt.cs">
+using DungeonAdventures.Src.Utilities.UI;
+using Pastel;
+using System;
+
+namespace DungeonAdventures.Src.Utilities.GameArt
+{
+	public static class MainMenuArt
+	{
+		public static void DrawMainHeader()
+		{
+			// 1. Create a dynamic separator based on current window width
+			// Subtracting 2 ensures we don't hit the edge and cause a scrollbar
+			string separator = "<" + new string('-', Console.WindowWidth - 2) + ">";
+			string titleText = "D U N G E O N   A D V E N T U R E S - R E B O R N";
+
+			// 2. Set the color and draw
+			// We use line 1 and 3 for separators, and line 2 for the text
+			Console.ForegroundColor = ConsoleColor.DarkRed;
+
+			UiEngine.DrawCentered(separator, 1);
+			UiEngine.DrawCentered(titleText.Pastel("#8B0000"), 2);
+			UiEngine.DrawCentered(separator, 3);
+
+			Console.ResetColor();
+		}
+	}
+}
+</file>
+
+<file path="DungeonAdventures.sln">
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.1.11312.151 d18.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DungeonAdventures", "DungeonAdventures.csproj", "{885B5FAB-8CAA-422C-AFA5-805F3DC550C3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{885B5FAB-8CAA-422C-AFA5-805F3DC550C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{885B5FAB-8CAA-422C-AFA5-805F3DC550C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{885B5FAB-8CAA-422C-AFA5-805F3DC550C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{885B5FAB-8CAA-422C-AFA5-805F3DC550C3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E26CB599-A13E-4EF0-A430-698D735E33AE}
+	EndGlobalSection
+EndGlobal
+</file>
+
+<file path="Src/Interfaces/MainMenu.cs">
+using DungeonAdventures.Src.Game.Interfaces;
+using DungeonAdventures.Src.GameData.Components;
+using DungeonAdventures.Src.Interfaces;
+using DungeonAdventures.Src.Utilities.GameArt;
+using DungeonAdventures.Src.Utilities.UI;
+using Pastel;
+using System.Runtime.InteropServices;
+using static System.Console;
+
+namespace DungeonAdventures.Src.GameEngine.Interfaces
+{
+	internal class MainMenu
+	{
+		private static DevGuiRenderer? _myDevRenderer;
+
+		public static void Show()
+		{
+			GameState.EnsureDirectories();
+			var conductor = new Conductor();
+			bool isMirrorHealthy = SaveGame.RunSanityCheck();
+			CursorVisible = true; // Make cursor visible for retro/creepy feel
+
+			bool isRunning = true;
+			int selectedIndex = 0;
+			string[] options = { "START NEW GAME", "LOAD SAVE", "CREDITS", "EXIT" };
+
+			// --- DRAW TITLE ART ONCE ---
+			Clear();
+			MainMenuArt.DrawMainHeader();
+
+			// --- ATMOSPHERIC BACKGROUND TEXT ---
+			UiEngine.DrawCentered("--------------------------------------------".Pastel("#4A0000"), 10);
+			UiEngine.DrawCentered("SYSTEM // CORRUPTED // REALITY // FRAGMENTED".Pastel("#4A0000"), 11);
+			UiEngine.DrawCentered("--------------------------------------------".Pastel("#4A0000"), 18);
+			UiEngine.DrawCentered("ERROR // SECTOR // UNSTABLE // ENTITY".Pastel("#4A0000"), 19);
+			UiEngine.DrawCentered("--------------------------------------------".Pastel("#4A0000"), 20);
+
+
+			while (isRunning)
+			{
+			RedrawMenu:
+				bool saveExists = CheckForSaves();
+
+				UiFunctions.TitleBar();
+				RenderMenu(options, selectedIndex, saveExists);
+
+				while (!KeyAvailable)
+				{
+					// if (DevGuiRenderer.NeedsMenuRedraw)
+					// {
+					// 	DevGuiRenderer.NeedsMenuRedraw = false;
+					// 	goto RedrawMenu;
+					// }
+
+					UpdateIdleAnimation(saveExists);
+
+					Thread.Sleep(50);
+				}
+
+				ConsoleKeyInfo keyInfo = ReadKey(true);
+
+				if (HandleGlobalHotkeys(keyInfo)) continue;
+
+				switch (keyInfo.Key)
+				{
+					case ConsoleKey.UpArrow:
+						if (selectedIndex > 0)
+						{
+							selectedIndex--;
+						}
+						break;
+					case ConsoleKey.DownArrow:
+						if (selectedIndex < options.Length - 1)
+						{
+							selectedIndex++;
+						}
+						break;
+					case ConsoleKey.Enter:
+						isRunning = ExecuteSelection(options[selectedIndex], saveExists);
+						if (!isRunning) return;
+
+						Write("\x1b[2J\x1b[3J\x1b[H");
+						break;
+				}
+				RenderMenu(options, selectedIndex, saveExists);
+			}
+		}
+
+		private static void RenderMenu(string[] options, int selectedIndex, bool saveExists)
+		{
+			const int boxWidth = 42;
+			const int startY = 12;
+
+			var menuItems = new List<string>();
+
+			for (int i = 0; i < options.Length; i++)
+			{
+				menuItems.Add(BuildMenuItem(i, selectedIndex, saveExists, options));
+			}
+
+			UiEngine.DrawDynamicFrame("MAIN MENU", menuItems, "Use Arrows & Enter", boxWidth: boxWidth, startY: startY);
+		}
+		private static string BuildMenuItem(int index, int selectedIndex, bool saveExists, string[] options)
+		{
+			if (index >= options.Length) return "";
+
+			string option = options[index];
+			bool isSelected = (index == selectedIndex);
+
+			// Normalize the string to catch "Load Save", "LOAD SAVE ", etc.
+			if (option.Trim().ToUpper() == "LOAD SAVE" && !saveExists)
+			{
+				return UiEngine.PadAnsiStringWithCenter("🔒 LOAD SAVE 🔒".Pastel("#8B0000"), 40); // Darker red
+			}
+
+			if (isSelected)
+			{
+				string selectedColor = ((int)(DateTime.Now.TimeOfDay.TotalMilliseconds / 250) % 2 == 0) ? "#FFD700" : "#FFA500"; // Gold flicker
+				return UiEngine.PadAnsiStringWithCenter($"> {option} <".Pastel(selectedColor), 40);
+			}
+
+			return UiEngine.PadAnsiStringWithCenter(option.Pastel("#4A0000"), 40); // Very dark red/brown
+		}
+		private static bool HandleGlobalHotkeys(ConsoleKeyInfo keyInfo)
+		{
+			if (keyInfo.Key == ConsoleKey.F8)
+			{
+				// Only allow the GUI to toggle if the Master Switch (IsDevMode) is on
+				if (GameState.IsDevMode && _myDevRenderer != null)
+				{
+					_myDevRenderer.Toggle(); // Assuming Toggle() handles visibility
+				}
+				return true;
+			}
+
+			if (keyInfo.Key == ConsoleKey.F12)
+			{
+				GameState.IsDevMode = !GameState.IsDevMode;
+				if (GameState.IsDevMode && _myDevRenderer == null)
+				{
+					if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+					{
+						_myDevRenderer = new DevGuiRenderer();
+						_ = Task.Run(async () => await _myDevRenderer.Start());
+					}
+				}
+				return true;
+			}
+
+			if (keyInfo.Key == ConsoleKey.F10)
+			{
+				GameState.Sync();
+				return true;
+			}
+
+			return false;
+		}
+
+		private static void UpdateIdleAnimation(bool saveExists)
+		{
+			string status = saveExists ? "[ SAVES DETECTED ]" : "[ NO SAVES FOUND ]";
+			bool statusVisible = ((int)(DateTime.Now.TimeOfDay.TotalSeconds * 2.0) % 2 == 0);
+			// Row 22 ensures it stays below the spicy frame
+			UiEngine.DrawCentered(statusVisible ? status.Pastel(saveExists ? "#00FF00" : "#FF0000") : "                     ", 22);
+		}
+
+		private static bool CheckForSaves()
+		{
+			string activeFolder = GameState.GetActiveProfileFolder();
+			if (Directory.Exists(activeFolder))
+			{
+				return Directory.GetFiles(activeFolder, "*.json").Length > 0;
+			}
+			return false;
+		}
+
+		private static bool ExecuteSelection(string selection, bool saveExists)
+		{
+			switch (selection)
+			{
+				case "START NEW GAME":
+					Clear();
+					CharacterCreation.Start();
+					if (GameState.CurrentPlayer != null) // Check if character was successfully created
+					{
+						UiFunctions.TitleBar(); // Update title bar to established state
+						TownSquare.MainTownSquare(); // Transition to Town Square after character creation
+					}
+					return false; // Exit menu to enter game loop
+
+				case "LOAD SAVE":
+					if (saveExists)
+					{
+						Clear(); // Clear the main menu before showing load screen
+						if (CharacterLoadScreen.ShowLoadMenu()) // Show the load menu
+						{
+							// If a character was loaded, update the title bar
+							UiFunctions.TitleBar();
+							return false; // Exit MainMenu.Show() to proceed to game (or wherever CharacterLoadScreen leads)
+						}
+					}
+					return true; // Keep menu running if no save exists or user cancels load
+
+				case "CREDITS":
+					ShowCredits();
+					return true; // Keep menu running
+
+				case "EXIT":
+					Environment.Exit(0);
+					return false;
+
+				default:
+					return true;
+			}
+		}
+
+		private static void ShowCredits()
+		{
+			Clear();
+			UiEngine.DrawCentered("CREATED BY: YOUR NAME".Pastel("#FFAB00"), 10);
+			UiEngine.DrawCentered("V2 ENGINE POWERED BY C# & IMGUI", 12);
+			UiEngine.DrawCentered("Press any key to return...", 16);
+			ReadKey(true);
+			Clear();
+		}
+	}
+}
+</file>
+
+<file path="Src/Utilities/UI/UiFunctions.cs">
+// Ignore Spelling: Tle
+
+using DungeonAdventures.Src.GameData.Components;
+using Pastel;
+using System.Runtime.InteropServices;
+using System.Text;
+
+// ADD THIS LINE TO FIX THE ERRORS:
+using static System.Console;
+
+namespace DungeonAdventures.Src.Utilities.UI
+{
+	public class UiFunctions
+	{
+		#region//ConsoleSize
+		public static void ConsoleSize()
+		{
+			int width = 100; // Slightly wider than standard to fit the matrix side-car
+			int height = 30;
+
+			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+			{
+				try
+				{
+					// 1. Set the Window Size first
+					Console.SetWindowSize(85, 25);
+
+					// 2. FORCE the Buffer to match the Window exactly (This kills the scroll bar)
+					Console.SetBufferSize(85, 25);
+				}
+				catch { /* Fallback for small screens */ }
+			}
+			Console.CursorVisible = false;
+		}
+
+
+		#endregion
+		#region//TitleBar
+		public static void TitleBar()
+				{
+					// 1. FORCE UTF-8: Essential for Ubuntu/Linux to render ⚔️
+					Console.OutputEncoding = System.Text.Encoding.UTF8;
+		
+					// We save the cursor position first so we don't disrupt the menu
+					int currentCursorLeft = Console.CursorLeft;
+					int currentCursorTop = Console.CursorTop;
+		
+					try
+					{
+						Console.SetCursorPosition(0, 0);
+						// Wipe the top line with spaces to act as a physical eraser
+						Console.Write(new string(' ', Console.WindowWidth));
+		
+						Random rnd = new Random();
+						// Check if player is established (e.g., after character creation or loading a game)
+						if (GameState.CurrentPlayer != null)
+						{
+					// 2. SET THE TAB TITLE: Use the property for better cross-platform support
+					string modeLabel = GameState.IsDevMode ? "DEVELOPER" : "STABLE";
+					Console.Title = $"⚔️ {modeLabel} MODE V2 ⚔️";
+
+				}
+				else
+						{
+							// --- Glitchy, Vague Title Bar (Player Not Established) ---
+							string[] glitchTitles = {
+								"S̷Y̷S̷T̵E̵M̴ ̶E̵R̷R̴O̷R̴",
+								"D̷A̷T̵A̷ ̶C̶O̵R̷R̴U̷P̷T̸E̵D̸",
+								"U̷N̵K̵N̷O̵W̷N̵ ̶E̵N̵T̸I̵T̸Y̵",
+								"P̷R̷O̷T̸O̵C̸O̷L̵ ̶F̷A̷I̸L̴U̷R̷E̵"
+							};
+		
+							string[] glitchChars = { "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "=", "+", "[", "]", "{", "}", ";", ":", "'", "\"", "\\", "|", "<", ">", ",", ".", "/", "?", "`", "~" };
+							string[] scaryColors = { "#FF0000", "#8B0000", "#4B0082", "#800000" }; // Red, Dark Red, Indigo, Maroon
+		
+							// Flickering Console.Title
+							Console.Title = glitchTitles[rnd.Next(glitchTitles.Length)].Pastel(scaryColors[rnd.Next(scaryColors.Length)]);
+		
+							// Row 0 Display - Dynamic and Glitchy
+							string glitchText = "";
+							int glitchLength = rnd.Next(15, 30);
+							for(int i = 0; i < glitchLength; i++)
+							{
+								glitchText += glitchChars[rnd.Next(glitchChars.Length)].Pastel(scaryColors[rnd.Next(scaryColors.Length)]);
+							}
+							UiEngine.DrawCentered(glitchText, 0);
+						}
+					}
+					finally
+					{
+						// Always restore the cursor position
+						Console.SetCursorPosition(currentCursorLeft, currentCursorTop);
+					}
+				}
+				#endregion
+		#region//Footer
+		public static void DisplayFooter(bool isVisible = true)
+		{
+			int width = WindowWidth;
+			int height = WindowHeight;
+			int footerRow = height - 1;
+
+			// Save cursor to prevent menu flicker
+			int origLeft = CursorLeft;
+			int origTop = CursorTop;
+
+			try
+			{
+				// 1. Setup Data
+				string modeLabel = GameState.IsDevMode ? " DEV " : " BUILD ";
+				string modeStatus = GameState.IsDevMode ? " F8 FOR GUI " : " STABLE ";
+				string versionText = GameState.IsDevMode ? $"ITER: {GameState.DevIteration}" : $"V {GameState.BuildVersion}";
+				string accentColor = GameState.IsDevMode ? "#FF4500" : "#125874";
+
+				// 2. Build the "Powerline" Badge (Left Side)
+				string leftBadge = modeLabel.PastelBg(accentColor).Pastel("#FFFFFF") +
+								  modeStatus.PastelBg("#333333").Pastel(accentColor);
+
+				// 3. Build the Version Info (Right Side)
+				string rightInfo = $" {versionText} ".Pastel("#888888").PastelBg("#1A1A1A");
+
+				// 4. Calculate Center Padding
+				// We subtract the raw character length (ignoring color codes) from the total width
+				int rawLength = modeLabel.Length + modeStatus.Length + versionText.Length + 2;
+				int paddingSize = width - rawLength;
+				string padding = new string(' ', Math.Max(0, paddingSize)).PastelBg("#1A1A1A");
+
+				// 5. Execution: One single move and one single write
+				SetCursorPosition(0, footerRow);
+				Write(leftBadge + padding + rightInfo);
+
+				// Restore cursor to the menu area
+				SetCursorPosition(origLeft, origTop);
+			}
+			catch { /* Resize Safety */ }
+		}
+		#endregion
+		#region//ShowSaveLoadedIcon
+		public static void ShowSaveLoadedIcon(string playerName)
+		{
+			Console.Clear();
+			// V2 Integration
+			UiFunctions.TitleBar();
+			UiFunctions.DisplayFooter();
+
+			int centerX = Console.WindowWidth / 2;
+			int startY = 5;
+
+			// --- SIDE DATA PILLARS (Dynamic Width) ---
+			string[] sideDecor = { " [CON-4] ", " [TRN-R] ", " [LOG-V] ", " [SYS-8] " };
+			for (int i = 0; i < sideDecor.Length; i++)
+			{
+				// Use Console.WindowWidth - 10 to keep them relative to the screen edge
+				Console.SetCursorPosition(2, 7 + (i * 3));
+				Console.Write(sideDecor[i].Pastel("#125874"));
+
+				Console.SetCursorPosition(Console.WindowWidth - 11, 7 + (i * 3));
+				Console.Write(sideDecor[i].Pastel("#125874"));
+			}
+
+			// 1. TOP ACCENTS
+			string topAccent = "◢◤".Pastel("#00FF00") + " —————————————————————————————————————— " + "◥◣".Pastel("#00FF00");
+			Console.SetCursorPosition(Math.Max(0, centerX - (UiEngine.StripAnsi(topAccent).Length / 2)), startY - 2);
+			Console.Write(topAccent);
+
+			// 2. 3D ICON
+			string icon = @"
+      _______________________
+     /                      /|
+    /      RECONSTRUCT     / |
+   /        COMPLETE      /  |
+  /______________________/   |
+  |                      |   |
+  |   [ VESSEL ONLINE ]  |   |
+  |______________________|  /";
+
+			string[] lines = icon.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+			int currentY = startY;
+			foreach (string line in lines)
+			{
+				Console.SetCursorPosition(centerX - 13, currentY++);
+				string color = (currentY % 2 == 0) ? "#00FF00" : "#008800";
+				Console.Write(line.Pastel(color));
+			}
+
+			// 3. PLAYER DATA BLOCK
+			currentY += 1;
+			string bracketL = ">> [".Pastel("#00FFFF");
+			string bracketR = "] <<".Pastel("#00FFFF");
+			string nameDisp = playerName.ToUpper().Pastel("#FFD700");
+			string fullRow = $"{bracketL} {nameDisp} {bracketR}";
+
+			// Using your new UiEngine helper to calculate centering
+			int textLen = UiEngine.StripAnsi(fullRow).Length;
+			Console.SetCursorPosition(centerX - (textLen / 2), currentY);
+			Console.WriteLine(fullRow);
+
+			// 4. METRICS
+			currentY += 3;
+			string[] metrics = { "INTEGRITY: 100%", "BIO-SYNC: STABLE", "CHRONO-LINK: ACTIVE" };
+			foreach (var m in metrics)
+			{
+				Console.SetCursorPosition(centerX - (m.Length / 2), currentY++);
+				Console.Write(m.Pastel("#333333"));
+			}
+
+			// 5. THE PULSE PROMPT
+			string prompt = "— PRESS ANY KEY TO ENTER THE VOID —";
+			int promptY = 20;
+
+			if (OperatingSystem.IsWindows())
+			{
+				Console.Beep(600, 50); Console.Beep(900, 50); Console.Beep(1200, 100);
+			}
+
+			while (!Console.KeyAvailable)
+			{
+				UiEngine.DrawCentered(prompt.Pastel("#FFFFFF"), promptY, 50);
+				Thread.Sleep(500);
+				if (Console.KeyAvailable) break;
+				UiEngine.DrawCentered(prompt.Pastel("#444444"), promptY, 50);
+				Thread.Sleep(250);
+			}
+
+			Console.ReadKey(true);
+			Clear();
+		}
+		#endregion
+		#region//LoadSaveProgress
+		public static void LoadSaveProgress()
+		{
+			Console.Clear();
+
+			int centerX = 85 / 2;
+			int centerY = 12;
+			int barWidth = 40;
+			Random rnd = new Random();
+
+			// --- RAIN CONFIG ---
+			// Columns on the left (5, 10, 15) and right (70, 75, 80)
+			int[] rainCols = { 5, 10, 15, 70, 75, 80 };
+			int[] rainY = new int[rainCols.Length];
+			for (int r = 0; r < rainY.Length; r++) rainY[r] = rnd.Next(2, 22);
+
+			// 1. PHASE ONE: RAPID DATA SCAN
+			for (int i = 0; i < 15; i++)
+			{
+				Console.SetCursorPosition(centerX - 20, centerY);
+				string noise = $"SCANNING_SECTOR_{rnd.Next(1000, 9999)} >> 0x{rnd.Next(100, 999)}FF{rnd.Next(10, 99)}";
+				Console.Write(noise.Pastel("#ed0410"));
+				Thread.Sleep(90);
+			}
+
+			string[] steps = {
+		"INITIALIZING HANDSHAKE",
+		"DECRYPTING SOUL-FILE",
+		"STITCHING TEMPORAL VECTORS",
+		"RECONSTRUCTING VESSEL"
+	};
+
+			// 2. PHASE TWO: THE PROGRESS BAR + RAIN
+			for (int i = 0; i < steps.Length; i++)
+			{
+				Console.SetCursorPosition(centerX - 25, centerY - 2);
+				Console.Write(new string(' ', 50));
+				Console.SetCursorPosition(centerX - (steps[i].Length / 2), centerY - 2);
+				Console.Write(steps[i].Pastel("#00FFFF"));
+
+				for (int p = 0; p <= 10; p++)
+				{
+					// --- UPDATE BINARY RAIN ---
+					for (int r = 0; r < rainCols.Length; r++)
+					{
+						// Erase old bit
+						Console.SetCursorPosition(rainCols[r], rainY[r]);
+						Console.Write(" ");
+
+						// Increment and wrap Y
+						rainY[r]++;
+						if (rainY[r] > 21) rainY[r] = 2;
+
+						// Draw new bit
+						Console.SetCursorPosition(rainCols[r], rainY[r]);
+						string bit = rnd.Next(2).ToString();
+						// Alternate between bright cyan and deep teal for depth
+						string color = rnd.Next(3) == 0 ? "#00FFFF" : "#004444";
+						Console.Write(bit.Pastel(color));
+					}
+
+					// --- UPDATE PROGRESS BAR ---
+					float totalPercent = ((i * 10) + p) / 40f;
+					int filledWidth = (int)(totalPercent * barWidth);
+
+					Console.SetCursorPosition(centerX - (barWidth / 2), centerY);
+					string bar = new string('█', filledWidth).Pastel("#00FFFF");
+					string background = new string('░', barWidth - filledWidth).Pastel("#222222");
+					string percentText = $" {(int)(totalPercent * 100)}% ".Pastel("#FFFFFF");
+
+					Console.Write($"{bar}{background}{percentText}");
+
+					Thread.Sleep(rnd.Next(30, 80));
+				}
+			}
+
+			// 3. FINAL LOCK-ON
+			Console.SetCursorPosition(centerX - 10, centerY + 2);
+			Console.Write("SYNC SUCCESSFUL".Pastel("#00FF00"));
+
+			if (OperatingSystem.IsWindows())
+			{
+				Console.Beep(1200, 100);
+				Console.Beep(1500, 150);
+			}
+			Thread.Sleep(800);
+		}
+		#endregion
+		#region//StartGameLoading
+		public static void StartGameLoading()
+		{
+			// --- STEP 1: DIMENSIONS & SCROLLBAR KILLER ---
+			const int width = 84;
+			const int height = 24;
+
+			try
+			{
+				Console.SetWindowSize(width + 1, height + 1);
+				Console.SetBufferSize(width + 1, height + 1);
+			}
+			catch { }
+
+			Console.Clear();
+			Console.CursorVisible = false;
+
+			int centerX = width / 2;
+			int centerY = height / 2;
+			int barWidth = 40;
+			Random rnd = new Random();
+
+			// --- STEP 2: INITIAL BURST ---
+			for (int j = 0; j < 5; j++)
+			{
+				Console.SetCursorPosition(0, 0);
+				StringBuilder burst = new StringBuilder();
+				for (int y = 0; y < height; y++)
+				{
+					for (int x = 0; x < width; x++)
+					{
+						if (rnd.Next(0, 100) < 15)
+						{
+							burst.Append(((char)rnd.Next(33, 126)).ToString().Pastel(rnd.Next(2) == 0 ? "#FF0000" : "#00FF00"));
+						}
+						else burst.Append(" ");
+					}
+				}
+				Console.Write(burst.ToString());
+				Thread.Sleep(300);
+			}
+
+			// --- STEP 3: THE MAIN LOOP (Rain + Skulls + Nukes) ---
+			string[] scaryLabels = {
+		"SYSTEM INTEGRITY: CRITICAL...",
+		"REALITY ANCHORS: DEGRADED...",
+		"INITIATING UNSTABLE PROTOCOL...",
+		"WARNING: ENTITY DETECTED...",
+		"S̴Y̷S̷T̵E̵M̴ ̶C̶O̵R̷R̴U̷P̷T̸E̵D̸...",
+		"F̸A̴I̸L̴U̶R̷E̵ ̸T̸O̵ ̷C̸O̷N̵N̷E̵C̷T̵..."
+	};
+			string[] scaryColors = { "#FF0000", "#8B0000", "#4B0082", "#2F4F4F" };
+			int labelIndex = 0;
+
+			for (int i = 0; i <= 100; i++)
+			{
+				// --- THE RAIN ENGINE (Background) ---
+				Console.SetCursorPosition(0, 0);
+				StringBuilder rainFrame = new StringBuilder();
+				for (int y = 0; y < height; y++)
+				{
+					for (int x = 0; x < width; x++)
+					{
+						if (rnd.Next(0, 100) < 10)
+						{
+							rainFrame.Append(((char)rnd.Next(33, 126)).ToString().Pastel("#004400"));
+						}
+						else rainFrame.Append(" ");
+					}
+				}
+				Console.Write(rainFrame.ToString());
+
+				// --- THE UI OVERLAY ---
+
+				// We use double quotes "" to avoid the "too many characters" error
+				// 1. TOP PATTERN: RED SKULLS + ERROR MESSAGE
+				string skullIcon = "☠"; // This is the standard Unicode skull, it tints perfectly
+				string skullMsg = " [ FATAL_MEMORY_LEAK ] ";
+				// Combine first, THEN apply color to the whole thing
+				string topContent = $"{skullIcon}{skullMsg}{skullIcon}";
+
+				// Use the glitchRed logic you have, but apply it to the FINAL string
+				string glitchRed = rnd.Next(0, 10) > 8 ? "#4A0000" : "#FF0000";
+				UiEngine.DrawCentered(topContent.Pastel(glitchRed), centerY - 5);
+
+				// 2. DYNAMIC LABEL (The one you already had)
+				if (i % 15 == 0) labelIndex = rnd.Next(scaryLabels.Length);
+				UiEngine.DrawCentered(scaryLabels[labelIndex].Pastel(scaryColors[rnd.Next(scaryColors.Length)]), centerY - 2);
+
+				// 3. PROGRESS BAR
+				int barLeft = centerX - (barWidth / 2);
+				Console.SetCursorPosition(barLeft, centerY);
+				int progressBlocks = (int)((i / 100.0) * barWidth);
+				string filled = new string('█', progressBlocks);
+				string empty = new string('░', barWidth - progressBlocks);
+				Console.Write(filled.Pastel("#5A057A") + empty.Pastel("#333333") + $" {i}%".Pastel("#FFFFFF"));
+
+				// 4. BOTTOM PATTERN: NUKES + RADIATION WARNING
+				string nukeIcon = "☢";
+				string nukeMsg = " [ CORE_MELTDOWN_IMMINENT ] ";
+				string bottomContent = nukeIcon + nukeMsg + nukeIcon;
+				UiEngine.DrawCentered(bottomContent.Pastel(scaryColors[rnd.Next(scaryColors.Length)]), centerY + 3);
+
+				// --- SPEED CONTROL ---
+				int baseDelay = 120; // Slower rain and progress
+				if (i < 30) Thread.Sleep(baseDelay + 100);
+				else if (i < 80) Thread.Sleep(baseDelay);
+				else Thread.Sleep(baseDelay + 150);
+
+				if (rnd.Next(0, 70) == 0 && i < 90) i += rnd.Next(2, 8);
+			}
+
+			// --- STEP 4: FINAL MESSAGE ---
+			Console.Clear();
+			UiEngine.DrawCentered("T̷H̷E̵ ̸G̷A̷T̷E̵S̷ ̷A̶R̸E̵ ̷O̷P̷E̶N̸...".Pastel("#FF0000"), centerY);
+			Thread.Sleep(2500);
+
+			Console.ResetColor();
+			Console.Clear();
+		}
+		#endregion
+		#region//ShowCreationAnimation
+		public static void ShowCreationAnimation(string playerName, string playerClass)
+		{
+			// --- DYNAMIC THEME ---
+			string themeColor = playerClass switch
+			{
+				"Warrior" or "Paladin" or "Berserker" => "#FF4500",
+				"Mage" or "Wizard" or "Warlock" => "#00FFFF",
+				"Rogue" or "Assassin" => "#9370DB",
+				_ => "#00FF00"
+			};
+
+			string[] steps = {
+		$"Analyzing {playerName}'s Potential...",
+		$"Forging the {playerClass} Soul-Core...",
+		"Calibrating Attribute Matrix...",
+		"Manifesting Physical Vessel...",
+		"Injecting Starter Gear into Pack...",
+		"Syncing Chrono-Link to World..."
+	};
+
+			Console.Clear();
+			TitleBar();
+			UiEngine.DrawCentered($"SYSTEM: CHARACTER MANIFESTATION".Pastel(themeColor), 4);
+			DisplayFooter();
+
+			int startY = 7;
+			int centerX = (Console.WindowWidth / 2) - 20;
+
+			for (int i = 0; i < steps.Length; i++)
+			{
+				Console.SetCursorPosition(centerX, startY + i);
+				Console.Write("[ ".Pastel("#555555") + "WAIT".Pastel("#FFD700") + " ] ".Pastel("#555555") + steps[i]);
+
+				// We removed the SaveData logic from here. 
+				// The data is already synced by GameState.Sync() before this starts.
+
+				Thread.Sleep(new Random().Next(300, 600));
+
+				Console.SetCursorPosition(centerX, startY + i);
+				Console.Write("[ ".Pastel("#555555") + "DONE".Pastel("#00FF00") + " ] ".Pastel("#555555") + steps[i]);
+			}
+
+			// --- FINAL FEEDBACK ---
+			string checksum = Guid.NewGuid().ToString("N").Substring(0, 12).ToUpper();
+			Console.SetCursorPosition(centerX, startY + steps.Length + 1);
+			Console.WriteLine($"» HASH VERIFIED: {checksum}".Pastel("#555555"));
+
+			Console.SetCursorPosition(centerX, startY + steps.Length + 2);
+			Console.WriteLine("» UPLINK COMPLETE: LOCAL & MASTER FULLY SYNCED...".Pastel(themeColor));
+
+			Thread.Sleep(1200);
+		}
+		#endregion
+		#region//ProgressBar
+		public static void ProgressBar()
+		{
+			int barWidth = 50;
+			int topPadding = 12;
+			int leftPadding = (85 / 2) - (barWidth / 2); // Result: 17
+
+			Console.CursorVisible = false;
+
+			// 1. Define the plain text for math
+			string plainLabel = "LOADING PROFILE...";
+			// 2. Define the colored version for display
+			string coloredLabel = plainLabel.Pastel("#A020F0");
+
+			// 3. Center using the PLAIN length (18 characters)
+			int labelLeft = (85 / 2) - (plainLabel.Length / 2);
+			Console.SetCursorPosition(labelLeft, topPadding - 2);
+			Console.Write(coloredLabel);
+
+			for (int i = 0; i <= 100; i++)
+			{
+				// Force the cursor back to the exact start of the bar area
+				Console.SetCursorPosition(leftPadding, topPadding);
+
+				int progressBlocks = (int)((i / 100.0) * barWidth);
+				string filled = new string('█', progressBlocks);
+				string empty = new string('░', barWidth - progressBlocks);
+
+				// We draw the bar using Pastel, but since we use SetCursorPosition 
+				// every loop, it can't "drift" to the left.
+				Console.Write(filled.Pastel("#5A057A") + empty.Pastel("#333333"));
+
+				// Add the percentage at the end
+				Console.ForegroundColor = ConsoleColor.White;
+				Console.Write($" {i}%");
+
+				Thread.Sleep(25);
+			}
+
+			Console.ResetColor();
+			Console.CursorVisible = true;
+		}
+		#endregion
+		#region//QuickAlert
+
+		public static void QuickAlert(string message)
+		{
+			int x = (85 / 2) - (message.Length / 2);
+			int y = 12;
+			Console.Clear();
+			// Center it
+			Console.SetCursorPosition((85 / 2) - (message.Length / 2), 12);
+			Console.WriteLine(message.Pastel("#72071C"));
+			Console.SetCursorPosition((85 / 2) - 10, y + 2);
+			Console.Write("Press any key...".Pastel("#555555"));
+
+			// This stops the code right here until a key is pressed!
+			Console.ReadKey(true);
+
+		}
+
+		#endregion
+		#region//AreaLoadingScreen
+		public static void AreaLoadingScreen(string areaName, string hexColor)
+		{
+			Console.Clear();
+			Console.CursorVisible = false;
+
+			int barWidth = 40; // Slightly narrower for a "smaller" area feel
+			int centerX = 85 / 2;
+			int centerY = 25 / 2;
+
+			// 1. Label (e.g., "ENTERING THE GENERAL STORE...")
+			string plainLabel = $"ENTERING THE {areaName.ToUpper()}...";
+			int labelLeft = centerX - (plainLabel.Length / 2);
+
+			Console.SetCursorPosition(labelLeft, centerY - 2);
+			Console.Write(plainLabel.Pastel(hexColor));
+
+			// 2. The Bar
+			for (int i = 0; i <= 100; i++)
+			{
+				int barLeft = centerX - (barWidth / 2);
+				Console.SetCursorPosition(barLeft, centerY);
+
+				int progressBlocks = (int)((i / 100.0) * barWidth);
+				string filled = new string('█', progressBlocks);
+				string empty = new string('░', barWidth - progressBlocks);
+
+				// Use the hexColor passed into the method for the bar!
+				Console.Write(filled.Pastel(hexColor) + empty.Pastel("#333333"));
+
+				Console.ForegroundColor = ConsoleColor.White;
+				Console.Write($" {i}%");
+
+				Thread.Sleep(15); // Stores usually load fast!
+
+			}
+
+			Thread.Sleep(400);
+			Console.Clear();
+			//Store.LoadShop();
+			Console.CursorVisible = true;
+		}
+
+
+		#endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	}
+}
+</file>
+
+</files>
