@@ -165,7 +165,7 @@ namespace DungeonAdventures.Src.Interfaces
 		#endregion
 		#region//Customization
 		//Customization - REMOVED due to CS0414 warning
-		//private bool Customization = false;
+		private bool Customization = false;
 		//private bool MainGui = true;
 		public Vector4 color1 = new Vector4(1, 1, 1, 1);       // Font
 		public Vector4 BorderColor = new Vector4(0, 1, 1, 1);  // Border

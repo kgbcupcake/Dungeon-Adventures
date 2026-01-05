@@ -1,6 +1,8 @@
-﻿using System;
+﻿using DungeonAdventures.Src.GameEngine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -41,5 +43,32 @@ namespace DungeonAdventures.Src.Interfaces
 				}
 			}
 		}
+		private void LoadTheme()
+		{
+			// Now 'conductor' is recognized!
+			var config = conductor.GetTheme();
+
+			if (config != null)
+			{
+				// Your existing mapping logic
+				color1 = new Vector4(config.FontColor[0], config.FontColor[1], config.FontColor[2], config.FontColor[3]);
+				// ... etc
+			}
+		}
+
+		
+		
+
+
+
+
+
+
+
+
+
+
+
+
 	}
 }

@@ -1,3 +1,4 @@
+using DungeonAdventures.Src.GameData;
 using DungeonAdventures.Src.GameData.Components;
 using DungeonAdventures.Src.Interfaces;
 using static DungeonAdventures.Src.GameData.Entities.PlayerData;
@@ -112,6 +113,19 @@ namespace DungeonAdventures.Src.GameEngine
         				DevGuiRenderer.DevLog.Write($"[CONDUCTOR ERROR] Failed to export '{fileName}' to category '{category}': {ex.Message}", "ERROR");
         			}
         		}
-        	}
-        }
+
+		public ThemeConfig GetTheme(string fileName = "ui_config")
+		{
+			// Use the LoadAllFromFolder method from LoadGame.cs
+			var settings = LoadGame.LoadAllFromFolder<ThemeConfig>("settings");
+
+			// Return the first config found, or a new default one if none exist
+			return settings.FirstOrDefault() ?? new ThemeConfig();
+		}
+
+
+
+
+	}
+}
         

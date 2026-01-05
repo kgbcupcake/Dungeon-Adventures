@@ -85,5 +85,36 @@ namespace DungeonAdventures.Src.GameEngine
 		
 					return loadedData;
 				}
+
+
+
+		public static T? LoadConfig<T>(string folder, string fileName)
+		{
+			string targetPath = Path.Combine(GameState.GetGlobalPath(folder), fileName + ".json");
+
+			if (!File.Exists(targetPath)) return default;
+
+			try
+			{
+				string json = File.ReadAllText(targetPath);
+				var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+				return JsonSerializer.Deserialize<T>(json, options);
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"[CONFIG LOAD ERROR] {fileName}: {ex.Message}");
+				return default;
 			}
 		}
+
+
+
+
+
+
+
+
+	}
+
+
+}
