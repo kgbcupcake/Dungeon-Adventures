@@ -2,7 +2,7 @@
 
 > **“THE VOID IS NOT EMPTY. IT IS FULL OF SEGMENTATION FAULTS.”**
 
-[![Version](https://img.shields.io/badge/version-v1.0.11-cyan?style=for-the-badge&logo=gitbook)](https://github.com/kgbcupcake/Dungeon-Adventures)
+[![Version](https://img.shields.io/badge/version-v1.0.3 1.0.3-cyan?style=for-the-badge&logo=gitbook)](https://github.com/kgbcupcake/Dungeon-Adventures)
 [![Venture Link](https://img.shields.io/badge/Venture_Link-STABLE-green?style=for-the-badge&logo=sharp)](https://github.com/kgbcupcake/Dungeon-Adventures)
 [![License](https://img.shields.io/badge/License-MIT-red?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
