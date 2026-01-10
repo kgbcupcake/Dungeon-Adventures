@@ -7,7 +7,7 @@
   "targets": {
     ".NETCoreApp,Version=v8.0": {},
     ".NETCoreApp,Version=v8.0/win-x64": {
-      "Dungeon-Adventures/1.0.4": {
+      "Dungeon-Adventures/1.0.5": {
         "dependencies": {
           "ClickableTransparentOverlay": "11.1.0",
           "ImGui.NET": "1.91.6.1",
@@ -1418,7 +1418,7 @@
     }
   },
   "libraries": {
-    "Dungeon-Adventures/1.0.4": {
+    "Dungeon-Adventures/1.0.5": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
