@@ -416,3 +416,16 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# --- Custom Project Cleanup ---
+# Remove local temporary logs and development notes
+firebase-debug.log
+message_to_user.txt
+repomix-output.xml
+
+# Ignore local AI/Gemini specific scratchpads
+GEMINI.md
+.gemini/
+
+# Ignore large source-code context exports
+repomix-output.xml

@@ -1,0 +1,73 @@
+#!/bin/bash
+set -e
+
+# 1. Metadata extraction
+# Updated to target the Dungeon-Adventures project file
+VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" Dungeon-Adventures.csproj)
+
+# Color Definitions
+CYAN='\033[0;36m'
+MAGENTA='\033[0;35m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+NC='\033[0m' 
+BG_BLUE='\033[44;30m'
+BG_GREEN='\033[42;37m'
+
+clear
+# High-Impact Header (Customized for Dungeon-Adventures)
+echo -e "${CYAN}"
+cat << "EOF"
+  _____                                         
+ |  __ \                                        
+ | |  | |_   _ _ __   __ _  ___  ___  _ __      
+ | |  | | | | | '_ \ / _` |/ _ \/ _ \| '_ \     
+ | |__| | |_| | | | | (_| |  __/ (_) | | | |    
+ |_____/ \__,_|_| |_|\__, |\___|\___/|_| |_|    
+                      __/ |                     
+                     |___/                      
+EOF
+echo -e "${NC}"
+echo -e " ${BG_BLUE} ⚔️  DUNGEON-ADVENTURES VENTURE DOWNLINK v$VERSION ${NC}"
+echo ""
+
+# 2. Cloud Sync
+echo -ne " ${CYAN}📡 [1/4] SYNCING WORLD DATA...        ${NC}"
+git fetch origin master --quiet > /dev/null 2>&1
+git reset --hard origin/master --quiet > /dev/null 2>&1
+echo -e "${GREEN}SYNCED${NC}"
+
+# 3. Clean & Build with Spinner
+echo -ne " ${CYAN}📦 [2/4] FORGING THE ENGINE...        ${NC}"
+
+# Run publish in background (Standalone game build instead of dotnet pack)
+(rm -rf ./bin && dotnet publish -c Release -r win-x64 --self-contained true -o ./bin --nologo -v quiet > /dev/null 2>&1) & 
+pid=$! 
+
+spinner=( '⠋' '⠙' '⠹' '⠸' '⠼' '⠴' '⠦' '⠧' '⠇' '⠏' )
+while kill -0 $pid 2>/dev/null; do
+    for i in "${spinner[@]}"; do
+        # Maintaining the carriage return logic for the smooth spinner
+        echo -ne "\r ${CYAN}📦 [2/4] FORGING THE ENGINE...        ${MAGENTA}$i${NC}"
+        sleep 0.1
+    done
+done
+wait $pid 
+echo -e "\r ${CYAN}📦 [2/4] FORGING THE ENGINE...        ${GREEN}DONE  ${NC}"
+
+# 4. Global Injection (Adapted to local binary readiness)
+echo -ne " ${CYAN}💉 [3/4] INJECTING WORKSPACE...        ${NC}"
+# Instead of 'dotnet tool install', we ensure the binary has execution permissions
+if [ -f "./bin/Dungeon-Adventures" ]; then
+    chmod +x ./bin/Dungeon-Adventures > /dev/null 2>&1
+fi
+echo -e "${GREEN}INJECTED${NC}"
+
+# 5. Clean Up
+echo -ne " ${CYAN}🧹 [4/4] PURGING TEMPORARY LOGIC...   ${NC}"
+dotnet clean --nologo -v quiet > /dev/null 2>&1
+echo -e "${GREEN}CLEAN${NC}"
+
+echo ""
+echo -e " ${BG_GREEN} ✅ DOWNLINK SUCCESSFUL. VENTURE STATE: STABLE v$VERSION ${NC}"
+echo ""
