@@ -48,7 +48,7 @@ echo -e "${CYAN}[SYSTEM] Igniting Venture Uplink...${NC}"
 # Use a specific add if you want to be safe, or rely on .gitignore
 git add . 
 git commit -m "🚀 $msg" --quiet
-git push origin master --quiet
+git push origin main --quiet
 
 # 6. AUTOMATED RELEASE (The "Spiciest" Part)
 # Requires GitHub CLI (gh) installed
