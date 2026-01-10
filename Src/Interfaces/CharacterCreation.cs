@@ -15,7 +15,7 @@ namespace DungeonAdventures.Src.Game.Interfaces
 			if (GameState.CurrentPlayer == null) GameState.CurrentPlayer = new loadPlayer();
 			var player = GameState.CurrentPlayer;
 
-			int screenWidth = 80;
+			int screenWidth = Console.WindowWidth;
 			Clear();
 
 			// Logic is now self-contained; no more external UiFunctions calls here
@@ -57,12 +57,23 @@ namespace DungeonAdventures.Src.Game.Interfaces
 
 				for (int i = 0; i < coreArchetypes.Length; i++)
 				{
-					string classText = (i == selectedIndex) ? $"[ {coreArchetypes[i].ToUpper()} ]" : $"  {coreArchetypes[i]}  ";
-					int classX = (screenWidth / 2) - (classText.Length / 2);
+					// 1. Build the raw text first to calculate the true visual center
+					string rawText = (i == selectedIndex) ? $"[ {coreArchetypes[i].ToUpper()} ]" : $"  {coreArchetypes[i]}  ";
 
+					// 2. Calculate the X position based on the REAL length of the text
+					// We use screenWidth (94) to ensure it stays anchored to your console size
+					int visualLength = rawText.Length;
+					int classX = (screenWidth / 2) - (visualLength / 2);
+
+					// 3. Set the position and THEN apply the color
 					SetCursorPosition(classX, boxY + 4 + i);
-					Write(i == selectedIndex ? classText.Pastel("#00FF00") : classText.Pastel("#555555"));
+
+					if (i == selectedIndex)
+						Write(rawText.Pastel("#00FF00")); // Highlighted green
+					else
+						Write(rawText.Pastel("#555555")); // Dimmed gray
 				}
+
 
 				string hint = "[UP/DOWN] to browse | [ENTER] to specialize";
 				SetCursorPosition((screenWidth / 2) - (hint.Length / 2), 17);
@@ -83,15 +94,24 @@ namespace DungeonAdventures.Src.Game.Interfaces
 			AssignStarterKit(player);
 
 			Clear();
-			int centerX = (80 / 2);
-			SetCursorPosition(centerX - 15, 8);
-			WriteLine($"Welcome to the world, {player.PlayerName.Pastel("#00FF00")}!");
+			int centerX = (screenWidth / 2); // Change (80 / 2) to (screenWidth / 2)
 
-			SetCursorPosition(centerX - 20, 10);
-			WriteLine($"Your journey as a {player.PlayerClass.Pastel("#FFD700")} begins now...".Pastel("#DCDCDC"));
+			// Use StripAnsi to get the REAL center of the welcome message
+			string welcomeMsg = $"Welcome to the world, {player.PlayerName.Pastel("#00FF00")}!";
+			int welcomeVisualLength = UiEngine.StripAnsi(welcomeMsg).Length;
+			SetCursorPosition(centerX - (welcomeVisualLength / 2), 8);
+			WriteLine(welcomeMsg);
 
-			SetCursorPosition(10, 12);
-			WriteLine("Starter gear has been added to your pack.");
+			// Center the journey message
+			string journeyMsg = $"Your journey as a {player.PlayerClass.Pastel("#FFD700")} begins now...";
+			int journeyVisualLength = UiEngine.StripAnsi(journeyMsg).Length;
+			SetCursorPosition(centerX - (journeyVisualLength / 2), 10);
+			WriteLine(journeyMsg.Pastel("#DCDCDC"));
+
+			// Center the "Starter gear" message too
+			string gearMsg = "Starter gear has been added to your pack.";
+			SetCursorPosition(centerX - (gearMsg.Length / 2), 12);
+			WriteLine(gearMsg);
 
 			SetCursorPosition(centerX - 12, 14);
 			WriteLine("\n    --- INITIAL INVENTORY ---".Pastel("#125874"));
@@ -151,7 +171,7 @@ namespace DungeonAdventures.Src.Game.Interfaces
 				Clear();
 				// Building the header locally to maintain alignment
 				WriteLine("=== Build your Hero ===".Pastel("#FFD700"));
-				WriteLine(new string('-', 80).Pastel("#125874"));
+				WriteLine(new string('-', screenWidth).Pastel("#125874"));
 
 				SetCursorPosition(4, 3);
 				WriteLine(" CLASS OVERVIEW ".Pastel("#000000").PastelBg("#125874"));
@@ -175,14 +195,17 @@ namespace DungeonAdventures.Src.Game.Interfaces
 					SetCursorPosition(8, 11 + i);
 					int currentVal = GetStatValueByIndex(player, i);
 
-					if (i == selectedStat)
-						Write($"> {statNames[i].PadRight(15)} [{currentVal}] <".Pastel("#00FF00"));
-					else
-						Write($"  {statNames[i].PadRight(15)} [{currentVal}]  ".Pastel("#555555"));
+					// Build the string first, THEN color it to keep alignment perfect
+					string line = (i == selectedStat)
+						? $"> {statNames[i].PadRight(15)} [{currentVal}] <"
+						: $"  {statNames[i].PadRight(15)} [{currentVal}]  ";
+
+					Write(i == selectedStat ? line.Pastel("#00FF00") : line.Pastel("#555555"));
 				}
 
 				// The Attributes box is handled by UiEngine as per your setup
-				UiEngine.DrawAttributeBox(player, 45, 11, selectedStat);
+				int attributeBoxX = 52;
+				UiEngine.DrawAttributeBox(player, attributeBoxX, 11, selectedStat);
 
 				var key = ReadKey(true).Key;
 				if (key == ConsoleKey.UpArrow) selectedStat = (selectedStat == 0) ? statNames.Length - 1 : selectedStat - 1;

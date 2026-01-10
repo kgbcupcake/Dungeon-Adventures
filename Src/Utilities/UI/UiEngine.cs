@@ -43,10 +43,18 @@ namespace DungeonAdventures.Src.Utilities.UI
 			WriteLine(text);
 		}
 
-		public static void DrawCentered(string text, int row)
+		public static void DrawCentered(string text, int y)
 		{
-			string cleanText = StripAnsi(text);
-			SetCursorPosition(Math.Max(0, (WindowWidth / 2) - (cleanText.Length / 2)), row);
+			int screenWidth = 94; // Match your ConsoleSize() anchor
+
+			// We must use StripAnsi because Pastel color codes have 0 visual width 
+			// but count as characters in string.Length
+			int cleanLength = StripAnsi(text).Length;
+			int x = (screenWidth / 2) - (cleanLength / 2);
+
+			if (x < 0) x = 0; // Boundary safety
+
+			SetCursorPosition(x, y);
 			Write(text);
 		}
 
@@ -110,42 +118,71 @@ namespace DungeonAdventures.Src.Utilities.UI
 		public static void DrawDynamicFrame(string title, List<string> lines, string hint = "", int boxWidth = 66, int startY = 11, int selectedIndex = -1, int previewHp = -1, int previewCoins = -1)
 		{
 			CursorVisible = false;
-			SetCursorPosition(0, 0);
-			BackgroundColor = ConsoleColor.DarkRed; // Dark Red background
-			ForegroundColor = ConsoleColor.Yellow; // Yellow foreground
-			int displayHp = (previewHp != -1) ? previewHp : (GameState.CurrentPlayer?.Health ?? 100);
-			int displayCoins = (previewCoins != -1) ? previewCoins : (GameState.CurrentPlayer?.Coins ?? 50);
-			string leftSection = $" {title}";
-			string rightSection;
-			if (title == "MAIN MENU")
-			{
-				rightSection = $"HP: {displayHp} | COINS: {displayCoins} ";
-			}
-			else
-			{
-				rightSection = $"TIME: {DateTime.Now:HH:mm} | HP: {displayHp} | COINS: {displayCoins} ";
-			}
-			int fillerCount = WindowWidth - leftSection.Length - rightSection.Length;
-			Write(leftSection + new string(' ', Math.Max(0, fillerCount)) + rightSection);
-			ResetColor();
 
-			int startX = (WindowWidth / 2) - (boxWidth / 2);
-			int fixedHeight = lines.Count;
+			// 1. Unified Setup - Using 94 Anchor
+			int screenWidth = 94;
+			int startX = (screenWidth / 2) - (boxWidth / 2);
+			// startY is already a parameter, we use the value passed in (11)
 			string borderColor = BorderColor;
 
+			// 2. Top Border Logic
 			SetCursorPosition(startX, startY);
-			Write(("╔" + new string('═', boxWidth - 2) + "╗").Pastel(borderColor));
+			Write($"╔{new string('═', boxWidth - 2)}╗".Pastel(borderColor));
 
-			for (int i = 0; i < fixedHeight; i++)
+			// 3. The Hover-Aware Loop
+			for (int i = 0; i < lines.Count; i++)
 			{
-				string content = (lines != null && i < lines.Count) ? lines[i] : "";
-				DrawCenteredBoxLine(content, startY + 1 + i, startX, boxWidth, borderColor);
+				SetCursorPosition(startX, startY + 1 + i);
+				string currentLine = lines[i];
+
+				// Apply Highlight Color based on index
+				if (i == selectedIndex)
+				{
+					currentLine = currentLine.Pastel("#00FF00"); // Hover Green
+				}
+				else
+				{
+					currentLine = currentLine.Pastel("#555555"); // Idle Gray
+				}
+
+				// Write line with borders
+				Write($"║{currentLine}║".Pastel(borderColor));
 			}
 
-			SetCursorPosition(startX, startY + fixedHeight + 1);
-			Write(("╚" + new string('═', boxWidth - 2) + "╝").Pastel(borderColor));
+			// 4. Bottom Border
+			SetCursorPosition(startX, startY + lines.Count + 1);
+			Write($"╚{new string('═', boxWidth - 2)}╝".Pastel(borderColor));
 
-			if (!string.IsNullOrEmpty(hint)) DrawCentered(hint.Pastel("#555555"), startY + fixedHeight + 3);
+			// 5. Hint Logic
+			if (!string.IsNullOrEmpty(hint))
+			{
+				DrawCentered(hint.Pastel("#555555"), startY + lines.Count + 3);
+			}
+
+			// --- TITLE BAR LOGIC (Restored and Fixed) ---
+			// Note: We don't redeclare variables here, we just use them.
+			BackgroundColor = ConsoleColor.DarkRed;
+			ForegroundColor = ConsoleColor.Yellow;
+
+			int displayHp = (previewHp != -1) ? previewHp : (GameState.CurrentPlayer?.Health ?? 100);
+			int displayCoins = (previewCoins != -1) ? previewCoins : (GameState.CurrentPlayer?.Coins ?? 50);
+
+			string leftSection = $" {title}";
+			string rightSection = (title == "MAIN MENU")
+				? $"HP: {displayHp} | COINS: {displayCoins} "
+				: $"TIME: {DateTime.Now:HH:mm} | HP: {displayHp} | COINS: {displayCoins} ";
+
+			int currentWindowWidth = Console.WindowWidth;
+			int fillerCount = currentWindowWidth - leftSection.Length - rightSection.Length;
+
+			string fullHeader = leftSection + new string(' ', Math.Max(0, fillerCount)) + rightSection;
+
+			SetCursorPosition(0, 0); // Move to very top to draw the bar
+			Write(fullHeader.PadRight(currentWindowWidth));
+
+			ResetColor();
+
+			// --- FINAL FOOTER ---
 			UiFunctions.DisplayFooter();
 		}
 
@@ -159,8 +196,15 @@ namespace DungeonAdventures.Src.Utilities.UI
 		public static void DrawAttributeBox(loadPlayer player, int x, int y, int selectedStat = -1)
 		{
 			string bColor = BorderColor;
+			// Total width is now 40 characters to fill the 94-width buffer properly
+			string top = "╔══════════════ ATTRIBUTES ══════════════╗";
+			string mid = "╠════════════════════════════════════════╣";
+			string bottom = "╚════════════════════════════════════════╝";
+
 			SetCursorPosition(x, y);
-			WriteLine("╔══════════ ATTRIBUTES ══════════╗".Pastel(bColor));
+			WriteLine(top.Pastel(bColor));
+
+			// Stats lines (Make sure DrawStatLine pads to 38 internal spaces)
 			DrawStatLine("Strength", player.Abilities.Strength, x, y + 1, selectedStat == 0, "#00FF00", "#FFFFFF", bColor);
 			DrawStatLine("Dexterity", player.Abilities.Dexterity, x, y + 2, selectedStat == 1, "#00FF00", "#FFFFFF", bColor);
 			DrawStatLine("Intelligence", player.Abilities.Intelligence, x, y + 3, selectedStat == 2, "#00FF00", "#FFFFFF", bColor);
@@ -169,35 +213,40 @@ namespace DungeonAdventures.Src.Utilities.UI
 			DrawStatLine("Luck", player.Abilities.Luck, x, y + 6, selectedStat == 5, "#00FF00", "#FFFFFF", bColor);
 			DrawStatLine("Wisdom", player.Abilities.Wisdom, x, y + 7, selectedStat == 6, "#00FF00", "#FFFFFF", bColor);
 			DrawStatLine("Charisma", player.Abilities.Charisma, x, y + 8, selectedStat == 7, "#00FF00", "#FFFFFF", bColor);
+
 			SetCursorPosition(x, y + 9);
-			WriteLine("╠════════════════════════════════╣".Pastel(bColor));
+			WriteLine(mid.Pastel(bColor));
+
 			SetCursorPosition(x, y + 10);
-			WriteLine($"║ Health: {player.Health.ToString().PadRight(23).Pastel("#FF4500")}║");
+			// Use PadRight(29) to ensure the Health line hits the right border exactly
+			string healthText = $" Health: {player.Health}";
+			WriteLine($"║{healthText.PadRight(40)}║".Pastel(bColor));
+
 			SetCursorPosition(x, y + 11);
-			WriteLine("╚════════════════════════════════╝".Pastel(bColor));
+			WriteLine(bottom.Pastel(bColor));
 		}
 
 		private static void DrawStatLine(string label, int value, int x, int y, bool isSelected, string aCol, string iCol, string bColor)
 		{
-			// Hide cursor during draw to prevent the "white flicker"
+			// 1. Setup
 			Console.CursorVisible = false;
-
 			SetCursorPosition(x, y);
-			string color = isSelected ? aCol : iCol;
 
-			// PADDING FIX: Ensure the total length of 'text' matches your frame width exactly
-			// If your box is 34 characters wide, use PadRight accordingly.
-			string text = $" {label}:".PadRight(15) + value.ToString().PadLeft(5);
+			// 2. Select the text color based on focus
+			string textColor = isSelected ? aCol : iCol;
 
-			// If the item is selected, we can add the > < arrows back inside the line
-			if (isSelected)
-			{
-				text = $"> {label}: {value} <".PadRight(20).PadLeft(25); // Adjust numbers to fit your box
-			}
+			// 3. Build the visual content manually to ensure it hits exactly 40 chars
+			// We calculate based on raw text to avoid ANSI math drift
+			string indicator = isSelected ? "> " : "  ";
+			string mainText = $"{indicator}{label}: {value}";
 
-			Write($"{"║".Pastel(bColor)}{text.Pastel(color)}{"║".Pastel(bColor)}");
+			// 4. Pad the content to 40 characters so the right '║' snaps to the edge
+			string finalLine = $"║{mainText.PadRight(40)}║";
 
-			// Move cursor to 0,0 after drawing so it's not visible on the menu
+			// 5. Write with colors (Applying Pastel to the whole line or just text)
+			// Using bColor for the borders to match your DrawAttributeBox
+			Write(finalLine.Pastel(bColor));
+
 			SetCursorPosition(0, 0);
 		}
 

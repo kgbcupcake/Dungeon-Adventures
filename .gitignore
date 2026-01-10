@@ -429,3 +429,10 @@ GEMINI.md
 
 # Ignore large source-code context exports
 repomix-output.xml
+
+# Ignore game data and saves
+Data/
+Saves/
+*.json
+bin/
+obj/

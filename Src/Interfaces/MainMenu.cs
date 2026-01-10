@@ -206,7 +206,7 @@ namespace DungeonAdventures.Src.GameEngine.Interfaces
 					return true; // Keep menu running
 
 				case "EXIT":
-					Environment.Exit(0);
+					UiFunctions.ShutdownSequence();
 					return false;
 
 				default:

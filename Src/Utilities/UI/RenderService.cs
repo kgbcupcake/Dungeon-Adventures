@@ -13,8 +13,8 @@ namespace DungeonAdventures.csproj.Src.Utilities.UI
         }
 
         private static Pixel[] _frameBuffer;
-        private const int CONSOLE_WIDTH = 85;
-        private const int CONSOLE_HEIGHT = 25;
+        private const int CONSOLE_WIDTH = 84;
+        private const int CONSOLE_HEIGHT = 24;
 
         static RenderService()
         {

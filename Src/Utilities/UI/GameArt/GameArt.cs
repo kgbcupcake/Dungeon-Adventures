@@ -4,6 +4,7 @@ using System;
 
 namespace DungeonAdventures.Src.Utilities.GameArt
 {
+	#region// Main Menu Art
 	public static class MainMenuArt
 	{
 		public static void DrawMainHeader()
@@ -24,4 +25,35 @@ namespace DungeonAdventures.Src.Utilities.GameArt
 			Console.ResetColor();
 		}
 	}
+	#endregion
+	#region// Game Over Art
+	public static class GameOver 
+	{
+		public static readonly string[] CynicalSkull = new string[]
+		{
+			"         YOU WERE JUST RENTED DATA         ",
+			"___________________________________________",
+			"         oooo$$$$$$$$oooo                  ",
+			"      oo$$$$$$$$$$$$$$$$$$oo               ",
+			"     od$$$$$$$$$$$$$$$$$$$$$bo             ",
+			"     oo$$$$$$$$$$$$$$$$$$$$$$oo            ",
+			"     $$$$$$$$$$$$$$$$$$$$$$$$$$            ",
+			"     $$$$$$$$$$$$$$$$$$$$$$$$$$            ",
+			"     $$$   $$$$$$$$$$$$   $$$$$            ",
+			"     \"$$$   $$$$$$$$$$   $$$$$\"            ",
+			"      \"$$$oooo$$$$$$$oooo$$$\"              ",
+			"        \"$$$$$$$$$$$$$$$$$\"                ",
+			"    oooo$$$$$$$$$$$$$$$$$$oooo             ",
+			"   $$$$$$$$\"\"$$$$$$$$$??$$$$$$$            ",
+			"    \"\"$$$$\"  \"$$$$$$$\"  \"$$$$\"             ",
+			"       \"$$$    \"$$$\"    $$$\"               ",
+			"___________________________________________",
+			"          [ REALITY TERMINATED ]           "
+		};
+	}
+
+
+	#endregion
+
+
 }

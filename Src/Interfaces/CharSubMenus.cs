@@ -1,8 +1,6 @@
 ﻿using DungeonAdventures.Src.GameData.Components;
 using DungeonAdventures.Src.Utilities.UI;
 using Pastel;
-using System;
-using System.Collections.Generic;
 using static System.Console;
 
 namespace DungeonAdventures.Src.Game.MainInterfaces
@@ -36,27 +34,36 @@ namespace DungeonAdventures.Src.Game.MainInterfaces
 			{
 				Clear();
 
-				// 1. Prepare the list of options so the Box expands to fit them
+				// 1. Clean up the strings before sending them to the frame
 				List<string> evolutionOptions = new List<string>();
 				for (int i = 0; i < subClasses.Length; i++)
 				{
-					evolutionOptions.Add(subClasses[i]);
+					// If your loop adds specific spacing or characters, 
+					// ensure they don't push the border character out of alignment.
+					string optionText = subClasses[i].PadRight(92);
+
+					// 1. Calculate the center based on your magic number 92
+					int visualLength = UiEngine.StripAnsi(subClasses[i]).Length;
+					int leftSpaceCount = (92 / 2) - (visualLength / 2);
+					int rightSpaceCount = 92 - visualLength - leftSpaceCount;
+					// 2. Build the string with manual spaces to avoid ANSI drift
+					string centeredOption = new string(' ', leftSpaceCount) + subClasses[i] + new string(' ', rightSpaceCount);
+					evolutionOptions.Add(optionText);
 				}
 
 				// 2. Draw the Massive Frame using the options list
 				// This ensures the box is tall enough to hold everything
 				UiEngine.DrawDynamicFrame($"{player.PlayerClass.ToUpper()} EVOLUTION: {player.PlayerName.ToUpper()}",
-										 evolutionOptions,
-										 "[UP/DOWN] to browse | [ENTER] to evolve",
-										 boxWidth: 70, // Explicitly set a reasonable width
-										 selectedIndex: selected);
+				evolutionOptions,
+				"[UP/DOWN] to browse | [ENTER] to evolve",
+				boxWidth: 94, // Explicitly set a reasonable width
+				selectedIndex: selected);
 
 				// 3. Draw the Sub-Header (Greetings/Choose Path) ABOVE the box
 				UiEngine.DrawCentered($"Choose your path, {player.PlayerName}".Pastel(flavorColor), 6);
-
 				// 4. Draw the Attributes/Description BELOW the options but INSIDE the frame area
 				// Since DrawDynamicFrame with 3 options is about 6 rows high, we place these relative to startY
-				int contentBaseY = 15;
+				int contentBaseY = 20;
 				UiEngine.DrawCentered(" ATTRIBUTES ".Pastel("#000000").PastelBg(flavorColor), contentBaseY);
 				UiEngine.DrawCentered(descriptions[selected].Pastel("#DCDCDC"), contentBaseY + 2);
 

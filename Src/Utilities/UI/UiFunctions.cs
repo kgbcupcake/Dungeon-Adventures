@@ -1,8 +1,11 @@
 ﻿// Ignore Spelling: Tle
 
 using DungeonAdventures.Src.GameData.Components;
+using DungeonAdventures.Src.GameEngine;
+using DungeonAdventures.Src.Utilities.GameArt;
 using Pastel;
 using System.Runtime.InteropServices;
+using System.Security.AccessControl;
 using System.Text;
 
 // ADD THIS LINE TO FIX THE ERRORS:
@@ -13,22 +16,24 @@ namespace DungeonAdventures.Src.Utilities.UI
 	public class UiFunctions
 	{
 		#region//ConsoleSize
+
+		
 		public static void ConsoleSize()
 		{
-			int width = 100; // Slightly wider than standard to fit the matrix side-car
-			int height = 30;
+			int width = 94; // Adhering to 84x24 reality anchor
+			int height = 24;
 
-			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+			if (OperatingSystem.IsWindows())
 			{
-				try
-				{
-					// 1. Set the Window Size first
-					Console.SetWindowSize(85, 25);
-
-					// 2. FORCE the Buffer to match the Window exactly (This kills the scroll bar)
-					Console.SetBufferSize(85, 25);
-				}
-				catch { /* Fallback for small screens */ }
+				// Windows-specific buffer and window sizing
+				Console.SetWindowSize(Math.Min(width, Console.LargestWindowWidth), Math.Min(height, Console.LargestWindowHeight));
+				Console.SetBufferSize(width, height);
+			}
+			else if (OperatingSystem.IsLinux() || OperatingSystem.IsMacOS())
+			{
+				// Linux/Unix use ANSI escape sequences to suggest terminal resizing
+				// \e[8;height;widtht is the standard sequence
+				Console.Write($"\u001b[8;{height};{width}t");
 			}
 			Console.CursorVisible = false;
 		}
@@ -49,7 +54,7 @@ namespace DungeonAdventures.Src.Utilities.UI
 					{
 						Console.SetCursorPosition(0, 0);
 						// Wipe the top line with spaces to act as a physical eraser
-						Console.Write(new string(' ', Console.WindowWidth));
+						Console.Write(new string(' ', 84));
 		
 						Random rnd = new Random();
 						// Check if player is established (e.g., after character creation or loading a game)
@@ -92,44 +97,43 @@ namespace DungeonAdventures.Src.Utilities.UI
 						Console.SetCursorPosition(currentCursorLeft, currentCursorTop);
 					}
 				}
-				#endregion
+		#endregion
 		#region//Footer
 		public static void DisplayFooter(bool isVisible = true)
 		{
-			int width = WindowWidth;
-			int height = WindowHeight;
+			// CHANGE 1: Get the real width and height of the current window
+			int width = Console.WindowWidth;
+			int height = Console.WindowHeight;
 			int footerRow = height - 1;
 
-			// Save cursor to prevent menu flicker
 			int origLeft = CursorLeft;
 			int origTop = CursorTop;
 
 			try
 			{
-				// 1. Setup Data
 				string modeLabel = GameState.IsDevMode ? " DEV " : " BUILD ";
 				string modeStatus = GameState.IsDevMode ? " F8 FOR GUI " : " STABLE ";
 				string versionText = GameState.IsDevMode ? $"ITER: {GameState.DevIteration}" : $"V {GameState.BuildVersion}";
 				string accentColor = GameState.IsDevMode ? "#FF4500" : "#125874";
 
-				// 2. Build the "Powerline" Badge (Left Side)
 				string leftBadge = modeLabel.PastelBg(accentColor).Pastel("#FFFFFF") +
 								  modeStatus.PastelBg("#333333").Pastel(accentColor);
 
-				// 3. Build the Version Info (Right Side)
 				string rightInfo = $" {versionText} ".Pastel("#888888").PastelBg("#1A1A1A");
 
-				// 4. Calculate Center Padding
-				// We subtract the raw character length (ignoring color codes) from the total width
+				// CHANGE 2: The raw length calculation is correct, 
+				// but paddingSize will now be based on the REAL width
 				int rawLength = modeLabel.Length + modeStatus.Length + versionText.Length + 2;
 				int paddingSize = width - rawLength;
 				string padding = new string(' ', Math.Max(0, paddingSize)).PastelBg("#1A1A1A");
 
-				// 5. Execution: One single move and one single write
 				SetCursorPosition(0, footerRow);
-				Write(leftBadge + padding + rightInfo);
 
-				// Restore cursor to the menu area
+				string fullFooter = leftBadge + padding + rightInfo;
+
+				// CHANGE 3: Use the dynamic width variable here
+				Write(fullFooter.PadRight(94));
+
 				SetCursorPosition(origLeft, origTop);
 			}
 			catch { /* Resize Safety */ }
@@ -317,19 +321,43 @@ namespace DungeonAdventures.Src.Utilities.UI
 		#region//StartGameLoading
 		public static void StartGameLoading()
 		{
+
 			// --- STEP 1: DIMENSIONS & SCROLLBAR KILLER ---
-			const int width = 84;
+			const int width = 94;
 			const int height = 24;
+			// FORCE INITIALIZATION BEFORE THE UI STARTS
+			GameState.EnsureDirectories();
 
 			try
 			{
-				Console.SetWindowSize(width + 1, height + 1);
-				Console.SetBufferSize(width + 1, height + 1);
+				GameState.EnsureDirectories();
+				// Debug check: write a dummy file to prove it worked
+				File.WriteAllText(Path.Combine(GameState.MasterPath, "wsl_test.txt"), "WSL Active");
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine("DIR FAIL: " + e.Message);
+			}
+
+
+
+
+			try
+			{
+				// FIX: Only resize on Windows to prevent WSL terminal crashes
+				if (OperatingSystem.IsWindows())
+				{
+					Console.SetWindowSize(width, height);
+					Console.SetBufferSize(width, height);
+				}
 			}
 			catch { }
 
 			Console.Clear();
 			Console.CursorVisible = false;
+
+			// FIX: Clean Title Bar (Removes the ←[38;2;... artifacts from screenshots)
+			Console.Title = "Dungeon Adventures - Reborn";
 
 			int centerX = width / 2;
 			int centerY = height / 2;
@@ -387,19 +415,14 @@ namespace DungeonAdventures.Src.Utilities.UI
 				Console.Write(rainFrame.ToString());
 
 				// --- THE UI OVERLAY ---
-
-				// We use double quotes "" to avoid the "too many characters" error
 				// 1. TOP PATTERN: RED SKULLS + ERROR MESSAGE
-				string skullIcon = "☠"; // This is the standard Unicode skull, it tints perfectly
+				string skullIcon = "☠";
 				string skullMsg = " [ FATAL_MEMORY_LEAK ] ";
-				// Combine first, THEN apply color to the whole thing
 				string topContent = $"{skullIcon}{skullMsg}{skullIcon}";
-
-				// Use the glitchRed logic you have, but apply it to the FINAL string
 				string glitchRed = rnd.Next(0, 10) > 8 ? "#4A0000" : "#FF0000";
 				UiEngine.DrawCentered(topContent.Pastel(glitchRed), centerY - 5);
 
-				// 2. DYNAMIC LABEL (The one you already had)
+				// 2. DYNAMIC LABEL
 				if (i % 15 == 0) labelIndex = rnd.Next(scaryLabels.Length);
 				UiEngine.DrawCentered(scaryLabels[labelIndex].Pastel(scaryColors[rnd.Next(scaryColors.Length)]), centerY - 2);
 
@@ -418,7 +441,7 @@ namespace DungeonAdventures.Src.Utilities.UI
 				UiEngine.DrawCentered(bottomContent.Pastel(scaryColors[rnd.Next(scaryColors.Length)]), centerY + 3);
 
 				// --- SPEED CONTROL ---
-				int baseDelay = 120; // Slower rain and progress
+				int baseDelay = 120;
 				if (i < 30) Thread.Sleep(baseDelay + 100);
 				else if (i < 80) Thread.Sleep(baseDelay);
 				else Thread.Sleep(baseDelay + 150);
@@ -429,7 +452,11 @@ namespace DungeonAdventures.Src.Utilities.UI
 			// --- STEP 4: FINAL MESSAGE ---
 			Console.Clear();
 			UiEngine.DrawCentered("T̷H̷E̵ ̸G̷A̷T̷E̵S̷ ̷A̶R̸E̵ ̷O̷P̷E̶N̸...".Pastel("#FF0000"), centerY);
-			Thread.Sleep(2500);
+
+			// FIX: Ensure the loading screen stays until the user is ready for the menu
+			UiEngine.DrawCentered("» PRESS ANY KEY «".Pastel("#444444"), centerY + 2);
+			Thread.Sleep(1000);
+			Console.ReadKey(true);
 
 			Console.ResetColor();
 			Console.Clear();
@@ -487,6 +514,7 @@ namespace DungeonAdventures.Src.Utilities.UI
 			Console.WriteLine("» UPLINK COMPLETE: LOCAL & MASTER FULLY SYNCED...".Pastel(themeColor));
 
 			Thread.Sleep(1200);
+			Clear();
 		}
 		#endregion
 		#region//ProgressBar
@@ -596,8 +624,94 @@ namespace DungeonAdventures.Src.Utilities.UI
 
 
 		#endregion
+		#region//ExitAnimation                    
+		public static void ShutdownSequence()
+		{
+			CursorVisible = false;
+			Random rnd = new Random();
+
+			// 1. Cold Asset Liquidation (The Cynical Setup)
+			Clear();
+			string[] tasks = {
+		"VALUATING BIOLOGICAL DEBT...",
+		"EXTRACTING NEURAL POTENTIAL...",
+		"DEPRECATING PLAYER_IDENTITY..."
+	};
+
+			for (int i = 0; i < tasks.Length; i++)
+			{
+				SetCursorPosition(4, 5 + i);
+				Write($"[ ANALYZING ] {tasks[i]}".Pastel("#555555"));
+				Thread.Sleep(1000);
+				SetCursorPosition(4, 5 + i);
+				Write($"[ LIQUIDATED ] {tasks[i]}".Pastel("#8B0000"));
+				WriteLine(" [ VALUE: 0.00 ]".Pastel("#444444"));
+			}
+			Thread.Sleep(1000);
+
+			// 2. Digital Rain / Entity Detection (The Screenshot Phase)
+			for (int i = 0; i < 15; i++)
+			{
+				Clear();
+				for (int r = 0; r < 20; r++) // Matrix Background
+				{
+					string rain = new string(' ', rnd.Next(2, 80)) + (char)rnd.Next(33, 126);
+					SetCursorPosition(0, r);
+					Write(rain.Pastel("#1A3300")); // Dim green rain
+				}
+
+				UiEngine.DrawCentered("☠ [ FATAL_MEMORY_LEAK ] ☠".Pastel("#FF0000"), 8);
+				UiEngine.DrawCentered("WARNING: ENTITY DETECTED...".Pastel("#555555"), 10);
+				Thread.Sleep(80);
+			}
+
+			// 3. The Purple Loading Bar
+			int barWidth = 40;
+			for (int p = 0; p <= 100; p += 2)
+			{
+				SetCursorPosition(27, 12);
+				string filled = new string('█', (p * barWidth) / 100).Pastel("#800080"); // Purple
+				string empty = new string('░', barWidth - ((p * barWidth) / 100)).Pastel("#333333");
+				Write(filled + empty + $" {p}%".Pastel("#FFFFFF"));
+
+				if (p >= 40)
+				{
+					UiEngine.DrawCentered("☢ [ CORE_MELTDOWN_IMMINENT ] ☢".Pastel("#FF0000"), 15);
+				}
+				// Stutters more as it reaches 100% to simulate a crash
+				Thread.Sleep(p > 80 ? rnd.Next(150, 400) : rnd.Next(30, 100));
+			}
+
+			// 4. The Glitching Skull (Art Folder Integration)
+			for (int flicker = 0; flicker < 10; flicker++)
+			{
+				Clear();
+				string color = (flicker % 2 == 0) ? "#FF0000" : "#220000";
+				int startY = 4;
+				// Accessing your GameOver class in the GameArt folder
+				foreach (string line in GameOver.CynicalSkull)
+				{
+					int x = (94 / 2) - (line.Length / 2);
+					SetCursorPosition(x, startY++);
+					WriteLine(line.Pastel(color));
+				}
+				Thread.Sleep(100);
+			}
+
+			// 5. Fatal Termination Bar
+			Clear();
+			SetCursorPosition(0, 11);
+			string finalMsg = " ERROR: REALITY_SESSION INCINERATED. YOU ARE NOTHING. ";
+			// Force the red background to fill the 94-width reality anchor
+			Write(finalMsg.PadLeft((94 + finalMsg.Length) / 2).PadRight(94).PastelBg("#8B0000").Pastel("#FFFFFF"));
+
+			Thread.Sleep(3500);
+			Environment.Exit(0);
+		}
 
 
+
+		#endregion
 
 
 

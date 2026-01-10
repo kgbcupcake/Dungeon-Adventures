@@ -26,18 +26,34 @@ namespace DungeonAdventures.Src.GameEngine.Interfaces
 
 			while (isRunning)
 			{
-			RedrawMenu:
+				RedrawMenu:
 				CursorVisible = false;
 
 				UiFunctions.TitleBar();
 				UiFunctions.DisplayFooter();
+				// 1. Create a "Processed" list to center the text and fix the borders
+				List<string> centeredOptions = new List<string>();
+				int internalWidth = 92; // The magic number for your 94-width reality
 
-                UiEngine.DrawDynamicFrame(
-                    title: "THE FORGOTTEN OUTPOST",
-                    lines: options.ToList(),
-                    hint: "Use arrow keys to navigate",
-                    selectedIndex: selectedIndex
-                );
+				foreach (var opt in options)
+				{
+					// Get visual length (even if you add colors later)
+					int visualLength = UiEngine.StripAnsi(opt).Length;
+					int leftSpace = (internalWidth / 2) - (visualLength / 2);
+					int rightSpace = internalWidth - visualLength - leftSpace;
+
+					// Create a perfectly padded line to overwrite the ghost borders
+					centeredOptions.Add(new string(' ', leftSpace) + opt + new string(' ', rightSpace));
+				}
+
+				// 2. Pass the CENTERED list to the frame
+				UiEngine.DrawDynamicFrame(
+					title: "THE FORGOTTEN OUTPOST",
+					lines: centeredOptions, // Use the new list
+					hint: "Use arrow keys to navigate",
+					boxWidth: 94, // Ensure this is explicitly set to your anchor
+					selectedIndex: selectedIndex
+				);
 
 				while (!Console.KeyAvailable)
 				{
