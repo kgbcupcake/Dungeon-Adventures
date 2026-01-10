@@ -1,38 +1,61 @@
-#!#!/usr/bin/env bash
-# No 'set -e' here so we can see all errors without the script crashing
-# No '>/dev/null' so you see everything
+#!/usr/bin/env bash
+# No 'set -e' - we want to see every crash point.
 
-# 1. Version Check
-# Updated to look for the Dungeon-Adventures project file
+# 1. Metadata Extraction
 csproj=$(find . -name "Dungeon-Adventures.csproj" | head -n 1)
-version=$(grep -oP '(?<=<Version>).*?(?=</Version>)' "$csproj")
-echo "🔍 DIAGNOSING VENTURE VERSION: $version"
+version=$(grep -oP '(?<=<Version>).*?(?=</Version>)' "$csproj" | tr -d '\r' | xargs)
 
-# 2. Build Check
-# Games are 'published' as executables rather than 'packed' as libraries
-echo "📦 TESTING GAME PUBLISH (WIN-X64)..."
+# Color Definitions
+CYAN='\033[0;36m'
+MAGENTA='\033[0;35m'
+YELLOW='\033[1;33m'
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+NC='\033[0m'
+
+clear
+echo -e "${MAGENTA}🛠️  VENTURE DEBUG UPLINK INITIATED...${NC}"
+echo -e "${CYAN}Targeting Version: v$version${NC}\n"
+
+# 2. Forge Check
+echo -e "${YELLOW}[1/3] 📦 TESTING GAME FORGE (WIN-X64)...${NC}"
+# Removed 'quiet' so you see the actual compiler errors
 dotnet publish -c Release -r win-x64 --self-contained true -o ./dist/win --nologo
-if [ $? -ne 0 ]; then 
-    echo "❌ BUILD ERROR DETECTED"
+
+if [ $? -eq 0 ]; then 
+    echo -e "${GREEN}✅ FORGE SUCCESSFUL. Archiving assets...${NC}"
+    zip -r "Dungeon-Adventures-v$version.zip" ./dist/win
 else
-    echo "✅ Build Successful. Compressing artifacts..."
-    # Zip the build for easier GitHub Release downloading
-    zip -r "Dungeon-Adventures-v$version.zip" ./dist/win > /dev/null
+    echo -e "${RED}❌ FORGE FAILED. Check the dotnet output above.${NC}"
 fi
 
-# 3. GitHub CLI Check
-echo "🌐 TESTING GITHUB CONNECTION..."
+# 3. Connection Check
+echo -e "\n${YELLOW}[2/3] 🌐 VERIFYING CLOUD PERMISSIONS...${NC}"
 if ! command -v gh &> /dev/null; then
-    echo "❌ ERROR: GitHub CLI (gh) is not installed or not in PATH."
+    echo -e "${RED}❌ ERROR: GitHub CLI (gh) not found.${NC}"
 else
-    echo "✅ GitHub CLI found. Attempting to verify auth..."
     gh auth status
 fi
 
-# 4. Release Test
-echo "🚀 ATTEMPTING VENTURE UPLOAD..."
+# 4. Uplink Test
+echo -e "\n${YELLOW}[3/3] 🚀 ATTEMPTING RELEASE UPLOAD...${NC}"
 pkgPath="./Dungeon-Adventures-v$version.zip"
-# Updated to point to the Dungeon-Adventures repository
-gh release create "v$version" "$pkgPath" --title "Venture v$version" --notes "Debug Uplink" --repo "kgbcupcake/Dungeon-Adventures" --overwrite
 
-echo "🏁 DIAGNOSTICS COMPLETE."
+if [ -f "$pkgPath" ]; then
+    # Note: --clobber replaces any existing file with the same name
+    gh release create "v$version" "$pkgPath" \
+        --title "Debug: Venture v$version" \
+        --notes "Automated Debug Uplink" \
+        --repo "kgbcupcake/Dungeon-Adventures" \
+        --clobber
+    
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}✨ UPLINK STABLE: Release is live on GitHub.${NC}"
+    else
+        echo -e "${RED}❌ UPLINK FAILED: Check your repository permissions.${NC}"
+    fi
+else
+    echo -e "${RED}❌ ABORTED: Package not found at $pkgPath${NC}"
+fi
+
+echo -e "\n${MAGENTA}🏁 DIAGNOSTICS COMPLETE.${NC}"

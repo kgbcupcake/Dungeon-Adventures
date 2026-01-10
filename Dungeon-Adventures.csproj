@@ -6,7 +6,7 @@
 		<Nullable>enable</Nullable>
 		<OutputType>Exe</OutputType>
 
-		<Version>1.0.1</Version>
+		<Version>1.0.0</Version>
 		<IsPackable>true</IsPackable>
 		<PackAsTool>true</PackAsTool>
 		<ToolCommandName>da</ToolCommandName>
@@ -14,7 +14,7 @@
 		<TieredCompilation>true</TieredCompilation>
 
 		<Authors>Kgbcupcake</Authors>
-		<Version>1.0.1</Version>
+		<Version>1.0.0</Version>
 		<Description>🌌 [HOSTILE_TERMINAL] A high-performance standalone game engine and terminal-based Dungeon Crawler. Reality Anchor: 84x24.</Description>
 		<PackageReleaseNotes>GENESIS UPLINK: Initial stabilization of the Dungeon-Adventures entity. Archive Manager and SpookyCleanup logic initialized.</PackageReleaseNotes>
 		<PackageTags>Game;CLI;NUnit;Automation;DungeonCrawler;SentientMalignancy</PackageTags>
@@ -25,6 +25,12 @@
 		<Content Include="Assets\**\*">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Remove="scripts\ship.sh\**" />
+	  <EmbeddedResource Remove="scripts\ship.sh\**" />
+	  <None Remove="scripts\ship.sh\**" />
 	</ItemGroup>
 
 	<ItemGroup>

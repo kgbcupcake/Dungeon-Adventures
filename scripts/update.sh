@@ -2,13 +2,14 @@
 set -e
 
 # --- [PATH CALIBRATION] ---
-# Ensures the script knows where it is and where the root project is
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-
-# 1. Metadata extraction (Looking for Dungeon-Adventures project)
 csproj=$(find "$ROOT_DIR" -name "Dungeon-Adventures.csproj" | head -n 1)
-version=$(sed -n "s/.*<Version>\(.*\)<\/Version>.*/\1/p" "$csproj" | tr -d "\r" | xargs)
+version=$(grep -oP '(?<=<Version>).*?(?=</Version>)' "$csproj" | tr -d '\r' | xargs)
+
+# 1. Metadata extraction
+csproj=$(find "$ROOT_DIR" -name "Dungeon-Adventures.csproj" | head -n 1)
+version=$(grep -oP '(?<=<Version>).*?(?=</Version>)' "$csproj" | tr -d '\r' | xargs)
 
 # Color Definitions
 CYAN='\033[0;36m'
@@ -22,63 +23,87 @@ NC='\033[0m'
 BG_CYAN='\033[46;30m'
 BG_GREEN='\033[42;37m'
 
+# --- [PHASE 0: SYSTEM DIAGNOSTICS] ---
+clear
+echo -e "${CYAN}🔍 ANALYZING VENTURE ENVIRONMENT...${NC}"
+sleep 0.5
+
+# Check for required tools
+for tool in dotnet git gh zip; do
+    if ! command -v $tool &> /dev/null; then
+        echo -e "${RED}❌ CRITICAL FAILURE: $tool is not installed.${NC}"
+        exit 1
+    fi
+    echo -e "  ${GRAY}» $tool: ${GREEN}ONLINE${NC}"
+done
+
+# Environment variables check
+echo -e "  ${GRAY}» ROOT_DIR: ${CYAN}$ROOT_DIR${NC}"
+echo -e "  ${GRAY}» TARGET_VERSION: ${MAGENTA}v$version${NC}"
+
 # --- [PHASE A: VENTURE PRE-FLIGHT] ---
 
-# 1. Git Guard (Safety Check)
 cd "$ROOT_DIR"
+
+# 1. Git Guard (Safety Check)
+echo -ne "\n${CYAN}🛡️  [GUARD] CHECKING FOR UNSTABLE CODE... ${NC}"
 if [[ -n $(git status -s) ]]; then
-    echo -e "${RED}❌ GIT GUARD: Uncommitted changes detected.${NC}"
+    echo -e "${RED}UNSTABLE${NC}"
+    echo -e "${YELLOW}---------------------------------------------------------${NC}"
     git status -s
-    echo -e "${YELLOW}Please commit your changes before shipping.${NC}"
+    echo -e "${YELLOW}---------------------------------------------------------${NC}"
+    echo -e "${RED}❌ UPLINK BLOCKED: You have uncommitted changes.${NC}"
     exit 1
 fi
+echo -e "${GREEN}SECURE${NC}"
 
 # 2. Integrity & Health Check
-# Ensure this script exists in your /scripts folder to run your NUnit tests
 if [ -f "$SCRIPT_DIR/check-health.sh" ]; then
+    echo -e "${CYAN}🏥 [HEALTH] RUNNING NUNIT DIAGNOSTICS...${NC}"
     bash "$SCRIPT_DIR/check-health.sh"
 fi
 
 # 3. Version Collision Check (GitHub)
-if command -v gh &> /dev/null; then
-    if gh release view "v$version" --repo "kgbcupcake/Dungeon-Adventures" &>/dev/null; then
-        echo -e "${YELLOW}⚠️  COLLISION: v$version already exists on GitHub.${NC}"
-        read -p "Overwrite existing release assets and notes? (y/n): " overwrite
-        if [[ $overwrite != [yY] ]]; then
-            echo -e "${RED}❌ UPLINK ABORTED. Update your .csproj version first.${NC}"
-            exit 1
-        fi
-    fi
+echo -ne "${CYAN}🛰️  [CLOUD] SCANNING FOR VERSION COLLISIONS... ${NC}"
+if gh release view "v$version" --repo "kgbcupcake/Dungeon-Adventures" &>/dev/null; then
+    echo -e "${YELLOW}COLLISION DETECTED${NC}"
+    echo -e "${YELLOW}⚠️  v$version already exists on GitHub.${NC}"
+    read -p "Overwrite existing release assets and notes? (y/n): " overwrite
+    if [[ $overwrite != [yY] ]]; then exit 1; fi
+else
+    echo -e "${GREEN}CLEAR${NC}"
 fi
 
-# 4. Venture Log Preview (Changelog)
+# 4. Venture Log Preview (The Spicy Menu)
 if [ -f "$ROOT_DIR/CHANGELOG.md" ]; then
-    echo -e "${CYAN}╔═══════════════════════════════════════════════════════╗${NC}"
-    echo -e "${CYAN}║             📡 VENTURE LOG PREVIEW (v$version)           ║${NC}"
+    echo -e "\n${CYAN}╔═══════════════════════════════════════════════════════╗${NC}"
+    echo -e "${CYAN}║              📡 VENTURE LOG PREVIEW (v$version)           ║${NC}"
     echo -e "${CYAN}╚═══════════════════════════════════════════════════════╝${NC}"
     if command -v glow &> /dev/null; then 
         glow "$ROOT_DIR/CHANGELOG.md"
     else 
+        echo -e "${GRAY}"
         cat "$ROOT_DIR/CHANGELOG.md"
+        echo -e "${NC}"
     fi
     echo -e "${CYAN}─────────────────────────────────────────────────────────${NC}"
     read -p "Proceed with this Changelog? (y/n): " log_confirm
     if [[ $log_confirm != [yY] ]]; then exit 1; fi
 fi
 
-# 5. Integrated README Sync (Badge Update)
+# 5. README Sync
 if [ -f "$ROOT_DIR/README.md" ]; then
-    echo -ne " 📄 [SYNC] UPDATING README VERSION BADGE... "
-    # Updates the shields.io badge version
+    echo -ne "📄 [SYNC] UPDATING README VERSION BADGE... "
     sed -i "s/version-v[0-9.]*-cyan/version-v$version-cyan/g" "$ROOT_DIR/README.md"
     echo -e "${GREEN}DONE${NC}"
 fi
 
 # 6. Final Uplink Confirmation
-read -p "⚠️ PROCEED WITH VENTURE UPLINK? (y/n): " confirm
-if [[ $confirm != [yY] ]]; then
+echo ""
+read -p "⚠️  PROCEED WITH FULL VENTURE UPLINK? (y/n): " confirm
+if [[ $confirm != [yY] ]]; then 
     echo -e "${RED}❌ UPLINK ABORTED BY USER.${NC}"
-    exit 1
+    exit 1 
 fi
 
 clear
@@ -89,74 +114,63 @@ echo ""
 
 # --- [PHASE B: UPLINK SEQUENCE] ---
 
-# Ensure we are in Root for dotnet and git commands
-cd "$ROOT_DIR"
+# 1. FORGE: WINDOWS (Installer)
+echo -ne " ${MAGENTA}[1/5] 🛠️  FORGING WINDOWS ENGINE...      ${NC}"
+dotnet publish "$csproj" -c Release -r win-x64 --self-contained true -o ./dist/win --nologo >/dev/null 2>&1
+if command -v iscc &> /dev/null; then
+    iscc "$ROOT_DIR/installer.iss" /DAppVersion="$version" >/dev/null 2>&1
+    winPkg="./Dungeon-Adventures-v$version-Installer.exe"
+    mv "$ROOT_DIR/dist/Output/setup.exe" "$winPkg"
+    echo -e "${GREEN}EXE READY${NC}"
+else
+    cd ./dist/win && zip -r "../../Dungeon-Adventures-v$version-Win.zip" . >/dev/null 2>&1 && cd ../..
+    winPkg="./Dungeon-Adventures-v$version-Win.zip"
+    echo -e "${YELLOW}ZIP READY${NC}"
+fi
 
-# 1. Build & Forge (Publishing as a standalone app)
-echo -ne " ${MAGENTA}[1/4] 🛠️  FORGING GAME ENGINE...       ${NC}"
-# We use publish instead of pack because this is a game, not a tool
-dotnet publish -c Release -r win-x64 --self-contained true -o ./dist/win --nologo >/dev/null 2>&1
-echo -e "${GREEN}ONLINE${NC}"
-
-# 2. Package for Distribution (Zipping the folder)
-echo -ne " ${MAGENTA}[2/4] 📦 COMPRESSING WORLD ASSETS...   ${NC}"
-# This creates the zip file that players actually download
-cd ./dist/win && zip -r "../../Dungeon-Adventures-v$version.zip" . >/dev/null 2>&1 && cd ../..
-echo -e "${GREEN}ZIPPED${NC}"
+# 2. FORGE: LINUX (Portable)
+echo -ne " ${MAGENTA}[2/5] 🐧 FORGING LINUX ENGINE...        ${NC}"
+dotnet publish "$csproj" -c Release -r linux-x64 --self-contained true -o ./dist/linux --nologo >/dev/null 2>&1
+tar -czf "Dungeon-Adventures-v$version-Linux.tar.gz" -C ./dist/linux .
+linPkg="./Dungeon-Adventures-v$version-Linux.tar.gz"
+echo -e "${GREEN}TAR.GZ READY${NC}"
 
 # 3. Git Sync
-echo -ne " ${YELLOW}[3/4] 🧠 WRITING VENTURE MEMORY...     ${NC}"
+echo -ne " ${YELLOW}[3/4] 🧠 WRITING VENTURE MEMORY...      ${NC}"
 git add . >/dev/null 2>&1
 git commit -m "Venture Update: v$version" --quiet >/dev/null 2>&1 || true
 git tag -f "v$version" -m "Game Release v$version" >/dev/null 2>&1
 echo -e "${GREEN}LOCALIZED${NC}"
 
-# 4. Cloud Uplink
-echo -ne " ${BLUE}[4/4] 🛰️  UPLINKING TO GITHUB...       ${NC}"
-git push origin master --force --quiet >/dev/null 2>&1
-git push origin "v$version" --force --quiet >/dev/null 2>&1
+# --- [PHASE A: VENTURE PRE-FLIGHT] ---
+# 2. Integrity & Health Check (Triggers your 100+ lines of logic)
+if [ -f "$SCRIPT_DIR/check-health.sh" ]; then
+    echo -e "${CYAN}🏥 [HEALTH] RUNNING DIAGNOSTICS...${NC}"
+    bash "$SCRIPT_DIR/check-health.sh" || exit 1
+fi
+
+
+# 4. CLOUD UPLINK (The Multi-Asset Release)
+echo -ne " ${BLUE}[4/5] 🛰️  UPLINKING TO GITHUB...        ${NC}"
+gh release create "v$version" "$winPkg" "$linPkg" \
+    --title "Venture v$version" \
+    --notes-file CHANGELOG.md \
+    --repo "kgbcupcake/Dungeon-Adventures" \
+    --clobber >/dev/null 2>&1
 echo -e "${GREEN}STABLE${NC}"
 
-# 5. GitHub Release (Using Changelog Logic)
-echo -ne " 🌐 [RELEASE] GENERATING GLOBAL RELEASE... "
-pkgPath="./Dungeon-Adventures-v$version.zip"
-UPLINK_STATUS="SUCCESS"
+# --- [PHASE C: FINALIZATION] ---
 
-if [ -f "CHANGELOG.md" ]; then
-    NOTES_ARG="--notes-file CHANGELOG.md"
-else
-    NOTES_ARG="--notes 'Venture Update: v$version'"
-fi
-
-if command -v gh &> /dev/null; then
-    if gh release create "v$version" "$pkgPath" --title "Venture v$version" $NOTES_ARG --repo "kgbcupcake/Dungeon-Adventures" 2>/dev/null || \
-       gh release upload "v$version" "$pkgPath" --repo "kgbcupcake/Dungeon-Adventures" --clobber >/dev/null 2>&1; then
-        echo -e "${GREEN}PUBLISHED${NC}"
-    else
-        echo -e "${RED}FAIL${NC}"
-        UPLINK_STATUS="FAILED"
-    fi
-else
-    echo -e "${YELLOW}SKIPPED (GH CLI NOT FOUND)${NC}"
-fi
-
-# 6. Final Status Report
 echo ""
 echo -e "${CYAN}─────────────────────────────────────────────────────────${NC}"
-if [ "$UPLINK_STATUS" == "SUCCESS" ]; then
-    echo -e " ${BG_GREEN} ✨ SUCCESS: VENTURE STATE STABLE [v$version] ✨ ${NC}"
-    echo -e " ${GRAY}⚡ Build is archived and live on GitHub.${NC}"
-else
-    echo -e " ${RED} ⚠️  UPLINK INCOMPLETE: LOCAL UPDATED / CLOUD FAILED ${NC}"
-fi
-echo ""
+echo -e " ${BG_GREEN} ✨ SUCCESS: VENTURE STATE STABLE [v$version] ✨ ${NC}"
+echo -e " ${GRAY}⚡ Build is archived and live on GitHub.${NC}"
+echo -e " ${GRAY}⚡ Current Binary: $pkgPath${NC}"
+echo -e "${CYAN}─────────────────────────────────────────────────────────${NC}"
 
-# 7. Local Cleanup
-echo -ne " 🧹 [CLEANUP] PURGING ARTIFACTS...        "
-sleep 2 
-if [ -d "./dist" ]; then
-    rm -rf ./dist
-    rm -f ./*.zip
-fi
-echo -e "${GREEN}CLEAN${NC}"
-echo ""
+# Cleanup
+echo -ne " 🧹 [CLEANUP] PURGING ARTIFACTS... "
+if [ -d "./dist" ]; then rm -rf ./dist; fi
+# Optional: remove local zip/exe if you only want it on GitHub
+# rm -f ./*.zip ./*.exe 
+echo -e "${GREEN}CLEAN${NC}\n"
