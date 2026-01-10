@@ -43,9 +43,10 @@ echo -e "${GRAY}------------------------------${NC}"
 read -p "📝 Enter Deployment Note: " msg
 if [ -z "$msg" ]; then msg="System Maintenance: $(date +'%Y-%m-%d')"; fi
 
-# 5. THE PUSH
+# 5. THE PUSH (Modified to ignore binaries)
 echo -e "${CYAN}[SYSTEM] Igniting Venture Uplink...${NC}"
-git add .
+# Use a specific add if you want to be safe, or rely on .gitignore
+git add . 
 git commit -m "🚀 $msg" --quiet
 git push origin master --quiet
 

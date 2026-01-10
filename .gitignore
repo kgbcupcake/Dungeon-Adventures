@@ -436,3 +436,9 @@ Saves/
 *.json
 bin/
 obj/
+
+# Ignore the automated build artifacts
+*.zip
+*.tar.gz
+*.nupkg
+dist/
