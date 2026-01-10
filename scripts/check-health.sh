@@ -57,7 +57,7 @@ fi
 echo -e "\n${CYAN}📂 PHASE 2: FILESYSTEM INTEGRITY${NC}"
 
 # Verify Reality Anchors
-anchors=("Dungeon-Adventures.csproj" "Program.cs" "README.md")
+anchors=("Dungeon-Adventures.csproj" "Src/Program.cs" "README.md")
 for file in "${anchors[@]}"; do
     echo -ne " ${GRAY}» Anchor: ${NC}$file... "
     if [ -f "$ROOT_DIR/$file" ]; then
@@ -83,7 +83,7 @@ echo -e "${GRAY}---------------------------------------------------------${NC}"
 
 # Temporarily allow failure to capture test results
 set +e 
-dotnet test "$ROOT_DIR" --nologo --verbosity minimal
+dotnet test "$ROOT_DIR/Dungeon-Adventures.csproj" --nologo --verbosity minimal
 TEST_RESULT=$?
 set -e
 
