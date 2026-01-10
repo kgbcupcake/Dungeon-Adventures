@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 
 # --- 💠 NEURAL UPLINK: PROMETHEUS PROTOCOL ---
 # Project: Dungeon Adventures | Author: kgbcupcake

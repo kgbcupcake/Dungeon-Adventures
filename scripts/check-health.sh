@@ -31,11 +31,18 @@ echo -e "${NC}"
 # --- [PHASE 1: DEPENDENCY AUDIT] ---
 echo -e "${CYAN}📡 PHASE 1: SYSTEM ENVIRONMENT AUDIT${NC}"
 
-# Comprehensive tool check loop
+# Comprehensive tool check loop - Cleaned of invisible characters
 tools=("dotnet" "git" "gh" "zip" "sed" "grep" "tar") 
 
 for tool in "${tools[@]}"; do
-    # ... your existing tool loop ...
+    echo -ne " ${GRAY}» Tool Check: ${NC}$tool... "
+    if command -v "$tool" &> /dev/null; then
+        echo -e "${GREEN}ONLINE${NC}"
+    else
+        echo -e "${RED}MISSING${NC}"
+        echo -e "${YELLOW}Please install $tool to continue.${NC}"
+        exit 1
+    fi
 done
 
 # NEW: Specific check for Inno Setup (Windows Installer Compiler)
